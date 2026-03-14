@@ -11,7 +11,7 @@ Each module is documented service by service with enumeration steps, real lab ou
 |---|---|---|---|
 | 01 | Penetration Testing Process | ⏳ Pending | — |
 | 02 | Getting Started | ⏳ Pending | — |
-| 03 | Footprinting | 🔄 In Progress | [View](./03-Footprinting/) |
+| 03 | Footprinting | 🔄 In Progress — 5/21 services complete | [View](./03-Footprinting/) |
 | 04 | Information Gathering - Web Edition | ⏳ Pending | — |
 | 05 | Vulnerability Assessment | ⏳ Pending | — |
 | 06 | File Transfers | ⏳ Pending | — |
@@ -57,11 +57,11 @@ Each service file follows this structure:
 
 | Service | File | Status |
 |---|---|---|
-| FTP | [01-FTP.md](./03-Footprinting/01-FTP.md) | ⏳ Pending |
-| SMB | [02-SMB.md](./03-Footprinting/02-SMB.md) | ⏳ Pending |
-| NFS | [03-NFS.md](./03-Footprinting/03-NFS.md) | ⏳ Pending |
-| DNS | [04-DNS.md](./03-Footprinting/04-DNS.md) | ⏳ Pending |
-| SMTP | [05-SMTP.md](./03-Footprinting/05-SMTP.md) | ⏳ Pending |
+| FTP | [01-FTP.md](./03-Footprinting/01-FTP.md) | ✅ Complete |
+| SMB | [02-SMB.md](./03-Footprinting/02-SMB.md) | ✅ Complete |
+| NFS | [03-NFS.md](./03-Footprinting/03-NFS.md) | ✅ Complete |
+| DNS | [04-DNS.md](./03-Footprinting/04-DNS.md) | ✅ Complete |
+| SMTP | [05-SMTP.md](./03-Footprinting/05-SMTP.md) | ✅ Complete |
 | IMAP/POP3 | [06-IMAP-POP3.md](./03-Footprinting/06-IMAP-POP3.md) | ⏳ Pending |
 | SNMP | [07-SNMP.md](./03-Footprinting/07-SNMP.md) | ⏳ Pending |
 | MySQL | [08-MySQL.md](./03-Footprinting/08-MySQL.md) | ⏳ Pending |
