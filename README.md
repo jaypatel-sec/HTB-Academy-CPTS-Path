@@ -1,75 +1,82 @@
-# CPTS Academy Notes — Jay Patel
+# HTB Academy — CPTS Learning Path Notes
+**Author:** Jay Patel | **Path:** Certified Penetration Testing Specialist (CPTS)
+**Started:** March 2026 | **Status:** In Progress
 
-All 28 HTB Academy modules for the Certified Penetration Testing Specialist (CPTS) path.
-Each module is documented service by service with enumeration steps, real lab output, and a detection layer.
+## What This Repository Is
 
----
+Personal documentation of my progress through the HTB Academy CPTS
+Penetration Tester Job Role path. Written in my own words — not copied
+from HTB, not a tutorial summary. Working notes from someone actively
+learning penetration testing methodology.
 
-## Module Progress
+Every module is documented with actual commands used, real lab output,
+detection layer showing what the blue team would see, and MITRE ATT&CK
+mapping on every technique.
 
-| # | Module | Status | Files |
-|---|---|---|---|
-| 01 | Penetration Testing Process | ⏳ Pending | — |
-| 02 | Getting Started | ⏳ Pending | — |
-| 03 | Footprinting | 🔄 In Progress — 6/21 services complete | March 2026 | [View](./03-Footprinting/) |
-| 04 | Information Gathering - Web Edition | ⏳ Pending | — |
-| 05 | Vulnerability Assessment | ⏳ Pending | — |
-| 06 | File Transfers | ⏳ Pending | — |
-| 07 | Shells and Payloads | ⏳ Pending | — |
-| 08 | Using the Metasploit Framework | ⏳ Pending | — |
-| 09 | Password Attacks | ⏳ Pending | — |
-| 10 | Attacking Common Services | ⏳ Pending | — |
-| 11 | Pivoting, Tunnelling and Port Forwarding | ⏳ Pending | — |
-| 12 | Active Directory Enumeration and Attacks | ⏳ Pending | — |
-| 13 | Using Web Proxies | ⏳ Pending | — |
-| 14 | Attacking Web Applications with Ffuf | ⏳ Pending | — |
-| 15 | Login Brute Forcing | ⏳ Pending | — |
-| 16 | SQL Injection Fundamentals | ⏳ Pending | — |
-| 17 | SQLMap Essentials | ⏳ Pending | — |
-| 18 | Cross-Site Scripting (XSS) | ⏳ Pending | — |
-| 19 | File Inclusion | ⏳ Pending | — |
-| 20 | File Upload Attacks | ⏳ Pending | — |
-| 21 | Command Injections | ⏳ Pending | — |
-| 22 | Web Attacks | ⏳ Pending | — |
-| 23 | Attacking Common Applications | ⏳ Pending | — |
-| 24 | Linux Privilege Escalation | ⏳ Pending | — |
-| 25 | Windows Privilege Escalation | ⏳ Pending | — |
-| 26 | Documentation and Reporting | ⏳ Pending | — |
-| 27 | Attacking Enterprise Networks | ⏳ Pending | — |
-| 28 | Shells and Payloads (Advanced) | ⏳ Pending | — |
+## Prerequisites (Completed Before CPTS Path)
 
----
-
-## File Format
-
-Each service file follows this structure:
-- What the service is and why pentesters care
-- Step-by-step enumeration commands with flag explanations
-- Common misconfigurations table
-- Real lab output
-- What I learned / what surprised me
-- Detection layer — Event IDs, SPL query, KQL query, MITRE technique
-- Commands reference table
-
----
-
-## Module 03 — Footprinting (Active)
-
-| Service | File | Status |
+| Module | Status | Date |
 |---|---|---|
-| FTP | [01-FTP.md](./03-Footprinting/01-FTP.md) | ✅ Complete |
-| SMB | [02-SMB.md](./03-Footprinting/02-SMB.md) | ✅ Complete |
-| NFS | [03-NFS.md](./03-Footprinting/03-NFS.md) | ✅ Complete |
-| DNS | [04-DNS.md](./03-Footprinting/04-DNS.md) | ✅ Complete |
-| SMTP | [05-SMTP.md](./03-Footprinting/05-SMTP.md) | ✅ Complete |
-| IMAP/POP3 | [06-IMAP-POP3.md](./03-Footprinting/06-IMAP-POP3.md) | ✅ Complete |
-| SNMP | [07-SNMP.md](./03-Footprinting/07-SNMP.md) | ⏳ Pending |
-| MySQL | [08-MySQL.md](./03-Footprinting/08-MySQL.md) | ⏳ Pending |
-| MSSQL | [09-MSSQL.md](./03-Footprinting/09-MSSQL.md) | ⏳ Pending |
-| Oracle TNS | [10-Oracle-TNS.md](./03-Footprinting/10-Oracle-TNS.md) | ⏳ Pending |
-| IPMI | [11-IPMI.md](./03-Footprinting/11-IPMI.md) | ⏳ Pending |
-| SSH | [12-SSH.md](./03-Footprinting/12-SSH.md) | ⏳ Pending |
-| RDP | [13-RDP.md](./03-Footprinting/13-RDP.md) | ⏳ Pending |
-| WinRM | [14-WinRM.md](./03-Footprinting/14-WinRM.md) | ⏳ Pending |
-| WMI | [15-WMI.md](./03-Footprinting/15-WMI.md) | ⏳ Pending |
-| Footprinting Lab | [Footprinting-Lab/](./03-Footprinting/Footprinting-Lab/) | ⏳ Pending |
+| Linux Fundamentals | ✅ Complete | March 2026 |
+| Bash Scripting | ✅ Complete | March 2026 |
+
+## CPTS Path — Module Progress
+
+| # | Module | Difficulty | Status | Date |
+|---|---|---|---|---|
+| 01 | Penetration Testing Process | Fundamental | ⏳ Pending | — |
+| 02 | Getting Started | Fundamental | ⏳ Pending | — |
+| 03 | Network Enumeration with Nmap | Easy | ⏳ Pending | — |
+| 04 | Footprinting | Medium | 🔄 In Progress — 6/13 sections complete | March 2026 |
+| 05 | Information Gathering - Web Edition | Easy | ⏳ Pending | — |
+| 06 | Vulnerability Assessment | Easy | ⏳ Pending | — |
+| 07 | File Transfers | Medium | ⏳ Pending | — |
+| 08 | Shells and Payloads | Medium | ⏳ Pending | — |
+| 09 | Using the Metasploit Framework | Easy | ⏳ Pending | — |
+| 10 | Password Attacks | Medium | ⏳ Pending | — |
+| 11 | Attacking Common Services | Medium | ⏳ Pending | — |
+| 12 | Pivoting, Tunneling and Port Forwarding | Medium | ⏳ Pending | — |
+| 13 | Active Directory Enumeration and Attacks | Medium | ⏳ Pending | — |
+| 14 | Using Web Proxies | Easy | ⏳ Pending | — |
+| 15 | Attacking Web Applications with Ffuf | Easy | ⏳ Pending | — |
+| 16 | Login Brute Forcing | Easy | ⏳ Pending | — |
+| 17 | SQL Injection Fundamentals | Medium | ⏳ Pending | — |
+| 18 | SQLMap Essentials | Easy | ⏳ Pending | — |
+| 19 | Cross-Site Scripting (XSS) | Easy | ⏳ Pending | — |
+| 20 | File Inclusion | Medium | ⏳ Pending | — |
+| 21 | File Upload Attacks | Medium | ⏳ Pending | — |
+| 22 | Command Injections | Medium | ⏳ Pending | — |
+| 23 | Web Attacks | Medium | ⏳ Pending | — |
+| 24 | Attacking Common Applications | Medium | ⏳ Pending | — |
+| 25 | Linux Privilege Escalation | Easy | ⏳ Pending | — |
+| 26 | Windows Privilege Escalation | Medium | ⏳ Pending | — |
+| 27 | Documentation and Reporting | Easy | ⏳ Pending | — |
+| 28 | Attacking Enterprise Networks | Medium | ⏳ Pending | — |
+
+## Footprinting Module — Section Progress
+
+| # | Section | Status |
+|---|---|---|
+| 01 | FTP | ✅ Complete |
+| 02 | SMB | ✅ Complete |
+| 03 | NFS | ✅ Complete |
+| 04 | DNS | ✅ Complete |
+| 05 | SMTP | ✅ Complete |
+| 06 | IMAP / POP3 | ✅ Complete |
+| 07 | SNMP | ⏳ Pending |
+| 08 | MySQL | ⏳ Pending |
+| 09 | MSSQL | ⏳ Pending |
+| 10 | Oracle TNS | ⏳ Pending |
+| 11 | IPMI | ⏳ Pending |
+| 12 | Footprinting Lab — Easy | ⏳ Pending |
+| 13 | Footprinting Lab — Medium | ⏳ Pending |
+| 14 | Footprinting Lab — Hard | ⏳ Pending |
+
+## Why Every Technique Includes A Detection Layer
+I am building a dual offensive and defensive portfolio simultaneously.
+Understanding what the blue team sees when I run an attack is not
+optional — it is the point. Every technique documented here includes
+the corresponding SIEM detection logic.
+
+Defensive portfolio: [SOC-Detection-Lab](../SOC-Detection-Lab)
+Main portfolio: [Offensive-Security-Portfolio](../Offensive-Security-Portfolio)
