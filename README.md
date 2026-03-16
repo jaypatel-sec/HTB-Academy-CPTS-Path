@@ -27,7 +27,7 @@ mapping on every technique.
 | 01 | Penetration Testing Process | Fundamental | ⏳ Pending | — |
 | 02 | Getting Started | Fundamental | ⏳ Pending | — |
 | 03 | Network Enumeration with Nmap | Easy | ⏳ Pending | — |
-| 04 | Footprinting | Medium | 🔄 In Progress — 6/13 sections complete | March 2026 |
+| 04 | Footprinting | Medium | 🔄 In Progress — 9/14 sections complete | March 2026 |
 | 05 | Information Gathering - Web Edition | Easy | ⏳ Pending | — |
 | 06 | Vulnerability Assessment | Easy | ⏳ Pending | — |
 | 07 | File Transfers | Medium | ⏳ Pending | — |
@@ -63,9 +63,9 @@ mapping on every technique.
 | 04 | DNS | ✅ Complete |
 | 05 | SMTP | ✅ Complete |
 | 06 | IMAP / POP3 | ✅ Complete |
-| 07 | SNMP | ⏳ Pending |
-| 08 | MySQL | ⏳ Pending |
-| 09 | MSSQL | ⏳ Pending |
+| 07 | SNMP | ✅ Complete |
+| 08 | MySQL | ✅ Complete |
+| 09 | MSSQL | ✅ Complete |
 | 10 | Oracle TNS | ⏳ Pending |
 | 11 | IPMI | ⏳ Pending |
 | 12 | Footprinting Lab — Easy | ⏳ Pending |
