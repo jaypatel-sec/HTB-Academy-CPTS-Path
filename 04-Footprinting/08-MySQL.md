@@ -99,7 +99,7 @@ sqlmap -d "mysql://robin:robin@10.129.14.128:3306/customers" -T myTable --dump
 
 ## Real Lab Output
 ```
-mysql -u robin -probin -h 10.129.14.128
+Hackerpatel007_1@htb[/htb]$ mysql -u robin -probin -h 10.129.14.128
 
 MySQL [(none)]> show databases;
 +--------------------+

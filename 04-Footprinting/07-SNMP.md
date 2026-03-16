@@ -109,14 +109,14 @@ snmpwalk -v2c -c <found_string> 10.129.14.128 | tee output.txt
 
 ## Real Lab Output
 ```
-snmpwalk -v2c -c public 10.129.14.128 | tee SNMPWalk.txt
+Hackerpatel007_1@htb[/htb]$ snmpwalk -v2c -c public 10.129.14.128 | tee SNMPWalk.txt
 
 iso.3.6.1.2.1.1.1.0 = STRING: "Linux NIX02 5.4.0-90-generic #101-Ubuntu SMP x86_64"
 iso.3.6.1.2.1.1.4.0 = STRING: "devadmin <devadmin@inlanefreight.htb>"
 iso.3.6.1.2.1.1.5.0 = STRING: "NIX02"
 iso.3.6.1.2.1.1.6.0 = STRING: "InFreight SNMP v0.91"
 
-grep -m 1 -B 8 "HTB{" SNMPWalk.txt
+Hackerpatel007_1@htb[/htb]$ grep -m 1 -B 8 "HTB{" SNMPWalk.txt
 iso.3.6.1.2.1.25.1.7.1.2.1.2.4.70.76.65.71 = STRING: "/usr/share/flag.sh"
 iso.3.6.1.2.1.25.1.7.1.3.1.1.4.70.76.65.71 = STRING: "HTB{5nMp_fl4g_uidhfljnsldiuhbfsdij44738b2u763g}"
 ```

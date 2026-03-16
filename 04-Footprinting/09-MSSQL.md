@@ -99,7 +99,7 @@ WHERE table_name = 'target_table';
 
 ## Real Lab Output
 ```
-sudo nmap --script ms-sql-ntlm-info -p1433 10.129.14.128
+Hackerpatel007_1@htb[/htb]$ sudo nmap --script ms-sql-ntlm-info -p1433 10.129.14.128
 
 | ms-sql-ntlm-info:
 |   Target_Name: ILF-SQL-01
@@ -107,7 +107,7 @@ sudo nmap --script ms-sql-ntlm-info -p1433 10.129.14.128
 |   DNS_Computer_Name: ILF-SQL-01
 |   Product_Version: 10.0.17763
 
-impacket-mssqlclient backdoor@10.129.14.128 -windows-auth
+Hackerpatel007_1@htb[/htb]$ impacket-mssqlclient backdoor@10.129.14.128 -windows-auth
 Password: Password1
 [*] Encryption required, switching to TLS
 [*] ACK: Result: 1 - Microsoft SQL Server (150 7208)
