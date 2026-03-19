@@ -65,7 +65,7 @@ ftp> get "Important Notes.txt"    # download single file
 ```
 
 ```bash
-# Download everything at once (causes alarms — use carefully)
+# Download everything at once (triggers IDS rate-based rules — use carefully in real engagements)
 wget -m --no-passive ftp://anonymous:anonymous@10.129.14.136
 ```
 
@@ -84,7 +84,8 @@ sudo nmap -sV -p21 -sC -A 10.129.14.136 --script-trace
 ### Step 5 — TLS/SSL FTP Interaction
 ```bash
 openssl s_client -connect 10.129.14.136:21 -starttls ftp
-# Reveals SSL certificate — hostname, organisation, email, location
+# Reveals SSL certificate — internal hostname, organisation, email, location
+# Maps to T1590.001 — certificate exposes domain properties and internal naming
 ```
 
 ### Step 6 — NetCat / Telnet Direct Interaction
@@ -112,7 +113,7 @@ cat /etc/ftpusers    # users denied FTP access even if they exist on the system
 
 ## Real Lab Output
 ```
-Hackerpatel007_1@htb[/htb]$ ftp 10.129.14.136
+HackerpatelOO7_1@htb[/htb]$ ftp 10.129.14.136
 Connected to 10.129.14.136.
 220 "Welcome to the HTB Academy vsFTP service."
 Name: anonymous
@@ -165,8 +166,10 @@ CommonSecurityLog
 | sort by Count desc
 ```
 
-**MITRE Technique:** T1190 — Exploit Public-Facing Application
-**Also relevant:** T1083 — File and Directory Discovery
+**MITRE Techniques:**
+- **T1078.001 — Valid Accounts: Default Accounts** — anonymous FTP login using default credentials
+- **T1135 — Network Share Discovery** — recursive directory listing to map file structure
+- **T1590.001 — Gather Victim Network Information: Domain Properties** — SSL certificate exposing internal hostname and organisation details
 
 ## Commands Reference
 
@@ -178,6 +181,6 @@ CommonSecurityLog
 | `ftp> put <file>` | Upload a file |
 | `ftp> status` | Show connection settings |
 | `ftp> debug` | Enable verbose command output |
-| `wget -m --no-passive ftp://anonymous:anonymous@<IP>` | Download all files |
+| `wget -m --no-passive ftp://anonymous:anonymous@<IP>` | Download all files recursively |
 | `nmap -sV -p21 -sC -A <IP>` | Full FTP enumeration with NSE scripts |
-| `openssl s_client -connect <IP>:21 -starttls ftp` | Connect to FTP over TLS |
+| `openssl s_client -connect <IP>:21 -starttls ftp` | Connect to FTP over TLS and extract certificate |
