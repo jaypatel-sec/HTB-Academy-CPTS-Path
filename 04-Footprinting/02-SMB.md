@@ -169,8 +169,10 @@ SecurityEvent
 | sort by Count desc
 ```
 
-**MITRE Technique:** T1135 — Network Share Discovery
-**Also relevant:** T1078 — Valid Accounts (Guest), T1557 — Adversary-in-the-Middle (relay)
+**MITRE Techniques:**
+- **T1135 — Network Share Discovery** — enumerating available SMB shares via null session
+- **T1078.001 — Valid Accounts: Default Accounts** — anonymous/guest access using default blank credentials
+- **T1557.001 — Adversary-in-the-Middle: LLMNR/NBT-NS Poisoning** — relay attacks when SMB signing is disabled
 
 ## Commands Reference
 
