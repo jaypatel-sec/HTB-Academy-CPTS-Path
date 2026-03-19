@@ -32,7 +32,7 @@ mapping on every technique.
 | 06 | Vulnerability Assessment | Easy | ⏳ Pending | — |
 | 07 | File Transfers | Medium | ⏳ Pending | — |
 | 08 | Shells and Payloads | Medium | ⏳ Pending | — |
-| 09 | Using the Metasploit Framework | Easy | ⏳ Pending | — |
+| 09 | Using the Metasploit Framework | Medium | ⏳ Pending | — |
 | 10 | Password Attacks | Medium | ⏳ Pending | — |
 | 11 | Attacking Common Services | Medium | ⏳ Pending | — |
 | 12 | Pivoting, Tunneling and Port Forwarding | Medium | ⏳ Pending | — |
@@ -78,5 +78,5 @@ Understanding what the blue team sees when I run an attack is not
 optional — it is the point. Every technique documented here includes
 the corresponding SIEM detection logic.
 
-Defensive portfolio: [SOC-Detection-Lab](../SOC-Detection-Lab)
-Main portfolio: [Offensive-Security-Portfolio](../Offensive-Security-Portfolio)
+Defensive portfolio: [SOC-Detection-Lab](https://github.com/jaypatel-sec/SOC-Detection-Lab)
+Main portfolio: [Offensive-Security-Portfolio](https://github.com/jaypatel-sec/Offensive-Security-Portfolio)
