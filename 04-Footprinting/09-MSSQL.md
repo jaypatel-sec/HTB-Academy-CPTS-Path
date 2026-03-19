@@ -154,8 +154,10 @@ SecurityEvent
 | sort by Count desc
 ```
 
-**MITRE Technique:** T1190 — Exploit Public-Facing Application
-**Also relevant:** T1213 — Data from Information Repositories, T1059 — Command and Scripting Interpreter (xp_cmdshell)
+**MITRE Techniques:**
+- **T1078.002 — Valid Accounts: Domain Accounts** — using discovered Windows/domain credentials to authenticate via `-windows-auth`
+- **T1213 — Data from Information Repositories** — querying sys.databases and tables to extract stored data
+- **T1059.001 — Command and Scripting Interpreter: PowerShell / xp_cmdshell** — OS command execution via xp_cmdshell
 
 ## Commands Reference
 
