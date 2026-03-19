@@ -143,8 +143,9 @@ CommonSecurityLog
 | sort by Count desc
 ```
 
-**MITRE Technique:** T1135 — Network Share Discovery
-**Also relevant:** T1005 — Data from Local System
+**MITRE Techniques:**
+- **T1135 — Network Share Discovery** — using showmount and nmap to enumerate exported NFS shares
+- **T1039 — Data from Network Shared Drive** — mounting NFS share and reading files from it
 
 ## Commands Reference
 
