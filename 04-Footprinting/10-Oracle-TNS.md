@@ -183,8 +183,9 @@ CommonSecurityLog
 | sort by Count desc
 ```
 
-**MITRE Technique:** T1190 — Exploit Public-Facing Application
-**Also relevant:** T1078 — Valid Accounts (default credentials), T1213 — Data from Information Repositories
+**MITRE Techniques:**
+- **T1078.001 — Valid Accounts: Default Accounts** — using default `scott/tiger` credentials that ship with Oracle installations
+- **T1213 — Data from Information Repositories** — querying sys.user$ and all_tables to extract stored data and password hashes
 
 ## Commands Reference
 
