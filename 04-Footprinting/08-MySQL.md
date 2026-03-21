@@ -143,36 +143,6 @@ MySQL [customers]> SELECT email FROM myTable WHERE name = "Otto Lang";
 
 The `pan` and `cvv` columns appearing in a customer table was something I did not expect to find — raw unencrypted payment card data sitting in a plaintext database column. In a real engagement that is an automatic critical finding regardless of how access was obtained. The no-space rule for the `-p` flag also caught me — it is the kind of thing that causes silent connection failures with no useful error message. The credential reuse angle was also reinforced here: `robin:robin` appeared on IMAP earlier in the module and worked again on MySQL, which is exactly how lateral movement works in real environments. Always try every credential you find against every open service.
 
-## Detection Layer
-
-| Log Source | What Is Logged | Detection Signal |
-|---|---|---|
-| MySQL general log | All queries executed | Bulk SELECT across all tables from single session |
-| MySQL error log | Failed authentication attempts | Multiple auth failures from same IP |
-| Network logs | Connection to port 3306 | External IP connecting directly to database port |
-| SIEM | Auth events | Successful login followed by schema enumeration queries |
-
-**SPL Query to detect MySQL enumeration:**
-```spl
-index=mysql sourcetype=mysql_logs
-(query="show databases" OR query="show tables" OR query="information_schema")
-| stats count by src_ip, user, query
-| where count > 5
-| sort -count
-```
-
-**KQL Query (Sentinel):**
-```kql
-CommonSecurityLog
-| where DestinationPort == 3306
-| where Message contains "show databases" or Message contains "information_schema"
-| summarize Count=count() by SourceIP, DestinationIP
-| sort by Count desc
-```
-
-**MITRE Technique:** T1213 — Data from Information Repositories
-**Also relevant:** T1005 — Data from Local System (FILE privilege abuse)
-
 ## Commands Reference
 
 | Command | Purpose |
