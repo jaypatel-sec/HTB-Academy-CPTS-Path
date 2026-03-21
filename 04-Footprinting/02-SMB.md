@@ -141,38 +141,7 @@ password complexity settings all in one shot. The password policy output showing
 `min_pw_length: 5` and no complexity requirements is exactly the kind of finding
 that goes straight into a pentest report as a critical misconfiguration.
 
-## Detection Layer
-
-| Log Source | What Is Logged | Detection Signal |
-|---|---|---|
-| Windows Security Log | Event ID 5140 — share access | Anonymous access to sensitive shares |
-| Windows Security Log | Event ID 5145 — file access | Bulk file access from single IP |
-| Sysmon Event ID 3 | Network connection to port 445 | External IP connecting to SMB |
-| SIEM | Auth events | Null session followed by share enumeration |
-
-**SPL Query to detect null session SMB enumeration:**
-```spl
-index=windows EventCode=5140
-(SubjectUserName="-" OR SubjectUserName="ANONYMOUS LOGON" OR SubjectUserName="Guest")
-| stats count by SubjectUserName, IpAddress, ShareName
-| where count > 3
-| sort -count
-```
-
-**KQL Query (Sentinel):**
-```kql
-SecurityEvent
-| where EventID == 5140
-| where SubjectUserName contains "ANONYMOUS" or SubjectUserName == "-"
-| summarize Count=count() by SubjectUserName, IpAddress, ShareName
-| where Count > 3
-| sort by Count desc
-```
-
-**MITRE Techniques:**
-- **T1135 — Network Share Discovery** — enumerating available SMB shares via null session
-- **T1078.001 — Valid Accounts: Default Accounts** — anonymous/guest access using default blank credentials
-- **T1557.001 — Adversary-in-the-Middle: LLMNR/NBT-NS Poisoning** — relay attacks when SMB signing is disabled
+ — relay attacks when SMB signing is disabled
 
 ## Commands Reference
 
