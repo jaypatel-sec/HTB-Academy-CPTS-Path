@@ -109,34 +109,6 @@ Hash.Mode........: 7300 (IPMI2 RAKP HMAC-SHA1)
 
 The fact that IPMI hands over the password hash without requiring you to know the password first was something I genuinely did not expect. Every other service we have covered requires at least a username and password attempt — IPMI 2.0 just gives you the hash through the RAKP handshake before any authentication completes. The implication is also significant: IPMI access means power control over physical servers, which is a level of access that bypasses everything the OS-level security team has done. Credential reuse is also worth noting here — a cracked BMC password should immediately be tested against every other service on that host because administrators frequently reuse the same password across IPMI, SSH, and web interfaces on the same machine.
 
-## Detection Layer
-
-| Log Source | What Is Logged | Detection Signal |
-|---|---|---|
-| BMC logs | Authentication attempts | Multiple IPMI queries from unexpected IP |
-| Network logs | UDP 623 traffic | External or unexpected IP querying IPMI port |
-| Firewall logs | UDP 623 connections | IPMI port accessible from untrusted network segment |
-| SIEM | Auth events | Successful BMC login from non-management IP |
-
-**SPL Query to detect IPMI enumeration:**
-```spl
-index=network dest_port=623 protocol=udp
-| stats count by src_ip, dest_ip
-| where count > 10
-| sort -count
-```
-
-**KQL Query (Sentinel):**
-```kql
-CommonSecurityLog
-| where DestinationPort == 623
-| summarize Count=count() by SourceIP, DestinationIP
-| where Count > 10
-| sort by Count desc
-```
-
-**MITRE Technique:** T1110 — Brute Force (hash retrieval for offline cracking)
-**Also relevant:** T1078 — Valid Accounts, T1190 — Exploit Public-Facing Application
 
 ## Commands Reference
 
