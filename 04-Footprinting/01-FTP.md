@@ -85,7 +85,6 @@ sudo nmap -sV -p21 -sC -A 10.129.14.136 --script-trace
 ```bash
 openssl s_client -connect 10.129.14.136:21 -starttls ftp
 # Reveals SSL certificate — internal hostname, organisation, email, location
-# Maps to T1590.001 — certificate exposes domain properties and internal naming
 ```
 
 ### Step 6 — NetCat / Telnet Direct Interaction
