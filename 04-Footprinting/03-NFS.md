@@ -118,34 +118,7 @@ dangerous setting I came across — it means if you mount the share as root on
 your machine, you are root on the server's filesystem too. Finding that in an
 `/etc/exports` file is an immediate critical finding.
 
-## Detection Layer
 
-| Log Source | What Is Logged | Detection Signal |
-|---|---|---|
-| System logs `/var/log/syslog` | NFS mount events | External IP mounting NFS share |
-| Firewall logs | Connection to port 2049 | Unexpected source IP connecting to NFS |
-| NFS server logs | File access events | Bulk file reads from mounted share |
-
-**SPL Query to detect NFS enumeration:**
-```spl
-index=network dest_port=2049 OR dest_port=111
-| stats count by src_ip, dest_ip, dest_port
-| where count > 10
-| sort -count
-```
-
-**KQL Query (Sentinel):**
-```kql
-CommonSecurityLog
-| where DestinationPort == 2049 or DestinationPort == 111
-| summarize Count=count() by SourceIP, DestinationIP, DestinationPort
-| where Count > 10
-| sort by Count desc
-```
-
-**MITRE Techniques:**
-- **T1135 — Network Share Discovery** — using showmount and nmap to enumerate exported NFS shares
-- **T1039 — Data from Network Shared Drive** — mounting NFS share and reading files from it
 
 ## Commands Reference
 
