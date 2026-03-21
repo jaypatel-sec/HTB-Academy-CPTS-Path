@@ -189,41 +189,6 @@ The FETCH command returning the From header revealing devadmin's email
 shows how a single compromised low-privilege mailbox can expose higher
 privilege account details for further attacks.
 
-## Detection Layer
-
-**What this enumeration looks like to a defender:**
-
-| Log Source | What Is Logged | Detection Signal |
-|---|---|---|
-| Mail server logs | Failed login attempts | Multiple AUTH failures from single IP |
-| Mail server logs | Successful login + bulk FETCH | Login followed by fetching all emails rapidly |
-| Network logs | Connection to port 110/143 unencrypted | Cleartext mail protocol usage — credentials at risk |
-| SIEM | Auth events across mail + other services | Same credentials used on IMAP and other services |
-| Firewall logs | External IP on port 143/110 | Unexpected external access to mail retrieval ports |
-
-**SPL Query to detect IMAP brute force:**
-```spl
-index=mail sourcetype=dovecot_logs
-(action="auth_failed" OR message="authentication failed")
-| stats count by src_ip, user, action
-| where count > 10
-| sort -count
-```
-
-**KQL Query to detect IMAP brute force (Sentinel):**
-```kql
-CommonSecurityLog
-| where DestinationPort in (110, 143, 993, 995)
-| where Message contains "authentication failed"
-    or Message contains "auth error"
-| summarize FailCount=count() by SourceIP, DestinationIP, DestinationPort
-| where FailCount > 10
-| sort by FailCount desc
-```
-
-**MITRE Technique:** T1078 — Valid Accounts (credential access via mail)
-**Also relevant:** T1114 — Email Collection, T1110 — Brute Force
-
 ## IMAP Command Reference
 
 | Command | Purpose |
