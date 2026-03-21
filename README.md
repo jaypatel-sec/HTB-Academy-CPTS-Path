@@ -7,11 +7,9 @@
 Personal documentation of my progress through the HTB Academy CPTS
 Penetration Tester Job Role path. Written in my own words — not copied
 from HTB, not a tutorial summary. Working notes from someone actively
-learning penetration testing methodology.
+learning penetration testing methodology.Every module is documented with
+actual commands used and with real lab output.
 
-Every module is documented with actual commands used, real lab output,
-detection layer showing what the blue team would see, and MITRE ATT&CK
-mapping on every technique.
 
 ## Prerequisites (Completed Before CPTS Path)
 
@@ -72,11 +70,5 @@ mapping on every technique.
 | 13 | Footprinting Lab — Medium | ⏳ Pending |
 | 14 | Footprinting Lab — Hard | ⏳ Pending |
 
-## Why Every Technique Includes A Detection Layer
-I am building a dual offensive and defensive portfolio simultaneously.
-Understanding what the blue team sees when I run an attack is not
-optional — it is the point. Every technique documented here includes
-the corresponding SIEM detection logic.
 
-Defensive portfolio: [SOC-Detection-Lab](https://github.com/jaypatel-sec/SOC-Detection-Lab)
 Main portfolio: [Offensive-Security-Portfolio](https://github.com/jaypatel-sec/Offensive-Security-Portfolio)
