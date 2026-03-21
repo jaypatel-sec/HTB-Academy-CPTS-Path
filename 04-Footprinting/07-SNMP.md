@@ -125,34 +125,7 @@ iso.3.6.1.2.1.25.1.7.1.3.1.1.4.70.76.65.71 = STRING: "HTB{5nMp_fl4g_uidhfljnsldi
 
 The thing that surprised me most was how much SNMP exposes before any exploitation — OS version, kernel, hostname, admin email, running processes, installed software, and even script output, all from a single `snmpwalk` with the default `public` community string. The `hrSWRunParameters` MIB was completely unexpected — the idea that a running script's output is stored in an SNMP OID and readable by anyone who knows the community string is a serious misconfiguration that I would not have thought to look for. The `.70.76.65.71` OID suffix being ASCII decimal encoding of `FLAG` was also something I had not encountered before — understanding how SNMP indexes named entries in tables is genuinely useful for parsing output in real engagements.
 
-## Detection Layer
 
-| Log Source | What Is Logged | Detection Signal |
-|---|---|---|
-| Network traffic | UDP packets to port 161 | SNMP queries from external or unexpected IPs |
-| Firewall logs | UDP 161 connections | External IP reaching SNMP port |
-| SIEM | Volume of SNMP requests | Hundreds of OID queries in short timeframe = snmpwalk |
-| IDS/IPS | SNMP community string in plaintext | Community string visible in packet capture |
-
-**SPL Query to detect SNMP enumeration:**
-```spl
-index=network dest_port=161 protocol=udp
-| stats count by src_ip, dest_ip
-| where count > 50
-| sort -count
-```
-
-**KQL Query (Sentinel):**
-```kql
-CommonSecurityLog
-| where DestinationPort == 161
-| summarize Count=count() by SourceIP, DestinationIP
-| where Count > 50
-| sort by Count desc
-```
-
-**MITRE Technique:** T1602.001 — Data from Configuration Repository: SNMP (MIB Dump)
-**Also relevant:** T1046 — Network Service Discovery
 
 ## Commands Reference
 
