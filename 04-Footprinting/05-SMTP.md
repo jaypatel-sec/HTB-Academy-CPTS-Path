@@ -136,37 +136,6 @@ providing an external RCPT TO and seeing the server accept it is an instant
 critical finding in any pentest. I also did not realise that EXPN on mailing
 lists can expose an entire department's user list in one command.
 
-## Detection Layer
-
-| Log Source | What Is Logged | Detection Signal |
-|---|---|---|
-| Mail server logs `/var/log/mail.log` | VRFY/EXPN commands | Sequential VRFY commands from single IP |
-| Mail server logs | Rejected relay attempts | External IP attempting to relay to external domain |
-| Network logs | SMTP connections on port 25 | External source connecting to internal SMTP |
-| SIEM | Auth failures | Multiple failed SMTP AUTH attempts |
-
-**SPL Query to detect SMTP user enumeration:**
-```spl
-index=mail sourcetype=smtp_logs
-(command="VRFY" OR command="EXPN")
-| stats count by src_ip, command, recipient
-| where count > 10
-| sort -count
-```
-
-**KQL Query (Sentinel):**
-```kql
-CommonSecurityLog
-| where DestinationPort == 25
-| where Message contains "VRFY" or Message contains "EXPN"
-| summarize Count=count() by SourceIP, Message
-| where Count > 10
-| sort by Count desc
-```
-
-**MITRE Technique:** T1589.002 — Gather Victim Identity Information: Email Addresses
-**Also relevant:** T1595 — Active Scanning, T1566 — Phishing (open relay abuse)
-
 ## Commands Reference
 
 | Command | Purpose |
