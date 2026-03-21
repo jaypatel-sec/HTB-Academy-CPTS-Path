@@ -157,35 +157,6 @@ DBSNMP                         E066D214D5421CCC
 
 The two-phase attack requirement was something I had not encountered with other databases — you cannot even attempt a login without knowing the SID first, which adds a layer that MySQL and MSSQL simply do not have. The `scott/tiger` credential being valid on a lab server drove home how long these defaults persist in real environments — Oracle shipped it as a demo account for decades and administrators routinely forget to disable it. The `as sysdba` escalation was also unexpected in its simplicity — once you have any credential granted SYSDBA privilege, you effectively have root on the entire database with a single keyword appended to the connection string. The `sys.user$` query returning short 16-character DES hashes confirmed how weak Oracle 11g password storage is compared to modern databases.
 
-## Detection Layer
-
-| Log Source | What Is Logged | Detection Signal |
-|---|---|---|
-| Oracle audit log | SID brute force attempts | Hundreds of failed connection attempts to port 1521 |
-| Oracle listener log | Connection requests | Multiple SIDs being tested from single IP |
-| Oracle audit log | Authentication failures | Rapid credential brute force against valid SID |
-| Network logs | Connection to port 1521 | External IP connecting to Oracle listener |
-
-**SPL Query to detect Oracle enumeration:**
-```spl
-index=network dest_port=1521
-| stats count by src_ip, dest_ip
-| where count > 20
-| sort -count
-```
-
-**KQL Query (Sentinel):**
-```kql
-CommonSecurityLog
-| where DestinationPort == 1521
-| summarize Count=count() by SourceIP, DestinationIP
-| where Count > 20
-| sort by Count desc
-```
-
-**MITRE Techniques:**
-- **T1078.001 — Valid Accounts: Default Accounts** — using default `scott/tiger` credentials that ship with Oracle installations
-- **T1213 — Data from Information Repositories** — querying sys.user$ and all_tables to extract stored data and password hashes
 
 ## Commands Reference
 
