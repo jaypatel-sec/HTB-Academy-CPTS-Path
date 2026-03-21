@@ -126,38 +126,6 @@ Employees
 
 The `ms-sql-ntlm-info` script was the biggest revelation in this module — extracting the hostname and domain name before any credentials are exchanged, purely through the NTLM handshake, is something I did not realise was possible. You get free reconnaissance on every MSSQL server you touch just by running that one script. The `RTM` with `Post-SP patches applied: false` combination is also a significant finding pattern — an unpatched base release in production is an immediate flag to check against known CVEs. The silent failure when omitting `-windows-auth` for a domain account also caught me — there is no error message, the connection just fails, and without knowing the flag you would assume the credentials are wrong.
 
-## Detection Layer
-
-| Log Source | What Is Logged | Detection Signal |
-|---|---|---|
-| SQL Server logs | Authentication events | Multiple failed logins from same IP |
-| SQL Server logs | Schema enumeration queries | `sys.databases`, `information_schema` queries |
-| Windows Security Log | Event ID 4624/4625 | Windows auth login success or failure to SQL |
-| Network logs | Connection to port 1433 | External IP connecting to database port |
-
-**SPL Query to detect MSSQL enumeration:**
-```spl
-index=windows EventCode=4624 LogonType=3
-(ProcessName="*sqlservr*" OR TargetUserName="sa")
-| stats count by SourceNetworkAddress, TargetUserName
-| where count > 5
-| sort -count
-```
-
-**KQL Query (Sentinel):**
-```kql
-SecurityEvent
-| where EventID in (4624, 4625)
-| where ProcessName contains "sqlservr"
-| summarize Count=count() by IpAddress, TargetUserName, EventID
-| where Count > 5
-| sort by Count desc
-```
-
-**MITRE Techniques:**
-- **T1078.002 — Valid Accounts: Domain Accounts** — using discovered Windows/domain credentials to authenticate via `-windows-auth`
-- **T1213 — Data from Information Repositories** — querying sys.databases and tables to extract stored data
-- **T1059.001 — Command and Scripting Interpreter: PowerShell / xp_cmdshell** — OS command execution via xp_cmdshell
 
 ## Commands Reference
 
