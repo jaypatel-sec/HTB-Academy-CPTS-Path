@@ -141,8 +141,6 @@ password complexity settings all in one shot. The password policy output showing
 `min_pw_length: 5` and no complexity requirements is exactly the kind of finding
 that goes straight into a pentest report as a critical misconfiguration.
 
- — relay attacks when SMB signing is disabled
-
 ## Commands Reference
 
 | Command | Purpose |
