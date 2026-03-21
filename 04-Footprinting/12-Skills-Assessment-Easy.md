@@ -295,7 +295,7 @@ Are you sure you want to continue connecting (yes/no)? yes
 Welcome to Ubuntu 20.04.1 LTS (GNU/Linux 5.4.0-90-generic x86_64)
 
 ceil@NIXEASY:~$ cat /home/flag/flag.txt
-HTB{7nrzise7hednrxihskjed7nzrgkweunj47zngrhdbkjhgdfbjkc7hgj}
+HTB{...flag_redacted...}
 ```
 
 ---
@@ -320,8 +320,6 @@ The DNS zone transfer working without any authentication was also a
 reminder of how much information is freely given to anyone who asks
 the right question. `dig AXFR` in two seconds returned the entire
 internal network map for free.
-
-
 
 ## Full Attack Chain Reference
 
@@ -351,7 +349,7 @@ internal network map for free.
 9.  ssh -i id_rsa ceil@<IP>
 
 10. cat /home/flag/flag.txt
-    → HTB{7nrzise7hednrxihskjed7nzrgkweunj47zngrhdbkjhgdfbjkc7hgj}
+    → HTB{...flag_redacted...}
 ```
 
 ---
