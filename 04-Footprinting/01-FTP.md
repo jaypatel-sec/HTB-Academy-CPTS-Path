@@ -136,40 +136,6 @@ is enabled — you get the entire file structure in seconds. I also did not
 realise FTP logs on the server side can lead to RCE through log poisoning
 combined with LFI vulnerabilities.
 
-## Detection Layer
-
-**What this enumeration looks like to a defender:**
-
-| Log Source | What Is Logged | Detection Signal |
-|---|---|---|
-| FTP server logs `/var/log/vsftpd.log` | Anonymous login events, file access | Multiple anonymous logins from same IP |
-| Network traffic | Cleartext FTP commands and credentials | FTP traffic on port 21 with USER/PASS visible |
-| Firewall logs | Connection to port 21 | External IP connecting to FTP |
-| SIEM | Auth events | Anonymous login followed by recursive directory listing |
-
-**SPL Query to detect anonymous FTP login:**
-```spl
-index=network sourcetype=ftp_logs
-(user="anonymous" OR user="ftp")
-| stats count by src_ip, dest_ip, action
-| where count > 5
-| sort -count
-```
-
-**KQL Query to detect anonymous FTP (Sentinel):**
-```kql
-CommonSecurityLog
-| where DestinationPort == 21
-| where SourceUserName contains "anonymous" or SourceUserName contains "ftp"
-| summarize Count=count() by SourceIP, DestinationIP, SourceUserName
-| where Count > 5
-| sort by Count desc
-```
-
-**MITRE Techniques:**
-- **T1078.001 — Valid Accounts: Default Accounts** — anonymous FTP login using default credentials
-- **T1135 — Network Share Discovery** — recursive directory listing to map file structure
-- **T1590.001 — Gather Victim Network Information: Domain Properties** — SSL certificate exposing internal hostname and organisation details
 
 ## Commands Reference
 
