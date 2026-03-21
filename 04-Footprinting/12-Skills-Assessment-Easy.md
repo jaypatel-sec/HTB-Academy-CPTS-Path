@@ -321,40 +321,7 @@ reminder of how much information is freely given to anyone who asks
 the right question. `dig AXFR` in two seconds returned the entire
 internal network map for free.
 
----
 
-## Detection Layer
-
-| Attack Stage | MITRE Technique | Log Source | Detection Signal |
-|---|---|---|---|
-| DNS zone transfer | T1590.002 | DNS server logs | AXFR request from non-authorised IP |
-| FTP enumeration | T1083 | FTP server logs | Directory listing + file download by authenticated user |
-| SSH private key theft | T1552.004 | FTP + SSH logs | File download of id_rsa followed by SSH login with key auth |
-| SSH login with key | T1078 | Auth.log Event | SSH login from new IP using key authentication |
-
-**SPL Query to detect SSH key exfiltration via FTP:**
-```spl
-index=ftp_logs action=download filename="id_rsa"
-| stats count by src_ip, user, filename
-| sort -count
-```
-
-**KQL Query (Sentinel):**
-```kql
-CommonSecurityLog
-| where DestinationPort == 2121 or DestinationPort == 21
-| where Message contains "id_rsa"
-| summarize Count=count() by SourceIP, DestinationIP, Message
-| sort by Count desc
-```
-
-**MITRE Techniques:**
-- T1590.002 — Gather Victim Network Information: DNS
-- T1083 — File and Directory Discovery
-- T1552.004 — Unsecured Credentials: Private Keys
-- T1078 — Valid Accounts
-
----
 
 ## Full Attack Chain Reference
 
