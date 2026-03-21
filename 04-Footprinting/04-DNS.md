@@ -117,33 +117,6 @@ servers and nobody locks it down externally. The TXT record enumeration was
 also new to me — I had no idea SPF records indirectly reveal every third-party
 email service a company uses, which is valuable OSINT for phishing campaigns.
 
-## Detection Layer
-
-| Log Source | What Is Logged | Detection Signal |
-|---|---|---|
-| DNS server logs | AXFR request attempts | Zone transfer request from non-authorised IP |
-| Network logs | Large DNS responses over TCP port 53 | Zone transfer returning megabytes of data |
-| SIEM | DNS query volume | Hundreds of subdomain queries from single IP |
-
-**SPL Query to detect DNS zone transfer attempts:**
-```spl
-index=network dest_port=53 protocol=tcp
-| rex field=dns_query "type=(?<query_type>\w+)"
-| where query_type="AXFR"
-| stats count by src_ip, dest_ip, dns_query
-| sort -count
-```
-
-**KQL Query (Sentinel):**
-```kql
-DnsEvents
-| where QueryType == "AXFR" or QueryType == "IXFR"
-| summarize Count=count() by ClientIP, Name, QueryType
-| sort by Count desc
-```
-
-**MITRE Technique:** T1590.002 — Gather Victim Network Information: DNS
-**Also relevant:** T1018 — Remote System Discovery
 
 ## Commands Reference
 
