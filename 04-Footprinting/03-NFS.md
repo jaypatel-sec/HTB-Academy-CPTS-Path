@@ -118,8 +118,6 @@ dangerous setting I came across — it means if you mount the share as root on
 your machine, you are root on the server's filesystem too. Finding that in an
 `/etc/exports` file is an immediate critical finding.
 
-
-
 ## Commands Reference
 
 | Command | Purpose |
