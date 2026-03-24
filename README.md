@@ -26,8 +26,8 @@ Every module is documented with actual commands used and real lab output.
 
 | #  | Module                                    | Difficulty  | Status                              | Date       |
 |----|-------------------------------------------|-------------|-------------------------------------|------------|
-| 01 | Penetration Testing Process               | Fundamental | ⏳ Pending                          | —          |
-| 02 | Getting Started                           | Fundamental | ⏳ Pending                          | —          |
+| 01 | Penetration Testing Process               | Fundamental | ✅ Complete                         | March 2026 |
+| 02 | Getting Started                           | Fundamental | ✅ Complete                         | March 2026 |
 | 03 | Network Enumeration with Nmap             | Easy        | ⏳ Pending                          | —          |
 | 04 | Footprinting                              | Medium      | ✅ Complete — 14/14 sections        | March 2026 |
 | 05 | Information Gathering - Web Edition       | Easy        | ⏳ Pending                          | —          |
