@@ -138,7 +138,7 @@ nmap --script imap-brute -p143 10.129.14.128
 
 ## Real Lab Output
 ```
-Hackerpatel007_1@htb[/htb]$ sudo nmap -p110,143,993,995 -sC -sV 10.129.14.128
+HackerpatelOO7_1@htb[/htb]$ sudo nmap -p110,143,993,995 -sC -sV 10.129.14.128
 
 PORT    STATE SERVICE  VERSION
 110/tcp open  pop3     Dovecot pop3d
@@ -150,12 +150,12 @@ PORT    STATE SERVICE  VERSION
 |           countryName=UK
 995/tcp open  ssl/pop3 Dovecot pop3d
 
-Hackerpatel007_1@htb[/htb]$ telnet 10.129.14.128 110
+HackerpatelOO7_1@htb[/htb]$ telnet 10.129.14.128 110
 +OK InFreight POP3 v9.188
 
 openssl s_client -connect 10.129.14.128:993
 * OK [CAPABILITY IMAP4rev1 SASL-IR LOGIN-REFERRALS ID ENABLE IDLE LITERAL+
-  AUTH=PLAIN] HTB{roncfbw7iszerd7shni7jr2343zhrj}
+  AUTH=PLAIN] HTB{...flag_redacted...}
 
 tag0 LOGIN robin robin
 tag0 OK Logged in
@@ -171,7 +171,7 @@ tag3 FETCH 1 (BODY[])
 Subject: Flag
 To: Robin <robin@inlanefreight.htb>
 From: CTO <devadmin@inlanefreight.htb>
-HTB{983uzn8jmfgpd8jmof8c34n7zio}
+HTB{...flag_redacted...}
 ```
 
 ## What I Learned / What Surprised Me
