@@ -202,7 +202,7 @@ nc -nv 10.129.2.49 31337
 
 ```
 (UNKNOWN) [10.129.2.49] 31337 (?) open
-220 HTB{pr0F7pDv3r510nb4nn3r}
+220 HTB{...flag_redacted...}
 ```
 
 Services on non-standard ports often expose banners that contain version strings, internal hostnames, or even flags. Always connect manually to anything unusual before moving on.
@@ -274,7 +274,7 @@ curl http://10.129.2.28/robots.txt
 User-agent: *
 Allow: /
 
-HTB{873nniuc71bu6usbs1i96as6dsv26}
+HTB{...flag_redacted...}
 ```
 
 `robots.txt` disallows specific paths from being indexed by search engines — which often means those paths contain something the administrator does not want publicly visible. Always fetch it.
@@ -363,7 +363,7 @@ sudo ncat -nv --source-port 53 10.129.2.47 50000
 
 ```
 Ncat: Connected to 10.129.2.47:50000.
-220 HTB{kjnsdf2n982n1827eh76238s98di1w6}
+220 HTB{...flag_redacted...}
 ```
 
 ---
@@ -498,12 +498,12 @@ sudo nmap -Pn --disable-arp-ping -p53 -sU -sC 10.129.2.48
 PORT   STATE SERVICE
 53/udp open  domain
 | dns-nsid:
-|_  bind.version: HTB{GoTtgUnyze9Psw4vGjcuMpHRp}
+|_  bind.version: HTB{...flag_redacted...}
 ```
 
 The `dns-nsid` NSE script queries the DNS server for its version string via the NSID (Name Server Identifier) extension. The version string returned here is the flag.
 
-**Answer:** HTB{GoTtgUnyze9Psw4vGjcuMpHRp}
+**Answer:** HTB{...flag_redacted...}
 
 ---
 
@@ -553,12 +553,12 @@ sudo ncat -nv --source-port 53 10.129.2.47 50000
 
 ```
 Ncat: Connected to 10.129.2.47:50000.
-220 HTB{kjnsdf2n982n1827eh76238s98di1w6}
+220 HTB{...flag_redacted...}
 ```
 
 The service banner on port 50000 contains the flag directly. Source port 53 was the key — the IDS was configured to allow DNS traffic and source port 53 spoofing bypassed the rule entirely.
 
-**Answer:** HTB{kjnsdf2n982n1827eh76238s98di1w6}
+**Answer:** HTB{...flag_redacted...}
 
 ---
 
