@@ -6,7 +6,8 @@
 | Module | 05 — Information Gathering - Web Edition |
 | Lab | Skills Assessment |
 | Difficulty | Easy |
-| Target | inlanefreight.com / inlanefreight.htb |
+| Target IP | 154.57.164.74 |
+| Target Port | 32127 |
 | Date | April 2026 |
 
 ---
@@ -50,7 +51,7 @@ Registrar IANA ID: 468
 
 Every domain registrar is assigned a unique IANA ID. This confirms which company manages the domain registration — useful for identifying the hosting ecosystem and any associated services under the same registrar.
 
-**Answer: 468**
+> **Answer:** <details><summary>Click to reveal</summary>468</details>
 
 ---
 
@@ -61,13 +62,13 @@ Every domain registrar is assigned a unique IANA ID. This confirms which company
 **Step 1 — Add the target to /etc/hosts:**
 
 ```bash
-Hackerpatel007_1@htb[/htb]$ sudo sh -c "echo '<TARGET_IP> inlanefreight.htb' >> /etc/hosts"
+Hackerpatel007_1@htb[/htb]$ sudo sh -c "echo '154.57.164.74 inlanefreight.htb' >> /etc/hosts"
 ```
 
 **Step 2 — Fetch only the response headers using -I:**
 
 ```bash
-Hackerpatel007_1@htb[/htb]$ curl -I http://inlanefreight.htb:<PORT>
+Hackerpatel007_1@htb[/htb]$ curl -I http://inlanefreight.htb:32127
 ```
 
 **Output:**
@@ -86,7 +87,7 @@ Accept-Ranges: bytes
 
 The `Server` response header directly identifies the web server software. `nginx/1.26.1` — the question asks for the software name only, not the version.
 
-**Answer: nginx**
+> **Answer:** <details><summary>Click to reveal</summary>nginx</details>
 
 ---
 
@@ -97,7 +98,7 @@ The `Server` response header directly identifies the web server software. `nginx
 **Step 1 — VHost enumeration against inlanefreight.htb:**
 
 ```bash
-Hackerpatel007_1@htb[/htb]$ gobuster vhost -u http://inlanefreight.htb:<PORT> \
+Hackerpatel007_1@htb[/htb]$ gobuster vhost -u http://inlanefreight.htb:32127 \
 -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt \
 -t 60 --append-domain
 ```
@@ -108,12 +109,12 @@ Hackerpatel007_1@htb[/htb]$ gobuster vhost -u http://inlanefreight.htb:<PORT> \
 ===============================================================
 Gobuster v3.6
 ===============================================================
-[+] Url:             http://inlanefreight.htb:<PORT>
+[+] Url:             http://inlanefreight.htb:32127
 [+] Threads:         60
 [+] Wordlist:        /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt
 [+] Append Domain:   true
 ===============================================================
-Found: web1337.inlanefreight.htb:<PORT> (Status: 200) [Size: 104]
+Found: web1337.inlanefreight.htb:32127 (Status: 200) [Size: 104]
 ===============================================================
 ```
 
@@ -122,13 +123,13 @@ New virtual host found: `web1337.inlanefreight.htb`
 **Step 2 — Add to /etc/hosts:**
 
 ```bash
-Hackerpatel007_1@htb[/htb]$ sudo sh -c "echo '<TARGET_IP> web1337.inlanefreight.htb' >> /etc/hosts"
+Hackerpatel007_1@htb[/htb]$ sudo sh -c "echo '154.57.164.74 web1337.inlanefreight.htb' >> /etc/hosts"
 ```
 
 **Step 3 — Check robots.txt on the new vhost:**
 
 ```bash
-Hackerpatel007_1@htb[/htb]$ curl http://web1337.inlanefreight.htb:<PORT>/robots.txt
+Hackerpatel007_1@htb[/htb]$ curl http://web1337.inlanefreight.htb:32127/robots.txt
 ```
 
 **Output:**
@@ -146,7 +147,7 @@ A `Disallow` directive is not a security control — it is a breadcrumb. `/admin
 **Step 4 — Check headers on the admin path:**
 
 ```bash
-Hackerpatel007_1@htb[/htb]$ curl -I http://web1337.inlanefreight.htb:<PORT>/admin_h1dd3n
+Hackerpatel007_1@htb[/htb]$ curl -I http://web1337.inlanefreight.htb:32127/admin_h1dd3n
 ```
 
 **Output:**
@@ -163,7 +164,7 @@ Connection: keep-alive
 **Step 5 — Fetch the admin directory:**
 
 ```bash
-Hackerpatel007_1@htb[/htb]$ curl http://web1337.inlanefreight.htb:<PORT>/admin_h1dd3n/
+Hackerpatel007_1@htb[/htb]$ curl http://web1337.inlanefreight.htb:32127/admin_h1dd3n/
 ```
 
 **Output:**
@@ -181,7 +182,7 @@ Hackerpatel007_1@htb[/htb]$ curl http://web1337.inlanefreight.htb:<PORT>/admin_h
 
 The API key is embedded directly in the page content.
 
-**Answer: e963d863ee0e82ba7080fbf558ca0d3f**
+> **Answer:** <details><summary>Click to reveal</summary>e963d863ee0e82ba7080fbf558ca0d3f</details>
 
 ---
 
@@ -192,7 +193,7 @@ The API key is embedded directly in the page content.
 **Step 1 — VHost enumeration against web1337.inlanefreight.htb:**
 
 ```bash
-Hackerpatel007_1@htb[/htb]$ gobuster vhost -u http://web1337.inlanefreight.htb:<PORT> \
+Hackerpatel007_1@htb[/htb]$ gobuster vhost -u http://web1337.inlanefreight.htb:32127 \
 -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-110000.txt \
 -t 60 --append-domain
 ```
@@ -201,7 +202,7 @@ Hackerpatel007_1@htb[/htb]$ gobuster vhost -u http://web1337.inlanefreight.htb:<
 
 ```
 ===============================================================
-Found: dev.web1337.inlanefreight.htb:<PORT> (Status: 200) [Size: 123]
+Found: dev.web1337.inlanefreight.htb:32127 (Status: 200) [Size: 123]
 ===============================================================
 ```
 
@@ -210,7 +211,7 @@ A development subdomain found on the second-level vhost.
 **Step 2 — Add to /etc/hosts:**
 
 ```bash
-Hackerpatel007_1@htb[/htb]$ sudo sh -c "echo '<TARGET_IP> dev.web1337.inlanefreight.htb' >> /etc/hosts"
+Hackerpatel007_1@htb[/htb]$ sudo sh -c "echo '154.57.164.74 dev.web1337.inlanefreight.htb' >> /etc/hosts"
 ```
 
 **Step 3 — Install Scrapy and set up ReconSpider:**
@@ -224,7 +225,7 @@ Hackerpatel007_1@htb[/htb]$ unzip ReconSpider.zip
 **Step 4 — Crawl dev.web1337.inlanefreight.htb:**
 
 ```bash
-Hackerpatel007_1@htb[/htb]$ python3 ReconSpider.py http://dev.web1337.inlanefreight.htb:<PORT>
+Hackerpatel007_1@htb[/htb]$ python3 ReconSpider.py http://dev.web1337.inlanefreight.htb:32127
 ```
 
 **Output (truncated):**
@@ -251,7 +252,7 @@ Hackerpatel007_1@htb[/htb]$ cat results.json | jq '.emails'
 
 ReconSpider crawled all linked pages under the vhost and extracted every email address found in the HTML source. Development environments frequently contain staff emails, contact addresses, and internal notification addresses.
 
-**Answer: 1337testing@inlanefreight.htb**
+> **Answer:** <details><summary>Click to reveal</summary>1337testing@inlanefreight.htb</details>
 
 ---
 
@@ -277,7 +278,7 @@ A developer left a note in an HTML comment on the development site referencing t
 
 The current API key (`e963d863ee0e82ba7080fbf558ca0d3f` — found in Question 3) is being replaced. This comment reveals the replacement key before the rotation occurs.
 
-**Answer: ba988b835be4aa97d068941dc852ff33**
+> **Answer:** <details><summary>Click to reveal</summary>ba988b835be4aa97d068941dc852ff33</details>
 
 ---
 
@@ -295,39 +296,39 @@ The HTML comment with the upcoming API key rotation was the most interesting fin
 
 ```
 1.  whois inlanefreight.com | grep IANA
-    → Registrar IANA ID: 468
+    → Registrar IANA ID: [hidden]
 
-2.  sudo sh -c "echo '<IP> inlanefreight.htb' >> /etc/hosts"
-    curl -I http://inlanefreight.htb:<PORT>
-    → Server: nginx/1.26.1
+2.  sudo sh -c "echo '154.57.164.74 inlanefreight.htb' >> /etc/hosts"
+    curl -I http://inlanefreight.htb:32127
+    → Server: nginx/[version]
 
-3.  gobuster vhost -u http://inlanefreight.htb:<PORT> -w subdomains-top1million-110000.txt -t 60 --append-domain
+3.  gobuster vhost -u http://inlanefreight.htb:32127 -w subdomains-top1million-110000.txt -t 60 --append-domain
     → Found: web1337.inlanefreight.htb
 
-4.  sudo sh -c "echo '<IP> web1337.inlanefreight.htb' >> /etc/hosts"
-    curl http://web1337.inlanefreight.htb:<PORT>/robots.txt
+4.  sudo sh -c "echo '154.57.164.74 web1337.inlanefreight.htb' >> /etc/hosts"
+    curl http://web1337.inlanefreight.htb:32127/robots.txt
     → Disallow: /admin_h1dd3n
 
-5.  curl -I http://web1337.inlanefreight.htb:<PORT>/admin_h1dd3n
+5.  curl -I http://web1337.inlanefreight.htb:32127/admin_h1dd3n
     → 301 → /admin_h1dd3n/
 
-6.  curl http://web1337.inlanefreight.htb:<PORT>/admin_h1dd3n/
-    → API key: e963d863ee0e82ba7080fbf558ca0d3f ✅
+6.  curl http://web1337.inlanefreight.htb:32127/admin_h1dd3n/
+    → API key: [hidden] ✅
 
-7.  gobuster vhost -u http://web1337.inlanefreight.htb:<PORT> -w subdomains-top1million-110000.txt -t 60 --append-domain
+7.  gobuster vhost -u http://web1337.inlanefreight.htb:32127 -w subdomains-top1million-110000.txt -t 60 --append-domain
     → Found: dev.web1337.inlanefreight.htb
 
-8.  sudo sh -c "echo '<IP> dev.web1337.inlanefreight.htb' >> /etc/hosts"
+8.  sudo sh -c "echo '154.57.164.74 dev.web1337.inlanefreight.htb' >> /etc/hosts"
 
 9.  pip3 install scrapy --break-system-packages
     wget ReconSpider.zip && unzip ReconSpider.zip
-    python3 ReconSpider.py http://dev.web1337.inlanefreight.htb:<PORT>
+    python3 ReconSpider.py http://dev.web1337.inlanefreight.htb:32127
 
 10. cat results.json | jq '.emails'
-    → 1337testing@inlanefreight.htb ✅
+    → [hidden] ✅
 
 11. cat results.json | jq '.comments'
-    → API key rotation comment: ba988b835be4aa97d068941dc852ff33 ✅
+    → API key rotation comment: [hidden] ✅
 ```
 
 ---
