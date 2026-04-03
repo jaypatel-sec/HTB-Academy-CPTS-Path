@@ -30,7 +30,7 @@ Every module is documented with actual commands used and real lab output.
 | 02 | Getting Started                           | Fundamental | ✅ Complete                         | March 2026 |
 | 03 | Network Enumeration with Nmap             | Easy        | ✅ Complete                         | March 2026 |
 | 04 | Footprinting                              | Medium      | ✅ Complete                         | March 2026 |
-| 05 | Information Gathering - Web Edition       | Easy        | ⏳ Pending                          | —          |
+| 05 | Information Gathering - Web Edition       | Easy        | ✅ Complete                         | April 2026 |
 | 06 | Vulnerability Assessment                  | Easy        | ⏳ Pending                          | —          |
 | 07 | File Transfers                            | Medium      | ⏳ Pending                          | —          |
 | 08 | Shells and Payloads                       | Medium      | ⏳ Pending                          | —          |
