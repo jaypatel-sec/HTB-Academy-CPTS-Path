@@ -36,7 +36,7 @@ Every module is documented with actual commands used and real lab output.
 | 08 | Shells and Payloads | Medium | ⏳ Pending | — |
 | 09 | Using the Metasploit Framework | Medium | ⏳ Pending | — |
 | 10 | Password Attacks | Medium | ⏳ Pending | — |
-| 11 | Attacking Common Services | Medium | ⏳ Pending | — |
+| 11 | Attacking Common Services | Medium | ✅ Complete | April 2026 |
 | 12 | Pivoting, Tunneling and Port Forwarding | Medium | ⏳ Pending | — |
 | 13 | Active Directory Enumeration and Attacks | Medium | ⏳ Pending | — |
 | 14 | Using Web Proxies | Easy | ⏳ Pending | — |
