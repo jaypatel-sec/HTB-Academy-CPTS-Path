@@ -33,7 +33,7 @@ Every module is documented with actual commands used and real lab output.
 | 05 | Information Gathering - Web Edition | Easy | ✅ Complete | April 2026 |
 | 06 | Vulnerability Assessment | Easy | ✅ Complete | April 2026 |
 | 07 | File Transfers | Medium | ⏳ Pending | — |
-| 08 | Shells and Payloads | Medium | ⏳ Pending | — |
+| 08 | Shells and Payloads | Medium | ✅ Complete | April 2026 |
 | 09 | Using the Metasploit Framework | Medium | ⏳ Pending | — |
 | 10 | Password Attacks | Medium | ⏳ Pending | — |
 | 11 | Attacking Common Services | Medium | ✅ Complete | April 2026 |
