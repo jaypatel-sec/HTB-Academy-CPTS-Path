@@ -32,7 +32,7 @@ Every module is documented with actual commands used and real lab output.
 | 04 | Footprinting | Medium | ✅ Complete | March 2026 |
 | 05 | Information Gathering - Web Edition | Easy | ✅ Complete | April 2026 |
 | 06 | Vulnerability Assessment | Easy | ✅ Complete | April 2026 |
-| 07 | File Transfers | Medium | ⏳ Pending | — |
+| 07 | File Transfers | Medium | ✅ Complete | April 2026 |
 | 08 | Shells and Payloads | Medium | ✅ Complete | April 2026 |
 | 09 | Using the Metasploit Framework | Medium | ✅ Complete | April 2026 |
 | 10 | Password Attacks | Medium | ⏳ Pending | — |
