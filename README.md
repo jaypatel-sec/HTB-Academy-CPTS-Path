@@ -1,4 +1,4 @@
-# HTB Academy — CPTS Learning Path Notes
+# HTB Academy — CPTS Path
 
 **Author:** Jay Patel | **Path:** Certified Penetration Testing Specialist (CPTS)
 **Started:** March 2026 | **Status:** In Progress
@@ -7,9 +7,9 @@
 
 ## What This Repository Is
 
-Personal documentation of my progress through the HTB Academy CPTS Penetration Tester Job Role path. Written in my own words — not copied from HTB, not a tutorial summary. Working notes from someone actively learning penetration testing methodology.
-
-Every module is documented with actual commands used and real lab output.
+Personal documentation of progress through the HTB Academy CPTS path. Written in my own words —
+not copied from HTB, not a tutorial summary. Every module is documented with real lab output,
+exact commands, and notes on what each technique actually means in practice.
 
 ---
 
