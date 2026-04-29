@@ -57,6 +57,4 @@ exact commands, and notes on what each technique actually means in practice.
 
 ---
 
-## Main Portfolio
-
-[Offensive-Security-Portfolio](https://github.com/jaypatel-sec/Offensive-Security-Portfolio)
+→ [Main Portfolio](https://github.com/jaypatel-sec/Offensive-Security-Portfolio)
