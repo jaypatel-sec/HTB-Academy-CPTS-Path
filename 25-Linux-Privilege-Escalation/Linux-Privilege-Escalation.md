@@ -1,7 +1,7 @@
 # Linux Privilege Escalation
 
 > **HTB Academy — CPTS Pathway | Module 25**
-> In Progress: May 2026
+> Completed: May 2026
 
 ---
 
@@ -14,9 +14,9 @@
 | **Module Number** | 25 |
 | **Difficulty** | Medium |
 | **Sections** | 27 |
-| **Status** | 🔄 In Progress (89.29%) |
+| **Status** | ✅ Complete |
 | **Started** | May 2026 |
-| **Next** | Skills Assessment Lab |
+| **Completed** | May 2026 |
 
 ---
 
