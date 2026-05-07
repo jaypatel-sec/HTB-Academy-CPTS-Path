@@ -50,7 +50,7 @@ exact commands, and notes on what each technique actually means in practice.
 | 22 | Command Injections | Medium | ⏳ Pending | — |
 | 23 | Web Attacks | Medium | ⏳ Pending | — |
 | 24 | Attacking Common Applications | Medium | ⏳ Pending | — |
-| 25 | Linux Privilege Escalation | Easy | ⏳ Pending | — |
+| 25 | Linux Privilege Escalation | Medium | ✅ Complete | May 2026 |
 | 26 | Windows Privilege Escalation | Medium | ⏳ Pending | — |
 | 27 | Documentation and Reporting | Easy | ⏳ Pending | — |
 | 28 | Attacking Enterprise Networks | Medium | ⏳ Pending | — |
