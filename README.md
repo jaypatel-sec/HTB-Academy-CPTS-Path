@@ -57,4 +57,18 @@ exact commands, and notes on what each technique actually means in practice.
 
 ---
 
+## Certification Roadmap
+
+| Certification | Provider | Status |
+|---|---|---|
+| INE ICCA (Certified Cloud Associate) | INE | ✅ Completed |
+| eJPT (eLearnSecurity Junior Penetration Tester) | INE / eLearnSecurity | ✅ Completed |
+| HTB CPTS (Certified Penetration Testing Specialist) | HackTheBox | 🔄 In Progress |
+| OSCP (Offensive Security Certified Professional) | OffSec | ⏳ Upcoming |
+| HTB CWES (Certified Web Exploitation Specialist) | HackTheBox | ⏳ Upcoming |
+| CRTO (Certified Red Team Operator) | Zero-Point Security | ⏳ Upcoming |
+| AZ-900 (Azure Fundamentals) | Microsoft | ⏳ Upcoming |
+
+---
+
 → [Main Portfolio](https://github.com/jaypatel-sec/Offensive-Security-Portfolio)
