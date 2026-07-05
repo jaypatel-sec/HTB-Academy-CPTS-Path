@@ -1,7 +1,7 @@
 # HTB Academy — CPTS Path
 
 **Author:** Jay Patel | **Path:** Certified Penetration Testing Specialist (CPTS)
-**Started:** March 2026 | **Status:** In Progress
+**Started:** March 2026 | **Status:** In Progress (13/28 modules complete)
 
 ---
 
@@ -54,6 +54,11 @@ exact commands, and notes on what each technique actually means in practice.
 | 26 | Windows Privilege Escalation | Medium | ✅ Complete | July 2026 |
 | 27 | Documentation and Reporting | Easy | ⏳ Pending | — |
 | 28 | Attacking Enterprise Networks | Medium | ⏳ Pending | — |
+
+### Module 26 — Windows Privilege Escalation
+- [Module Notes](26-Windows-Privilege-Escalation/Windows-Privilege-Escalation.md)
+- [Skills Assessment Part I](26-Windows-Privilege-Escalation/Skills-Assessment-Part-I.md) — Command injection → PrintNightmare → LaZagne
+- [Skills Assessment Part II](26-Windows-Privilege-Escalation/Skills-Assessment-Part-II.md) — unattend.xml → AlwaysInstallElevated → PwDump8 + Hashcat
 
 ---
 
