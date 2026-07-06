@@ -71,7 +71,8 @@ exact commands, and notes on what each technique actually means in practice.
 | HTB CPTS (Certified Penetration Testing Specialist) | HackTheBox | 🔄 In Progress |
 | OSCP (Offensive Security Certified Professional) | OffSec | ⏳ Upcoming |
 | HTB CWES (Certified Web Exploitation Specialist) | HackTheBox | ⏳ Upcoming |
-| CRTO (Certified Red Team Operator) | Zero-Point Security | ⏳ Upcoming |
+| CPSA (CREST Practitioner Security Analyst) | CREST | ⏳ Upcoming |
+| CRT (CREST Registered Tester) | CREST | ⏳ Upcoming |
 | AZ-900 (Azure Fundamentals) | Microsoft | ⏳ Upcoming |
 
 ---
