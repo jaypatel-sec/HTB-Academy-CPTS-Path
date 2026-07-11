@@ -1,7 +1,7 @@
 # HTB Academy — CPTS Path
 
 **Author:** Jay Patel | **Path:** Certified Penetration Testing Specialist (CPTS)
-**Started:** March 2026 | **Status:** In Progress (14/28 modules complete)
+**Started:** March 2026 | **Status:** In Progress (13/28 modules complete)
 
 ---
 
