@@ -57,6 +57,7 @@ exact commands, and notes on what each technique actually means in practice.
 
 ### Module 10 — Password Attacks
 - [Module Notes](10-Password-Attacks/Password-Attacks.md)
+- [Skills Assessment](10-Password-Attacks/Skills-Assessment.md) — DMZ foothold → ligolo-ng pivot → Snaffler share hunting → Password Safe 3 cracking → LSASS hash extraction → NTDS Administrator hash
 
 ### Module 26 — Windows Privilege Escalation
 - [Module Notes](26-Windows-Privilege-Escalation/Windows-Privilege-Escalation.md)
