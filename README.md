@@ -1,7 +1,7 @@
 # HTB Academy — CPTS Path
 
 **Author:** Jay Patel | **Path:** Certified Penetration Testing Specialist (CPTS)
-**Started:** March 2026 | **Status:** In Progress (13/28 modules complete)
+**Started:** March 2026 | **Status:** In Progress (14/28 modules complete)
 
 ---
 
@@ -37,7 +37,7 @@ exact commands, and notes on what each technique actually means in practice.
 | 09 | Using the Metasploit Framework | Medium | ✅ Complete | April 2026 |
 | 10 | Password Attacks | Medium | ✅ Complete | July 2026 |
 | 11 | Attacking Common Services | Medium | ✅ Complete | April 2026 |
-| 12 | Pivoting, Tunneling and Port Forwarding | Medium | ⏳ Pending | — |
+| 12 | Pivoting, Tunneling and Port Forwarding | Medium | ✅ Complete | July 2026 |
 | 13 | Active Directory Enumeration and Attacks | Medium | ⏳ Pending | — |
 | 14 | Using Web Proxies | Easy | ⏳ Pending | — |
 | 15 | Attacking Web Applications with Ffuf | Easy | ⏳ Pending | — |
@@ -58,6 +58,9 @@ exact commands, and notes on what each technique actually means in practice.
 ### Module 10 — Password Attacks
 - [Module Notes](10-Password-Attacks/Password-Attacks.md)
 - [Skills Assessment](10-Password-Attacks/Skills-Assessment.md) — DMZ foothold → ligolo-ng pivot → Snaffler share hunting → Password Safe 3 cracking → LSASS hash extraction → NTDS Administrator hash
+
+### Module 12 — Pivoting, Tunneling and Port Forwarding
+- [Module Notes](12-Pivoting-Tunneling-and-Port-Forwarding/Pivoting-Tunneling-and-Port-Forwarding.md) — SSH local/dynamic/remote forwarding, Meterpreter AutoRoute, Socat redirectors, sshuttle, Chisel, ligolo-ng, rpivot, dnscat2, ptunnel-ng, Netsh, double pivots
 
 ### Module 26 — Windows Privilege Escalation
 - [Module Notes](26-Windows-Privilege-Escalation/Windows-Privilege-Escalation.md)
