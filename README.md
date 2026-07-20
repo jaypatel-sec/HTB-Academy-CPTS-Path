@@ -61,6 +61,7 @@ exact commands, and notes on what each technique actually means in practice.
 
 ### Module 12 — Pivoting, Tunneling and Port Forwarding
 - [Module Notes](12-Pivoting-Tunneling-and-Port-Forwarding/Pivoting-Tunneling-and-Port-Forwarding.md) — SSH local/dynamic/remote forwarding, Meterpreter AutoRoute, Socat redirectors, sshuttle, Chisel, ligolo-ng, rpivot, dnscat2, ptunnel-ng, Netsh, double pivots
+- [Skills Assessment](12-Pivoting-Tunneling-and-Port-Forwarding/Skills-Assessment.md) — Web shell → SSH key → Ubuntu pivot → Meterpreter AutoRoute + SOCKS → RDP mlefay (Flag 1) → LSASS dump + Mimikatz → vfrank cleartext → RDP workstation (Flag 2) → Z: mapped share → DC (Flag 3)
 
 ### Module 26 — Windows Privilege Escalation
 - [Module Notes](26-Windows-Privilege-Escalation/Windows-Privilege-Escalation.md)
