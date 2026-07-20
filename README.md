@@ -78,7 +78,7 @@ exact commands, and notes on what each technique actually means in practice.
 | eJPT (eLearnSecurity Junior Penetration Tester) | INE / eLearnSecurity | ✅ Completed |
 | HTB CPTS (Certified Penetration Testing Specialist) | HackTheBox | 🔄 In Progress |
 | OSCP (Offensive Security Certified Professional) | OffSec | ⏳ Upcoming |
-| HTB CWES (Certified Web Exploitation Specialist) | HackTheBox | ⏳ Upcoming |
+| eWPTX (Web Application Penetration Tester eXtreme) | INE / eLearnSecurity | ⏳ Upcoming |
 | CPSA (CREST Practitioner Security Analyst) | CREST | ⏳ Upcoming |
 | CRT (CREST Registered Tester) | CREST | ⏳ Upcoming |
 | AZ-900 (Azure Fundamentals) | Microsoft | ⏳ Upcoming |
