@@ -1,7 +1,7 @@
 # HTB Academy — CPTS Path
 
 **Author:** Jay Patel | **Path:** Certified Penetration Testing Specialist (CPTS)
-**Started:** March 2026 | **Status:** In Progress (14/28 modules complete)
+**Started:** March 2026 | **Status:** In Progress (15/28 modules complete)
 
 ---
 
@@ -39,7 +39,7 @@ exact commands, and notes on what each technique actually means in practice.
 | 11 | Attacking Common Services | Medium | ✅ Complete | April 2026 |
 | 12 | Pivoting, Tunneling and Port Forwarding | Medium | ✅ Complete | July 2026 |
 | 13 | Active Directory Enumeration and Attacks | Medium | ⏳ Pending | — |
-| 14 | Using Web Proxies | Easy | ⏳ Pending | — |
+| 14 | Using Web Proxies | Easy | ✅ Complete | July 2026 |
 | 15 | Attacking Web Applications with Ffuf | Easy | ⏳ Pending | — |
 | 16 | Login Brute Forcing | Easy | ⏳ Pending | — |
 | 17 | SQL Injection Fundamentals | Medium | ⏳ Pending | — |
@@ -62,6 +62,9 @@ exact commands, and notes on what each technique actually means in practice.
 ### Module 12 — Pivoting, Tunneling and Port Forwarding
 - [Module Notes](12-Pivoting-Tunneling-and-Port-Forwarding/Pivoting-Tunneling-and-Port-Forwarding.md) — SSH local/dynamic/remote forwarding, Meterpreter AutoRoute, Socat redirectors, sshuttle, Chisel, ligolo-ng, rpivot, dnscat2, ptunnel-ng, Netsh, double pivots
 - [Skills Assessment](12-Pivoting-Tunneling-and-Port-Forwarding/Skills-Assessment.md) — Web shell → SSH key → Ubuntu pivot → Meterpreter AutoRoute + SOCKS → RDP mlefay (Flag 1) → LSASS dump + Mimikatz → vfrank cleartext → RDP workstation (Flag 2) → Z: mapped share → DC (Flag 3)
+
+### Module 14 — Using Web Proxies
+- [Module Notes](14-Using-Web-Proxies/Using-Web-Proxies.md) — Burp Suite vs ZAP, FoxyProxy setup, CA certificates, request/response interception, Match and Replace, Repeater, Decoder/Inspector, proxychains, Metasploit proxying, Intruder (Sniper/Battering Ram/Pitchfork/Cluster Bomb), ZAP Fuzzer, Burp Scanner, ZAP Active Scanner, BApp Store, ZAP Marketplace
 
 ### Module 26 — Windows Privilege Escalation
 - [Module Notes](26-Windows-Privilege-Escalation/Windows-Privilege-Escalation.md)
