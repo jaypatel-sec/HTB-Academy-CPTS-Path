@@ -65,6 +65,7 @@ exact commands, and notes on what each technique actually means in practice.
 
 ### Module 14 — Using Web Proxies
 - [Module Notes](14-Using-Web-Proxies/Using-Web-Proxies.md) — Burp Suite vs ZAP, FoxyProxy setup, CA certificates, request/response interception, Match and Replace, Repeater, Decoder/Inspector, proxychains, Metasploit proxying, Intruder (Sniper/Battering Ram/Pitchfork/Cluster Bomb), ZAP Fuzzer, Burp Scanner, ZAP Active Scanner, BApp Store, ZAP Marketplace
+- [Skills Assessment](14-Using-Web-Proxies/Skills-Assessment.md) — ZAP Replacer strip `disabled>` (Flag 1) → ZAP Encoder ASCII Hex → Base64 decode 31-char MD5 cookie → Burp Intruder 3-rule encoding chain fuzz last MD5 char (Flag 2) → Metasploit `coldfusion_locale_traversal` proxied → CFIDE directory
 
 ### Module 26 — Windows Privilege Escalation
 - [Module Notes](26-Windows-Privilege-Escalation/Windows-Privilege-Escalation.md)
