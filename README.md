@@ -1,7 +1,7 @@
 # HTB Academy — CPTS Path
 
 **Author:** Jay Patel | **Path:** Certified Penetration Testing Specialist (CPTS)
-**Started:** March 2026 | **Status:** In Progress (15/28 modules complete)
+**Started:** March 2026 | **Status:** In Progress (16/28 modules complete)
 
 ---
 
@@ -40,7 +40,7 @@ exact commands, and notes on what each technique actually means in practice.
 | 12 | Pivoting, Tunneling and Port Forwarding | Medium | ✅ Complete | July 2026 |
 | 13 | Active Directory Enumeration and Attacks | Medium | ⏳ Pending | — |
 | 14 | Using Web Proxies | Easy | ✅ Complete | July 2026 |
-| 15 | Attacking Web Applications with Ffuf | Easy | ⏳ Pending | — |
+| 15 | Attacking Web Applications with Ffuf | Easy | ✅ Complete | July 2026 |
 | 16 | Login Brute Forcing | Easy | ⏳ Pending | — |
 | 17 | SQL Injection Fundamentals | Medium | ⏳ Pending | — |
 | 18 | SQLMap Essentials | Easy | ⏳ Pending | — |
@@ -66,6 +66,9 @@ exact commands, and notes on what each technique actually means in practice.
 ### Module 14 — Using Web Proxies
 - [Module Notes](14-Using-Web-Proxies/Using-Web-Proxies.md) — Burp Suite vs ZAP, FoxyProxy setup, CA certificates, request/response interception, Match and Replace, Repeater, Decoder/Inspector, proxychains, Metasploit proxying, Intruder (Sniper/Battering Ram/Pitchfork/Cluster Bomb), ZAP Fuzzer, Burp Scanner, ZAP Active Scanner, BApp Store, ZAP Marketplace
 - [Skills Assessment](14-Using-Web-Proxies/Skills-Assessment.md) — ZAP Replacer strip `disabled>` (Flag 1) → ZAP Encoder ASCII Hex → Base64 decode 31-char MD5 cookie → Burp Intruder 3-rule encoding chain fuzz last MD5 char (Flag 2) → Metasploit `coldfusion_locale_traversal` proxied → CFIDE directory
+
+### Module 15 — Attacking Web Applications with Ffuf
+- [Module Notes](15-Attacking-Web-Applications-with-Ffuf/Attacking-Web-Applications-with-Ffuf.md) — Directory fuzzing, extension fuzzing, page fuzzing, recursive scanning, DNS /etc/hosts, sub-domain fuzzing, VHost fuzzing with Host header, response size filtering (`-fs`), GET parameter fuzzing, POST parameter fuzzing, value fuzzing with custom wordlists
 
 ### Module 26 — Windows Privilege Escalation
 - [Module Notes](26-Windows-Privilege-Escalation/Windows-Privilege-Escalation.md)
