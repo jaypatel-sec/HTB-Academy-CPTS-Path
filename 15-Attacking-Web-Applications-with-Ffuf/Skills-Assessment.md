@@ -168,7 +168,7 @@ Confirm with curl:
 curl -s http://faculty.academy.htb:32596/courses/linux-security.php7 -X POST -d 'username=harry' | grep "HTB{.*}"
 ```
 
-**Answer:** `HTB{...}`
+**Answer:** `HTB{flag_redacted}`
 
 ---
 
@@ -180,7 +180,7 @@ curl -s http://faculty.academy.htb:32596/courses/linux-security.php7 -X POST -d 
 | 2 | Extension fuzzing | `ffuf /indexFUZZ` per VHost | `.php`, `.phps`, `.php7` |
 | 3 | Recursive page fuzzing + regex | `-recursion -e .php,.phps,.php7 -mr "You don't have access!"` | `/courses/linux-security.php7` |
 | 4 | POST parameter fuzzing | `ffuf -X POST -d 'FUZZ=key' -fs 774` | `user`, `username` |
-| 5 | Value fuzzing | `ffuf -d 'username=FUZZ' -fs 781` → `harry` | `HTB{...}` |
+| 5 | Value fuzzing | `ffuf -d 'username=FUZZ' -fs 781` → `harry` | `HTB{flag_redacted}` |
 
 ---
 

@@ -74,7 +74,7 @@ The button is now active and clickable. Click it approximately 8 times to trigge
 
 > **Note:** If the button still appears disabled after opening the browser, press `CTRL+SHIFT+R` to force a full cache-bypassing page refresh.
 
-> **Answer:** `HTB{...}`
+> **Answer:** `HTB{flag_redacted}`
 
 ---
 
@@ -184,7 +184,7 @@ Click **Start attack**.
 
 When fuzzing completes, click the **Length** column to sort results by response size. All invalid responses share a consistent baseline length. The correct MD5 character produces a distinct response of size **1248** — containing the flag in the response body.
 
-> **Answer:** `HTB{...}`
+> **Answer:** `HTB{flag_redacted}`
 
 ---
 
@@ -247,9 +247,9 @@ The path `/CFIDE/administrator/..` reveals the target directory: `CFIDE` — Ado
 
 | Question | Description | Answer |
 |----------|-------------|--------|
-| Q1 — /lucky.php disabled button | Flag after clicking re-enabled button | `HTB{...}` |
+| Q1 — /lucky.php disabled button | Flag after clicking re-enabled button | `HTB{flag_redacted}` |
 | Q2 — /admin.php cookie decode | 31-char value after ASCII Hex → Base64 decode | `3dac93b8cd250aa8c1a36fffc79a17a` |
-| Q3 — MD5 character fuzzing | Flag from Intruder outlier response (length 1248) | `HTB{...}` |
+| Q3 — MD5 character fuzzing | Flag from Intruder outlier response (length 1248) | `HTB{flag_redacted}` |
 | Q4 — ColdFusion traversal directory | Directory name in `/XXXXX/administrator/..` | `CFIDE` |
 
 ---
@@ -281,7 +281,7 @@ Resend GET /lucky.php → response stripped of disabled attribute
         ↓
 Open URL in System Browser → button clickable → click ~8 times
         ↓
-Flag 1 captured [HTB{...}]
+Flag 1 captured [HTB{flag_redacted}]
 
 /admin.php → Cookie header contains double-encoded value
         ↓
@@ -296,7 +296,7 @@ Processing: Add prefix (31-char hash) → Base64-encode → ASCII-hex-encode
         ↓
 Start Attack → sort by Length → 1248-byte response
         ↓
-Flag 2 captured [HTB{...}]
+Flag 2 captured [HTB{flag_redacted}]
 
 msfconsole -q → use auxiliary/scanner/http/coldfusion_locale_traversal
         ↓
