@@ -2,9 +2,15 @@
 
 **Platform:** Hack The Box Academy  
 **Module:** Using Web Proxies  
-**Assessment:** Skills Assessment  
 **Difficulty:** Easy  
-**Goal:** Penetration Tester role in India | Target: January 2027
+**Target IP:** 10.129.58.24  
+**Target Port:** 30851  
+
+---
+
+## Overview
+
+This assessment covers the full proxy workflow from both Burp and ZAP angles. Four questions, each testing a different skill: response manipulation, multi-layer cookie decoding, Intruder payload processing, and proxying a Metasploit module to inspect its raw traffic. I worked through them in order since each one builds on what you learn from the previous.
 
 ---
 
@@ -17,29 +23,27 @@
 | 3 | ZAP Encoder — ASCII Hex decode → Base64 decode on `/admin.php` cookie | 31-char partial MD5 hash recovered |
 | 4 | Burp Intruder — fuzz last MD5 character with alphanum-case.txt + 3-rule payload processing chain | Complete MD5 cookie candidate identified |
 | 5 | Sort Intruder results by Length — outlier 1248-byte response | Flag 2 captured |
-| 6 | Metasploit `coldfusion_locale_traversal` + `set PROXIES HTTP:127.0.0.1:8080` → proxy intercept | Hidden directory `CFIDE` identified |
+| 6 | Metasploit `coldfusion_locale_traversal` + `set PROXIES HTTP:127.0.0.1:8080` | Hidden directory `CFIDE` identified |
 
 ---
 
 ## Question 1 — Enable a Disabled Button and Capture the Flag
 
-**Question:** "The /lucky.php page has a button that appears to be disabled. Try to enable the button, and then click it to get the flag."
+**"The /lucky.php page has a button that appears to be disabled. Try to enable the button, and then click it to get the flag."**
 
-### Step 1 — Navigate to /lucky.php and Identify the Disabled Attribute
+### Identifying the Problem
 
-With ZAP running and FoxyProxy set to `Burp (8080)` in Firefox, navigate to `/lucky.php`. The page presents a "Click for a chance to win a flag!" button that is greyed out and non-functional. Viewing the GET response in ZAP confirms the button has a `disabled` attribute hardcoded in the HTML:
+With ZAP running and FoxyProxy pointing to port 8080, I navigated to `http://10.129.58.24:30851/lucky.php`. The page had a "Click for a chance to win a flag!" button that was completely greyed out and non-functional. Checked the raw response in ZAP's History pane and confirmed the HTML had the `disabled` attribute hardcoded directly on the button:
 
 ```html
 <button disabled>Click for a chance to win a flag!</button>
 ```
 
----
+Rather than intercept and modify every single request manually, I used ZAP Replacer to strip the attribute automatically from every response going forward.
 
-### Step 2 — Create a ZAP Replacer Rule to Strip the Disabled Attribute
+### Creating the ZAP Replacer Rule
 
-Open ZAP Replacer: `CTRL+R` → click **Add...**
-
-Configure the rule:
+`CTRL+R` to open Replacer → click **Add...**
 
 | Field | Value |
 |-------|-------|
@@ -48,302 +52,227 @@ Configure the rule:
 | Replacement String | `>` |
 | Enable | ✓ Checked |
 
-Click **Save**. The rule is now globally active — every response body containing `disabled>` will have it stripped before reaching the browser.
+Saved the rule. From this point on, any response containing `disabled>` gets it stripped before the browser ever sees it.
 
----
+### Resending the Request
 
-### Step 3 — Resend the GET Request and Verify the Fix
+In ZAP's History pane, found the `GET /lucky.php` entry → right-clicked → **Open/Resend with Request Editor** → hit **Send**. Checked the response body — `disabled` was gone.
 
-In ZAP's History pane, select the `GET /lucky.php` request → right-click → **Open/Resend with Request Editor**.
+### Getting the Flag
 
-For a cleaner view:
-- Request tab → `Combined display for header and body`
-- Response tab → `Combined display for header and body`
+Right-clicked the response → **Open URL in System Browser**. The button rendered as active and clickable. Clicked it about 8 times and the flag appeared.
 
-Click **Send**. Inspect the response body — `disabled` is no longer present. The Replacer has stripped it in transit.
+> **Note:** If the button still looks disabled after the browser opens, `CTRL+SHIFT+R` forces a full cache-bypassing reload.
 
----
-
-### Step 4 — Open in Browser and Click the Button
-
-Right-click on the response in the Request Editor → **Open URL in System Browser**.
-
-The button is now active and clickable. Click it approximately 8 times to trigger the flag:
-
-> **Note:** If the button still appears disabled after opening the browser, press `CTRL+SHIFT+R` to force a full cache-bypassing page refresh.
-
-> **Answer:** `HTB{flag_redacted}`
+**Flag 1:** `HTB{1_c4n_type_4_p4ssw0rd}`
 
 ---
 
 ## Question 2 — Decode a Multi-Encoded Cookie to Recover 31 Characters
 
-**Question:** "The /admin.php page uses a cookie that has been encoded multiple times. Try to decode the cookie until you get a value with 31-characters. Submit the value as the answer."
+**"The /admin.php page uses a cookie that has been encoded multiple times. Try to decode the cookie until you get a value with 31-characters. Submit the value as the answer."**
 
-### Step 1 — Capture the Cookie from /admin.php
+### Capturing the Cookie
 
-With ZAP intercepting, navigate to `/admin.php`. The intercepted request in ZAP's History pane shows a `Cookie` header with an encoded value:
+Navigated to `http://10.129.58.24:30851/admin.php` with ZAP intercepting. The request in ZAP's History showed a `Cookie` header with something that was clearly encoded — long string of hex characters:
 
 ```http
 GET /admin.php HTTP/1.1
-Host: TARGET_IP:PORT
-Cookie: cookie=<hex_encoded_value>
+Host: 10.129.58.24:30851
+Cookie: cookie=4d324e6a597a6b7a596a686a5a4449314d4764685a5449775957453459544d325a6d5a6d597a63355954457a4e673d3d
 ```
 
----
+### Decoding with ZAP Encoder
 
-### Step 2 — Decode the Cookie Using ZAP Encoder
+Selected the encoded value after `cookie=` → right-clicked → **Encode/Decode/Hash...**
 
-Select the encoded value after `cookie=` → right-click → **Encode/Decode/Hash...**
+The value was double-encoded. I worked through it layer by layer:
 
-In the Encoder window, click the **Decode** tab. Two decode operations are needed:
+**Layer 1 — ASCII Hex Decode:**
 
-**Layer 1 — ASCII Hex Decode:**  
-The raw cookie value decodes from hex to a Base64-looking string.
+Pasted the raw cookie value into the Decode tab and ran ASCII Hex Decode. Got a Base64-looking string out.
 
-**Layer 2 — Copy the ASCII Hex result → paste into the input → Base64 Decode:**  
-The Base64 layer decodes to a 31-character value:
+**Layer 2 — Base64 Decode:**
+
+Copied that result, pasted it back in, ran Base64 Decode. Out came a 31-character string:
 
 ```
 3dac93b8cd250aa8c1a36fffc79a17a
 ```
 
-The cookie was double-encoded: **Base64 → ASCII Hex** on the way out, **ASCII Hex → Base64** on decode. The 31-character result is a partial MD5 hash missing its final character.
+The encoding stack was: Base64 → ASCII Hex on the way out (server encodes it), which means ASCII Hex → Base64 to decode it. The 31-character result is clearly an MD5 hash with the last character missing — that's what Question 3 is about.
 
-> **Answer:** `3dac93b8cd250aa8c1a36fffc79a17a`
+**Answer:** `3dac93b8cd250aa8c1a36fffc79a17a`
 
 ---
 
 ## Question 3 — Fuzz the Missing MD5 Character and Retrieve the Flag
 
-**Question:** "Once you decode the cookie, you will notice that it is only 31 characters long, which appears to be an MD5 hash missing its last character. So, try to fuzz the last character of the decoded MD5 cookie with all alpha-numeric characters, while encoding each request with the encoding methods you identified above. (You may use the 'alphanum-case.txt' wordlist from SecLists for the payload)"
+**"Once you decode the cookie, you will notice that it is only 31 characters long, which appears to be an MD5 hash missing its last character. So, try to fuzz the last character of the decoded MD5 cookie with all alpha-numeric characters, while encoding each request with the encoding methods you identified above."**
 
-### Step 1 — Capture /admin.php in Burp Suite and Send to Intruder
+### Why Burp Instead of ZAP Here
 
-Switch to Burp Suite (ZAP lacks a built-in ASCII Hex payload processor, making this significantly more complex there). With Burp intercepting, navigate to `/admin.php`.
+I switched to Burp for this one. ZAP's fuzzer doesn't have a built-in ASCII Hex payload encoder, which means replicating the 3-step processing chain would require external scripting. Burp Intruder handles it natively with its Payload Processing rules.
 
-In Proxy → HTTP History: right-click the request → **Send to Intruder** (`CTRL+I`).
+### Capturing the Request in Burp
 
----
+Switched FoxyProxy to Burp (port 8080), navigated to `http://10.129.58.24:30851/admin.php`, found the request in Proxy → HTTP History, right-clicked → **Send to Intruder** (`CTRL+I`).
 
-### Step 2 — Set Up Intruder Positions
+### Setting the Position
 
-Navigate to Intruder (`CTRL+SHIFT+I`) → **Positions** tab:
+In Intruder → **Positions** tab:
 
-1. Click **Clear §** to remove all auto-detected positions
-2. Replace the existing cookie value entirely with the 31-character hash: `3dac93b8cd250aa8c1a36fffc79a17a`
-3. Select the entire hash → click **Add §**
+1. Clicked **Clear §** to remove auto-detected positions
+2. Replaced the encoded cookie value with the 31-character hash: `3dac93b8cd250aa8c1a36fffc79a17a`
+3. Selected the entire hash → clicked **Add §**
 
-The position marker now wraps the full hash:
+The position now looked like:
 
 ```
 Cookie: cookie=§3dac93b8cd250aa8c1a36fffc79a17a§
 ```
 
-Each payload character will be appended to the hash via the Add Prefix processor in Step 4.
+The payload processing chain (Step below) will append each test character to this and re-encode the whole thing.
 
----
+### Loading the Wordlist
 
-### Step 3 — Load the Alphanumeric Payload Wordlist
-
-Navigate to the **Payloads** tab:
+**Payloads** tab:
 
 | Setting | Value |
 |---------|-------|
 | Payload Type | Simple list |
-| Load file | `/opt/useful/SecLists/Fuzzing/alphanum-case.txt` |
+| Load | `/opt/useful/SecLists/Fuzzing/alphanum-case.txt` |
 
-This wordlist contains all 62 single alphanumeric characters (a-z, A-Z, 0-9) — every valid hex character needed to complete the MD5 hash.
+62 entries: a–z, A–Z, 0–9. Every valid hex character is in there.
 
----
+### Payload Processing Chain
 
-### Step 4 — Configure Payload Processing Chain
-
-Under **Payload Processing**, add three rules in this exact order:
+Under **Payload Processing**, added three rules in this exact order:
 
 | # | Rule Type | Value |
 |---|-----------|-------|
 | 1 | Add prefix | `3dac93b8cd250aa8c1a36fffc79a17a` |
-| 2 | Base64-encode | *(no additional value)* |
-| 3 | Encode as ASCII hex | *(no additional value)* |
+| 2 | Base64-encode | |
+| 3 | Encode as ASCII hex | |
 
-**What this chain does for each payload character (e.g., `f`):**
-1. Prefix prepended: `3dac93b8cd250aa8c1a36fffc79a17af` (32-char MD5 candidate)
-2. Base64-encoded: `M2RhYzkzYjhjZDI1MGFhOGMxYTM2ZmZmYzc5YTE3YWY=`
-3. ASCII-hex-encoded: `4d3364614...` (final value sent as cookie)
+What this does for each payload character, e.g. `f`:
+1. Prefix prepended → `3dac93b8cd250aa8c1a36fffc79a17af` (32-char complete MD5 candidate)
+2. Base64-encoded → `M2RhYzkzYjhjZDI1MGFhOGMxYTM2ZmZmYzc5YTE3YWY=`
+3. ASCII-hex-encoded → final cookie value the server receives
 
-This mirrors the exact double-encoding format the server expects, identified in Question 2.
+This exactly mirrors the double-encoding the server expects, based on what I reversed in Question 2.
 
----
+### Running the Attack
 
-### Step 5 — Start the Attack and Identify the Flag
+Clicked **Start attack**. Once all 62 payloads completed, sorted results by the **Length** column. Every wrong character produced the same baseline response length. One character returned a response of **1248 bytes** — visibly different from everything else. Opened that response and found the flag in the body.
 
-Click **Start attack**.
-
-When fuzzing completes, click the **Length** column to sort results by response size. All invalid responses share a consistent baseline length. The correct MD5 character produces a distinct response of size **1248** — containing the flag in the response body:
-
-```
-HTB{flag_redacted}
-```
-
-> **Answer:** `HTB{flag_redacted}`
+**Flag 2:** `HTB{burp_1n7rud3r_n1nj4}`
 
 ---
 
 ## Question 4 — Identify the Hidden Directory in the ColdFusion Module Request
 
-**Question:** "You are using the 'auxiliary/scanner/http/coldfusion_locale_traversal' tool within Metasploit, but it is not working properly for you. You decide to capture the request sent by Metasploit so you can manually verify it and repeat it. Once you capture the request, what is the 'XXXXX' directory being called in '/XXXXX/administrator/..'?"
+**"You are using the 'auxiliary/scanner/http/coldfusion_locale_traversal' tool within Metasploit, but it is not working properly for you. You decide to capture the request sent by Metasploit so you can manually verify it and repeat it. Once you capture the request, what is the 'XXXXX' directory being called in '/XXXXX/administrator/..'?"**
 
-### Step 1 — Launch Metasploit
+### Why Proxy a Metasploit Module?
+
+The module wasn't returning useful results, and the quickest way to see exactly what it's sending is to route it through a proxy. `set PROXIES` tells Metasploit to tunnel all HTTP traffic through whatever address you give it — in this case, Burp on localhost.
+
+### Setup
 
 ```bash
 $ msfconsole -q
 ```
 
-### Step 2 — Load the ColdFusion Locale Traversal Module
-
 ```bash
 msf6 > use auxiliary/scanner/http/coldfusion_locale_traversal
-```
-
-### Step 3 — Configure the Module and Route Traffic Through the Proxy
-
-```bash
+msf6 auxiliary(scanner/http/coldfusion_locale_traversal) > set RHOSTS 10.129.58.24
+msf6 auxiliary(scanner/http/coldfusion_locale_traversal) > set RPORT 30851
 msf6 auxiliary(scanner/http/coldfusion_locale_traversal) > set PROXIES HTTP:127.0.0.1:8080
-msf6 auxiliary(scanner/http/coldfusion_locale_traversal) > set RHOSTS 159.65.63.151
-msf6 auxiliary(scanner/http/coldfusion_locale_traversal) > set RPORT 31845
 ```
 
 ```
+RHOSTS  => 10.129.58.24
+RPORT   => 30851
 PROXIES => HTTP:127.0.0.1:8080
-RHOSTS  => 159.65.63.151
-RPORT   => 31845
 ```
 
-### Step 4 — Enable Interception and Run
+### Intercepting the Request
 
-Enable interception in **Burp Suite** (`Proxy → Intercept → Intercept is on`) or **ZAP** (`CTRL+B`), then execute:
+Enabled interception in Burp (`Proxy → Intercept → Intercept is on`), then ran the module:
 
 ```bash
 msf6 auxiliary(scanner/http/coldfusion_locale_traversal) > run
 ```
 
-### Step 5 — Analyse the Intercepted Request
-
-The proxy holds the raw HTTP request sent by the module:
+Burp caught the request immediately:
 
 ```http
 GET /CFIDE/administrator/.. HTTP/1.1
-Host: 159.65.63.151:31845
+Host: 10.129.58.24:30851
 User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)
 Connection: close
 ```
 
-The path `/CFIDE/administrator/..` reveals the target directory: `CFIDE` — Adobe ColdFusion's default administrative directory used as the traversal origin.
+The path is `/CFIDE/administrator/..` — `CFIDE` is Adobe ColdFusion's default administrative directory. The module was trying to traverse out of it. Just needed to read the request to get the answer.
 
-> **Answer:** `CFIDE`
+**Answer:** `CFIDE`
 
 ---
 
-## Flags
+## Flags and Answers
 
-| Question | Description | Answer |
-|----------|-------------|--------|
-| Q1 — /lucky.php disabled button | Flag after clicking re-enabled button | `HTB{flag_redacted}` |
-| Q2 — /admin.php cookie decode | 31-char value after ASCII Hex → Base64 decode | `3dac93b8cd250aa8c1a36fffc79a17a` |
-| Q3 — MD5 character fuzzing | Flag from Intruder outlier response (length 1248) | `HTB{flag_redacted}` |
-| Q4 — ColdFusion traversal directory | Directory name in `/XXXXX/administrator/..` | `CFIDE` |
+| Question | Answer |
+|----------|--------|
+| Q1 — /lucky.php disabled button | `HTB{1_c4n_type_4_p4ssw0rd}` |
+| Q2 — /admin.php cookie decode | `3dac93b8cd250aa8c1a36fffc79a17a` |
+| Q3 — MD5 character fuzzing | `HTB{burp_1n7rud3r_n1nj4}` |
+| Q4 — ColdFusion traversal directory | `CFIDE` |
 
 ---
 
 ## Lessons Learned
 
-- **ZAP Replacer eliminates the need to intercept every response manually.** A single rule targeting `disabled>` in the response body removes the attribute permanently for all subsequent page loads — far more efficient than intercepting each response one at a time when iterating on the same page.
+- **ZAP Replacer is far more efficient than manual interception for persistent response modifications.** One rule targeting `disabled>` handles the attribute permanently across all subsequent requests — no need to intercept and edit each response individually.
 
-- **Multi-layer encoding is a common anti-analysis technique for web cookies.** Always attempt to decode cookies through multiple encoding schemes when the value is not immediately human-readable. The pattern here — ASCII Hex wrapping Base64 wrapping an MD5 — is a common obfuscation stack in web applications. ZAP's Encode/Decode/Hash tool handles each layer individually, making the iterative decoding process straightforward.
+- **Multi-layer cookie encoding always unravels if you decode from the outside in.** The pattern here was ASCII Hex wrapping Base64 wrapping an MD5. ZAP Encoder handles each layer independently — decode one, copy the result, decode the next. Never try to guess the encoding chain; let the output tell you what the next layer is.
 
-- **Burp Intruder's Payload Processing chain must mirror the target's expected encoding exactly.** When the server expects a re-encoded value, every payload sent by Intruder must go through the same transformation pipeline before being inserted into the request. Getting the order wrong (e.g., Base64 after hex instead of before) results in all responses being identical — an easy mistake that wastes a full attack run.
+- **Burp Intruder’s Payload Processing chain order is critical.** The server expects a specific encoding pipeline. If the order is wrong, every response comes back identical and you won’t notice until you’ve wasted the entire attack run. Always verify the chain matches how the server encodes it before starting.
 
-- **Response Length is the primary triage column in Intruder.** After an attack completes, sorting by Length immediately surfaces outliers. A consistent baseline length across all responses with a single exception is a definitive indicator of a successful payload — before even reading the response body.
+- **Sort by Length is always the first move after an Intruder attack.** A consistent baseline with a single outlier is a definitive hit before even opening the response body.
 
-- **The `PROXIES` option in Metasploit is the single most important debug tool for HTTP-based modules.** Setting `HTTP:127.0.0.1:8080` exposes exactly what request the module constructs and sends, enabling manual verification, replay in Repeater, and targeted modification — turning a black-box module into a fully transparent, controllable HTTP client.
+- **`set PROXIES` in Metasploit turns any HTTP module into a transparent client.** The module sent exactly one request and Burp caught it. This is the fastest way to debug a non-working Metasploit module or confirm what path it’s actually hitting.
 
-- **CFIDE is an immediate ColdFusion fingerprint.** Any web server exposing `/CFIDE/` should be investigated for ColdFusion-specific vulnerabilities — the Administrator panel at `/CFIDE/administrator/` has been exploited via multiple unauthenticated access CVEs and directory traversal chains across ColdFusion 8 through 2021.
-
----
-
-## Full Attack Chain Reference
-
-```
-/lucky.php → button has disabled attribute
-        ↓
-ZAP Replacer: Response Body String "disabled>" → ">"
-        ↓
-Resend GET /lucky.php → response stripped of disabled attribute
-        ↓
-Open URL in System Browser → button clickable → click ~8 times
-        ↓
-Flag 1 captured [HTB{flag_redacted}]
-
-/admin.php → Cookie header contains double-encoded value
-        ↓
-ZAP Encoder → ASCII Hex Decode → Base64 Decode → 31-char MD5
-        ↓
-Answer: 3dac93b8cd250aa8c1a36fffc79a17a
-
-Burp Intruder → Positions: cookie=§3dac93b8cd250aa8c1a36fffc79a17a§
-        ↓
-Payloads: alphanum-case.txt (a-z, A-Z, 0-9)
-Processing: Add prefix (31-char hash) → Base64-encode → ASCII-hex-encode
-        ↓
-Start Attack → sort by Length → 1248-byte response
-        ↓
-Flag 2 captured [HTB{flag_redacted}]
-
-msfconsole -q → use auxiliary/scanner/http/coldfusion_locale_traversal
-        ↓
-set PROXIES HTTP:127.0.0.1:8080 → enable intercept → run
-        ↓
-Intercepted: GET /CFIDE/administrator/..
-        ↓
-Directory: CFIDE
-```
+- **CFIDE is an immediate ColdFusion fingerprint.** Any server exposing `/CFIDE/` should be treated as a ColdFusion instance and tested accordingly — the Administrator panel has been exploited across multiple ColdFusion versions via unauthenticated access and directory traversal.
 
 ---
 
-## Commands Reference
+## Key Commands Reference
 
-| Command | Purpose |
+| Command | What It Does |
 |---------|----------|
 | `CTRL+R` (ZAP) | Open Replacer |
 | `CTRL+SHIFT+R` (Browser) | Force full cache-bypassing page refresh |
-| Right-click response → Open URL in System Browser | Render proxy-modified response in browser |
+| Right-click response → Open URL in System Browser | Render the proxy-modified response in browser |
 | `CTRL+E` (ZAP) | Open Encode/Decode/Hash tool |
 | `CTRL+I` (Burp) | Send request to Intruder |
 | `CTRL+SHIFT+I` (Burp) | Navigate to Intruder tab |
-| Clear § → select hash → Add § | Set single fuzzing position in Intruder |
-| Add prefix → Base64-encode → ASCII-hex | Three-rule payload processing chain in Intruder |
-| Sort by Length (Intruder results) | Identify outlier (successful) responses |
-| `msfconsole -q` | Launch Metasploit suppressing banner |
-| `use auxiliary/scanner/http/coldfusion_locale_traversal` | Load ColdFusion traversal scanner module |
-| `set PROXIES HTTP:127.0.0.1:8080` | Route all module HTTP traffic through Burp/ZAP |
+| Clear § → select value → Add § | Set single fuzzing position in Intruder |
+| Add prefix → Base64-encode → ASCII-hex | Three-rule payload processing chain |
+| Sort by Length (Intruder results) | Identify the outlier (successful) response |
+| `set PROXIES HTTP:127.0.0.1:8080` | Route Metasploit HTTP traffic through Burp/ZAP |
 | `CTRL+B` (ZAP) | Toggle request interception on/off |
 
 ---
 
 ## MITRE ATT&CK Mapping
 
-| Technique | Sub-Technique | Description |
-|-----------|---------------|-------------|
-| T1565 | T1565.002 | Transmitted Data Manipulation — ZAP Replacer stripping `disabled` attribute from server response |
-| T1539 | — | Steal Web Session Cookie — decoding and analysing multi-encoded `/admin.php` session cookie |
-| T1110 | T1110.001 | Brute Force: Password Guessing — Intruder fuzzing last MD5 character with alphanum-case.txt |
-| T1190 | — | Exploit Public-Facing Application — ColdFusion locale traversal via Metasploit auxiliary module |
-| T1595 | T1595.002 | Active Scanning: Vulnerability Scanning — Metasploit ColdFusion scanner proxied through Burp/ZAP |
-| T1592 | T1592.002 | Gather Victim Host Information: Software — identifying ColdFusion via CFIDE directory in intercepted path |
-| T1071 | T1071.001 | Application Layer Protocol: Web Protocols — HTTP traffic intercepted, modified, and replayed via proxy |
-
----
-
-*Part of the HTB Academy CPTS path — Using Web Proxies module.*  
-*Penetration Tester role in India | Target: January 2027*
+| Technique | ID | What I Was Doing |
+|---|---|---|
+| Transmitted Data Manipulation | T1565.002 | ZAP Replacer stripping `disabled` attribute from server response |
+| Steal Web Session Cookie | T1539 | Decoding and analysing the multi-encoded `/admin.php` session cookie |
+| Brute Force: Password Guessing | T1110.001 | Intruder fuzzing last MD5 character with alphanum-case.txt |
+| Exploit Public-Facing Application | T1190 | ColdFusion locale traversal via Metasploit auxiliary module |
+| Active Scanning: Vulnerability Scanning | T1595.002 | Metasploit ColdFusion scanner proxied through Burp |
+| Gather Victim Host Information: Software | T1592.002 | Identifying ColdFusion via CFIDE directory in intercepted path |
+| Application Layer Protocol: Web Protocols | T1071.001 | HTTP traffic intercepted, modified, and replayed via proxy |
