@@ -41,12 +41,12 @@ ffuf -w /opt/useful/SecLists/Discovery/DNS/subdomains-top1million-5000.txt:FUZZ 
 ### Output
 
 ```
-test      [Status: 200, Size: 0, Words: 1, Lines: 1]
-archive   [Status: 200, Size: 0, Words: 1, Lines: 1]
-faculty   [Status: 200, Size: 0, Words: 1, Lines: 1]
+[redacted]    [Status: 200, Size: 0, Words: 1, Lines: 1]
+[redacted]    [Status: 200, Size: 0, Words: 1, Lines: 1]
+[redacted]    [Status: 200, Size: 0, Words: 1, Lines: 1]
 ```
 
-**Answer:** `test archive faculty`
+**Answer:** `[redacted]`
 
 ---
 
@@ -59,31 +59,31 @@ faculty   [Status: 200, Size: 0, Words: 1, Lines: 1]
 Add all three VHosts to `/etc/hosts`:
 
 ```bash
-sudo bash -c 'echo "10.129.43.71 test.academy.htb archive.academy.htb faculty.academy.htb" >> /etc/hosts'
+sudo bash -c 'echo "10.129.43.71 <vhost1>.academy.htb <vhost2>.academy.htb <vhost3>.academy.htb" >> /etc/hosts'
 ```
 
 Run extension fuzzing against each VHost on `/indexFUZZ`:
 
 ```bash
-# test
-ffuf -w /opt/useful/SecLists/Discovery/Web-Content/web-extensions.txt:FUZZ -u http://test.academy.htb:32596/indexFUZZ
+# vhost1
+ffuf -w /opt/useful/SecLists/Discovery/Web-Content/web-extensions.txt:FUZZ -u http://<vhost1>.academy.htb:32596/indexFUZZ
 
-# archive
-ffuf -w /opt/useful/SecLists/Discovery/Web-Content/web-extensions.txt:FUZZ -u http://archive.academy.htb:32596/indexFUZZ
+# vhost2
+ffuf -w /opt/useful/SecLists/Discovery/Web-Content/web-extensions.txt:FUZZ -u http://<vhost2>.academy.htb:32596/indexFUZZ
 
-# faculty
-ffuf -w /opt/useful/SecLists/Discovery/Web-Content/web-extensions.txt:FUZZ -u http://faculty.academy.htb:32596/indexFUZZ
+# vhost3
+ffuf -w /opt/useful/SecLists/Discovery/Web-Content/web-extensions.txt:FUZZ -u http://<vhost3>.academy.htb:32596/indexFUZZ
 ```
 
 ### Results
 
 | VHost | Extensions Found |
 |---|---|
-| test | `.php` (200), `.phps` (403) |
-| archive | `.php` (200), `.phps` (403) |
-| faculty | `.php` (200), `.phps` (403), `.php7` (200) |
+| vhost1 | `[redacted]` |
+| vhost2 | `[redacted]` |
+| vhost3 | `[redacted]` |
 
-**Answer:** `.php .phps .php7`
+**Answer:** `[redacted]`
 
 ---
 
@@ -93,25 +93,25 @@ ffuf -w /opt/useful/SecLists/Discovery/Web-Content/web-extensions.txt:FUZZ -u ht
 
 ### Approach
 
-Fuzz the `faculty` VHost recursively (depth 1) with all three extensions. Filter the erroneous 287-byte response and match the target string with `-mr`:
+Fuzz the target VHost recursively (depth 1) with all discovered extensions. Filter the erroneous response size and match the target string with `-mr`:
 
 ```bash
-ffuf -w /opt/useful/SecLists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ -u http://faculty.academy.htb:32596/FUZZ -recursion -recursion-depth 1 -e .php,.phps,.php7 -fs 287 -mr "You don't have access!" -t 100
+ffuf -w /opt/useful/SecLists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ -u http://<target-vhost>.academy.htb:32596/FUZZ -recursion -recursion-depth 1 -e .php,.phps,.php7 -fs 287 -mr "You don't have access!" -t 100
 ```
 
-ffuf quickly discovers `/courses/` as a new queue entry. Cancel and target it directly:
+ffuf quickly discovers a subdirectory as a new queue entry. Cancel and target it directly:
 
 ```bash
-ffuf -w /opt/useful/SecLists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ -u http://faculty.academy.htb:32596/courses/FUZZ -e .php,.phps,.php7 -fs 287 -mr "You don't have access!" -t 100
+ffuf -w /opt/useful/SecLists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ -u http://<target-vhost>.academy.htb:32596/<subdir>/FUZZ -e .php,.phps,.php7 -fs 287 -mr "You don't have access!" -t 100
 ```
 
 ### Output
 
 ```
-linux-security.php7   [Status: 200, Size: 774, Words: 223, Lines: 53]
+[redacted]    [Status: 200, Size: 774, Words: 223, Lines: 53]
 ```
 
-**Answer:** `http://faculty.academy.htb:32596/courses/linux-security.php7`
+**Answer:** `[redacted]`
 
 ---
 
@@ -124,23 +124,23 @@ linux-security.php7   [Status: 200, Size: 774, Words: 223, Lines: 53]
 First pass without filtering to identify the erroneous response size (774):
 
 ```bash
-ffuf -w /opt/useful/SecLists/Discovery/Web-Content/burp-parameter-names.txt:FUZZ -u http://faculty.academy.htb:32596/courses/linux-security.php7 -X POST -d 'FUZZ=key' -H 'Content-Type: application/x-www-form-urlencoded'
+ffuf -w /opt/useful/SecLists/Discovery/Web-Content/burp-parameter-names.txt:FUZZ -u http://<target-vhost>.academy.htb:32596/<path-to-page> -X POST -d 'FUZZ=key' -H 'Content-Type: application/x-www-form-urlencoded'
 ```
 
 Filter erroneous size and re-run:
 
 ```bash
-ffuf -w /opt/useful/SecLists/Discovery/Web-Content/burp-parameter-names.txt:FUZZ -u http://faculty.academy.htb:32596/courses/linux-security.php7 -X POST -d 'FUZZ=key' -H 'Content-Type: application/x-www-form-urlencoded' -fs 774 -t 100
+ffuf -w /opt/useful/SecLists/Discovery/Web-Content/burp-parameter-names.txt:FUZZ -u http://<target-vhost>.academy.htb:32596/<path-to-page> -X POST -d 'FUZZ=key' -H 'Content-Type: application/x-www-form-urlencoded' -fs 774 -t 100
 ```
 
 ### Output
 
 ```
-user      [Status: 200, Size: 780]
-username  [Status: 200, Size: 781]
+[redacted]    [Status: 200, Size: 780]
+[redacted]    [Status: 200, Size: 781]
 ```
 
-**Answer:** `user username`
+**Answer:** `[redacted]`
 
 ---
 
@@ -150,22 +150,22 @@ username  [Status: 200, Size: 781]
 
 ### Approach
 
-Fuzz the `username` parameter with a names wordlist. First pass shows erroneous size is 781:
+Fuzz the identified parameter with a names wordlist. First pass shows erroneous size is 781:
 
 ```bash
-ffuf -w /opt/useful/SecLists/Usernames/Names/names.txt:FUZZ -u http://faculty.academy.htb:32596/courses/linux-security.php7 -X POST -d 'username=FUZZ' -H 'Content-Type: application/x-www-form-urlencoded' -fs 781 -t 100
+ffuf -w /opt/useful/SecLists/Usernames/Names/names.txt:FUZZ -u http://<target-vhost>.academy.htb:32596/<path-to-page> -X POST -d '<param>=FUZZ' -H 'Content-Type: application/x-www-form-urlencoded' -fs 781 -t 100
 ```
 
 ### Output
 
 ```
-harry   [Status: 200, Size: 773]
+[redacted]    [Status: 200, Size: 773]
 ```
 
 Confirm with curl:
 
 ```bash
-curl -s http://faculty.academy.htb:32596/courses/linux-security.php7 -X POST -d 'username=harry' | grep "HTB{.*}"
+curl -s http://<target-vhost>.academy.htb:32596/<path-to-page> -X POST -d '<param>=[redacted]' | grep "HTB{.*}"
 ```
 
 **Answer:** `HTB{flag_redacted}`
@@ -176,11 +176,11 @@ curl -s http://faculty.academy.htb:32596/courses/linux-security.php7 -X POST -d 
 
 | Step | Technique | Tool / Flag | Result |
 |---|---|---|---|
-| 1 | VHost fuzzing | `ffuf -H 'Host: FUZZ.academy.htb' -fs 985` | test, archive, faculty |
-| 2 | Extension fuzzing | `ffuf /indexFUZZ` per VHost | `.php`, `.phps`, `.php7` |
-| 3 | Recursive page fuzzing + regex | `-recursion -e .php,.phps,.php7 -mr "You don't have access!"` | `/courses/linux-security.php7` |
-| 4 | POST parameter fuzzing | `ffuf -X POST -d 'FUZZ=key' -fs 774` | `user`, `username` |
-| 5 | Value fuzzing | `ffuf -d 'username=FUZZ' -fs 781` → `harry` | `HTB{flag_redacted}` |
+| 1 | VHost fuzzing | `ffuf -H 'Host: FUZZ.academy.htb' -fs 985` | `[redacted]` |
+| 2 | Extension fuzzing | `ffuf /indexFUZZ` per VHost | `[redacted]` |
+| 3 | Recursive page fuzzing + regex | `-recursion -e .php,.phps,.php7 -mr "You don't have access!"` | `[redacted]` |
+| 4 | POST parameter fuzzing | `ffuf -X POST -d 'FUZZ=key' -fs 774` | `[redacted]` |
+| 5 | Value fuzzing | `ffuf -d '<param>=FUZZ' -fs 781` | `HTB{flag_redacted}` |
 
 ---
 
@@ -206,7 +206,7 @@ ffuf -w burp-parameter-names.txt:FUZZ -u http://vhost:PORT/page \
 
 # Value fuzzing
 ffuf -w names.txt:FUZZ -u http://vhost:PORT/page \
-  -X POST -d 'username=FUZZ' -H 'Content-Type: application/x-www-form-urlencoded' -fs <size>
+  -X POST -d '<param>=FUZZ' -H 'Content-Type: application/x-www-form-urlencoded' -fs <size>
 ```
 
 ---

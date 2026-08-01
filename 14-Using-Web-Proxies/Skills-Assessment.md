@@ -19,7 +19,7 @@
 | 3 | ZAP Encoder — ASCII Hex decode → Base64 decode on `/admin.php` cookie | 31-char partial MD5 hash recovered |
 | 4 | Burp Intruder — fuzz last MD5 character with alphanum-case.txt + 3-rule payload processing chain | Complete MD5 cookie candidate identified |
 | 5 | Sort Intruder results by Length — outlier 1248-byte response | Flag 2 captured |
-| 6 | Metasploit `coldfusion_locale_traversal` + `set PROXIES HTTP:127.0.0.1:8080` → proxy intercept | Hidden directory `CFIDE` identified |
+| 6 | Metasploit `coldfusion_locale_traversal` + `set PROXIES HTTP:127.0.0.1:8080` → proxy intercept | Hidden directory identified |
 
 ---
 
@@ -104,15 +104,11 @@ In the Encoder window, click the **Decode** tab. Two decode operations are neede
 The raw cookie value decodes from hex to a Base64-looking string.
 
 **Layer 2 — Copy the ASCII Hex result → paste into the input → Base64 Decode:**  
-The Base64 layer decodes to a 31-character value:
-
-```
-3dac93b8cd250aa8c1a36fffc79a17a
-```
+The Base64 layer decodes to a 31-character value.
 
 The cookie was double-encoded: **Base64 → ASCII Hex** on the way out, **ASCII Hex → Base64** on decode. The 31-character result is a partial MD5 hash missing its final character.
 
-> **Answer:** `3dac93b8cd250aa8c1a36fffc79a17a`
+> **Answer:** `[redacted]`
 
 ---
 
@@ -133,13 +129,13 @@ In Proxy → HTTP History: right-click the request → **Send to Intruder** (`CT
 Navigate to Intruder (`CTRL+SHIFT+I`) → **Positions** tab:
 
 1. Click **Clear §** to remove all auto-detected positions
-2. Replace the existing cookie value entirely with the 31-character hash: `3dac93b8cd250aa8c1a36fffc79a17a`
+2. Replace the existing cookie value entirely with the 31-character hash from Question 2
 3. Select the entire hash → click **Add §**
 
 The position marker now wraps the full hash:
 
 ```
-Cookie: cookie=§3dac93b8cd250aa8c1a36fffc79a17a§
+Cookie: cookie=§<31-char-md5>§
 ```
 
 Each payload character will be appended to the hash via the Add Prefix processor in Step 4.
@@ -165,14 +161,14 @@ Under **Payload Processing**, add three rules in this exact order:
 
 | # | Rule Type | Value |
 |---|-----------|-------|
-| 1 | Add prefix | `3dac93b8cd250aa8c1a36fffc79a17a` |
+| 1 | Add prefix | `<31-char-md5>` |
 | 2 | Base64-encode | *(no additional value)* |
 | 3 | Encode as ASCII hex | *(no additional value)* |
 
-**What this chain does for each payload character (e.g., `f`):**
-1. Prefix prepended: `3dac93b8cd250aa8c1a36fffc79a17af` (32-char MD5 candidate)
-2. Base64-encoded: `M2RhYzkzYjhjZDI1MGFhOGMxYTM2ZmZmYzc5YTE3YWY=`
-3. ASCII-hex-encoded: `4d3364614...` (final value sent as cookie)
+**What this chain does for each payload character:**
+1. Prefix prepended → 32-char complete MD5 candidate
+2. Base64-encoded
+3. ASCII-hex-encoded → final value sent as cookie
 
 This mirrors the exact double-encoding format the server expects, identified in Question 2.
 
@@ -231,26 +227,26 @@ msf6 auxiliary(scanner/http/coldfusion_locale_traversal) > run
 The proxy holds the raw HTTP request sent by the module:
 
 ```http
-GET /CFIDE/administrator/.. HTTP/1.1
+GET /[redacted]/administrator/.. HTTP/1.1
 Host: 159.65.63.151:31845
 User-Agent: Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1)
 Connection: close
 ```
 
-The path `/CFIDE/administrator/..` reveals the target directory: `CFIDE` — Adobe ColdFusion's default administrative directory used as the traversal origin.
+The path reveals the ColdFusion default administrative directory used as the traversal origin.
 
-> **Answer:** `CFIDE`
+> **Answer:** `[redacted]`
 
 ---
 
-## Flags
+## Flags and Answers
 
 | Question | Description | Answer |
 |----------|-------------|--------|
 | Q1 — /lucky.php disabled button | Flag after clicking re-enabled button | `HTB{flag_redacted}` |
-| Q2 — /admin.php cookie decode | 31-char value after ASCII Hex → Base64 decode | `3dac93b8cd250aa8c1a36fffc79a17a` |
+| Q2 — /admin.php cookie decode | 31-char value after ASCII Hex → Base64 decode | `[redacted]` |
 | Q3 — MD5 character fuzzing | Flag from Intruder outlier response (length 1248) | `HTB{flag_redacted}` |
-| Q4 — ColdFusion traversal directory | Directory name in `/XXXXX/administrator/..` | `CFIDE` |
+| Q4 — ColdFusion traversal directory | Directory name in `/XXXXX/administrator/..` | `[redacted]` |
 
 ---
 
@@ -287,9 +283,9 @@ Flag 1 captured [HTB{flag_redacted}]
         ↓
 ZAP Encoder → ASCII Hex Decode → Base64 Decode → 31-char MD5
         ↓
-Answer: 3dac93b8cd250aa8c1a36fffc79a17a
+Answer: [redacted]
 
-Burp Intruder → Positions: cookie=§3dac93b8cd250aa8c1a36fffc79a17a§
+Burp Intruder → Positions: cookie=§<31-char-md5>§
         ↓
 Payloads: alphanum-case.txt (a-z, A-Z, 0-9)
 Processing: Add prefix (31-char hash) → Base64-encode → ASCII-hex-encode
@@ -302,9 +298,9 @@ msfconsole -q → use auxiliary/scanner/http/coldfusion_locale_traversal
         ↓
 set PROXIES HTTP:127.0.0.1:8080 → enable intercept → run
         ↓
-Intercepted: GET /CFIDE/administrator/..
+Intercepted: GET /[redacted]/administrator/..
         ↓
-Directory: CFIDE
+Directory: [redacted]
 ```
 
 ---
