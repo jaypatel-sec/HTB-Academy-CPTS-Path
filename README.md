@@ -69,6 +69,7 @@ exact commands, and notes on what each technique actually means in practice.
 
 ### Module 15 — Attacking Web Applications with Ffuf
 - [Module Notes](15-Attacking-Web-Applications-with-Ffuf/Attacking-Web-Applications-with-Ffuf.md) — Directory fuzzing, extension fuzzing, page fuzzing, recursive scanning, DNS /etc/hosts, sub-domain fuzzing, VHost fuzzing with Host header, response size filtering (`-fs`), GET parameter fuzzing, POST parameter fuzzing, value fuzzing with custom wordlists
+- [Skills Assessment](15-Attacking-Web-Applications-with-Ffuf/Skills-Assessment.md) — VHost fuzzing → 3 sub-domains (test/archive/faculty) → extension fuzzing (.php/.phps/.php7) → recursive fuzzing with `-mr` regex match → POST parameter fuzzing (user/username) → value fuzzing `username=harry` → `HTB{w3b_fuzz1n6_m4573r}`
 
 ### Module 26 — Windows Privilege Escalation
 - [Module Notes](26-Windows-Privilege-Escalation/Windows-Privilege-Escalation.md)
