@@ -1,7 +1,7 @@
 # HTB Academy — CPTS Path
 
 **Author:** Jay Patel | **Path:** Certified Penetration Testing Specialist (CPTS)
-**Started:** March 2026 | **Status:** In Progress (16/28 modules complete)
+**Started:** March 2026 | **Status:** In Progress (17/28 modules complete)
 
 ---
 
@@ -41,7 +41,7 @@ exact commands, and notes on what each technique actually means in practice.
 | 13 | Active Directory Enumeration and Attacks | Medium | ⏳ Pending | — |
 | 14 | Using Web Proxies | Easy | ✅ Complete | July 2026 |
 | 15 | Attacking Web Applications with Ffuf | Easy | ✅ Complete | July 2026 |
-| 16 | Login Brute Forcing | Easy | ⏳ Pending | — |
+| 16 | Login Brute Forcing | Easy | ✅ Complete | August 2026 |
 | 17 | SQL Injection Fundamentals | Medium | ⏳ Pending | — |
 | 18 | SQLMap Essentials | Easy | ⏳ Pending | — |
 | 19 | Cross-Site Scripting (XSS) | Easy | ⏳ Pending | — |
@@ -69,7 +69,10 @@ exact commands, and notes on what each technique actually means in practice.
 
 ### Module 15 — Attacking Web Applications with Ffuf
 - [Module Notes](15-Attacking-Web-Applications-with-Ffuf/Attacking-Web-Applications-with-Ffuf.md) — Directory fuzzing, extension fuzzing, page fuzzing, recursive scanning, DNS /etc/hosts, sub-domain fuzzing, VHost fuzzing with Host header, response size filtering (`-fs`), GET parameter fuzzing, POST parameter fuzzing, value fuzzing with custom wordlists
-- [Skills Assessment](15-Attacking-Web-Applications-with-Ffuf/Skills-Assessment.md) — VHost fuzzing → 3 sub-domains (test/archive/faculty) → extension fuzzing (.php/.phps/.php7) → recursive fuzzing with `-mr` regex match → POST parameter fuzzing (user/username) → value fuzzing `username=harry` → `HTB{w3b_fuzz1n6_m4573r}`
+- [Skills Assessment](15-Attacking-Web-Applications-with-Ffuf/Skills-Assessment.md) — VHost fuzzing → 3 sub-domains → extension fuzzing → recursive fuzzing with `-mr` regex match → POST parameter fuzzing → value fuzzing → `HTB{flag_redacted}`
+
+### Module 16 — Login Brute Forcing
+- [Module Notes](16-Login-Brute-Forcing/Login-Brute-Forcing.md) — Brute force types (simple/dictionary/hybrid/credential stuffing/password spraying), password security fundamentals, default credentials, Hydra (http-get/http-post-form/ssh/ftp/rdp), Basic HTTP Auth brute force, login form inspection + params string construction, Medusa (SSH/FTP modules), SSH pivot → internal FTP discovery, Username Anarchy, CUPP password profiling, grep-based wordlist policy filtering
 
 ### Module 26 — Windows Privilege Escalation
 - [Module Notes](26-Windows-Privilege-Escalation/Windows-Privilege-Escalation.md)
