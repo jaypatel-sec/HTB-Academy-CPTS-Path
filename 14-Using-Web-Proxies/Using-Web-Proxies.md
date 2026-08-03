@@ -466,13 +466,13 @@ http 127.0.0.1 8080
 
 **Usage:**
 
-```bash
+```shell-session
 # Route curl through Burp/ZAP — suppress connection info with -q
-$ proxychains -q curl http://SERVER_IP:PORT
+Hackerpatel007_1@htb[/htb]$ proxychains -q curl http://SERVER_IP:PORT
 
 # Route any other tool the same way
-$ proxychains -q nmap -sT -p80,443 SERVER_IP
-$ proxychains -q sqlmap -u "http://SERVER_IP:PORT/?id=1"
+Hackerpatel007_1@htb[/htb]$ proxychains -q nmap -sT -p80,443 SERVER_IP
+Hackerpatel007_1@htb[/htb]$ proxychains -q sqlmap -u "http://SERVER_IP:PORT/?id=1"
 ```
 
 All requests appear in Burp's Proxy → HTTP History or ZAP's History pane, allowing full inspection and modification of CLI tool traffic.
@@ -485,8 +485,8 @@ All requests appear in Burp's Proxy → HTTP History or ZAP's History pane, allo
 
 Route Metasploit module web traffic through the proxy with the `PROXIES` option:
 
-```bash
-$ msfconsole -q
+```shell-session
+Hackerpatel007_1@htb[/htb]$ msfconsole -q
 
 msf6 > use auxiliary/scanner/http/robots_txt
 msf6 auxiliary(scanner/http/robots_txt) > set PROXIES HTTP:127.0.0.1:8080

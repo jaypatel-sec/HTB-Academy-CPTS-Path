@@ -190,8 +190,8 @@ When fuzzing completes, click the **Length** column to sort results by response 
 
 ### Step 1 — Launch Metasploit
 
-```bash
-$ msfconsole -q
+```shell-session
+Hackerpatel007_1@htb[/htb]$ msfconsole -q
 ```
 
 ### Step 2 — Load the ColdFusion Locale Traversal Module

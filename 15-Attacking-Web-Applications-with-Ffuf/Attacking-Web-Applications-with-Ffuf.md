@@ -77,7 +77,7 @@ The two required flags for every ffuf command are `-w` (wordlist) and `-u` (URL)
 **Basic syntax:**
 
 ```bash
-ffuf -w /opt/useful/seclists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ \
+Hackerpatel007_1@htb[/htb]$ ffuf -w /opt/useful/seclists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ \
      -u http://SERVER_IP:PORT/FUZZ
 ```
 
@@ -110,7 +110,7 @@ Ffuf tests ~90k URLs in under 10 seconds with the default 40 threads.
 When a directory is found but returns an empty page, fuzz for the server's file extension before fuzzing for pages. Place `FUZZ` where the extension would appear:
 
 ```bash
-ffuf -w /opt/useful/seclists/Discovery/Web-Content/web-extensions.txt:FUZZ \
+Hackerpatel007_1@htb[/htb]$ ffuf -w /opt/useful/seclists/Discovery/Web-Content/web-extensions.txt:FUZZ \
      -u http://SERVER_IP:PORT/blog/indexFUZZ
 ```
 
@@ -126,7 +126,7 @@ ffuf -w /opt/useful/seclists/Discovery/Web-Content/web-extensions.txt:FUZZ \
 Once the extension is known (e.g., `.php`), fuzz for filenames under the discovered directory:
 
 ```bash
-ffuf -w /opt/useful/seclists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ \
+Hackerpatel007_1@htb[/htb]$ ffuf -w /opt/useful/seclists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ \
      -u http://SERVER_IP:PORT/blog/FUZZ.php
 ```
 
@@ -155,7 +155,7 @@ Recursive scanning automatically spawns new scans under every newly discovered d
 **Command:**
 
 ```bash
-ffuf -w /opt/useful/seclists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ \
+Hackerpatel007_1@htb[/htb]$ ffuf -w /opt/useful/seclists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ \
      -u http://SERVER_IP:PORT/FUZZ \
      -recursion -recursion-depth 1 -e .php -v
 ```
@@ -180,7 +180,7 @@ When a page redirects to a hostname (e.g., `academy.htb`) that is not publicly r
 **Add a hostname:**
 
 ```bash
-sudo sh -c 'echo "SERVER_IP  academy.htb" >> /etc/hosts'
+Hackerpatel007_1@htb[/htb]$ sudo sh -c 'echo "SERVER_IP  academy.htb" >> /etc/hosts'
 ```
 
 After adding the entry, the browser resolves `academy.htb` to `SERVER_IP` directly — bypassing public DNS — and the site becomes accessible.
@@ -194,7 +194,7 @@ After adding the entry, the browser resolves `academy.htb` to `SERVER_IP` direct
 Sub-domain fuzzing checks whether publicly resolvable sub-domains exist by placing `FUZZ` in the sub-domain position of the URL:
 
 ```bash
-ffuf -w /opt/useful/seclists/Discovery/DNS/subdomains-top1million-5000.txt:FUZZ \
+Hackerpatel007_1@htb[/htb]$ ffuf -w /opt/useful/seclists/Discovery/DNS/subdomains-top1million-5000.txt:FUZZ \
      -u https://FUZZ.inlanefreight.com/
 ```
 
@@ -222,7 +222,7 @@ VHost fuzzing tests for virtual hosts (sub-domains hosted on the same IP) by fuz
 **Command:**
 
 ```bash
-ffuf -w /opt/useful/seclists/Discovery/DNS/subdomains-top1million-5000.txt:FUZZ \
+Hackerpatel007_1@htb[/htb]$ ffuf -w /opt/useful/seclists/Discovery/DNS/subdomains-top1million-5000.txt:FUZZ \
      -u http://academy.htb:PORT/ \
      -H 'Host: FUZZ.academy.htb'
 ```
@@ -260,7 +260,7 @@ Ffuf supports both matching (keep only responses that meet a condition) and filt
 First run without filter to identify the baseline response size (e.g., 900 bytes for all invalid VHosts). Then filter it out:
 
 ```bash
-ffuf -w /opt/useful/seclists/Discovery/DNS/subdomains-top1million-5000.txt:FUZZ \
+Hackerpatel007_1@htb[/htb]$ ffuf -w /opt/useful/seclists/Discovery/DNS/subdomains-top1million-5000.txt:FUZZ \
      -u http://academy.htb:PORT/ \
      -H 'Host: FUZZ.academy.htb' \
      -fs 900
@@ -273,7 +273,7 @@ admin                   [Status: 200, Size: 0, Words: 1, Lines: 1]
 The `admin` VHost produces a different response size — confirming it is a real, distinct VHost. Add it to `/etc/hosts` and browse to verify:
 
 ```bash
-sudo sh -c 'echo "SERVER_IP  admin.academy.htb" >> /etc/hosts'
+Hackerpatel007_1@htb[/htb]$ sudo sh -c 'echo "SERVER_IP  admin.academy.htb" >> /etc/hosts'
 ```
 
 ---
@@ -283,7 +283,7 @@ sudo sh -c 'echo "SERVER_IP  admin.academy.htb" >> /etc/hosts'
 GET parameters are appended to the URL after `?`. Fuzz by placing `FUZZ` in the parameter name position:
 
 ```bash
-ffuf -w /opt/useful/seclists/Discovery/Web-Content/burp-parameter-names.txt:FUZZ \
+Hackerpatel007_1@htb[/htb]$ ffuf -w /opt/useful/seclists/Discovery/Web-Content/burp-parameter-names.txt:FUZZ \
      -u http://admin.academy.htb:PORT/admin/admin.php?FUZZ=key \
      -fs <baseline_size>
 ```
@@ -318,7 +318,7 @@ POST parameters are passed in the request body, not the URL. Required flags:
 **Command:**
 
 ```bash
-ffuf -w /opt/useful/seclists/Discovery/Web-Content/burp-parameter-names.txt:FUZZ \
+Hackerpatel007_1@htb[/htb]$ ffuf -w /opt/useful/seclists/Discovery/Web-Content/burp-parameter-names.txt:FUZZ \
      -u http://admin.academy.htb:PORT/admin/admin.php \
      -X POST \
      -d 'FUZZ=key' \
@@ -335,7 +335,7 @@ id                      [Status: 200, Size: 768, Words: 57, Lines: 24]
 Verify with curl:
 
 ```bash
-curl http://admin.academy.htb:PORT/admin/admin.php \
+Hackerpatel007_1@htb[/htb]$ curl http://admin.academy.htb:PORT/admin/admin.php \
      -X POST \
      -d 'id=key' \
      -H 'Content-Type: application/x-www-form-urlencoded'
@@ -356,13 +356,13 @@ When no pre-made wordlist fits the expected parameter type, generate a custom on
 **Generate wordlist (1–1000):**
 
 ```bash
-for i in $(seq 1 1000); do echo $i >> ids.txt; done
+Hackerpatel007_1@htb[/htb]$ for i in $(seq 1 1000); do echo $i >> ids.txt; done
 ```
 
 **Fuzz with custom wordlist:**
 
 ```bash
-ffuf -w ids.txt:FUZZ \
+Hackerpatel007_1@htb[/htb]$ ffuf -w ids.txt:FUZZ \
      -u http://admin.academy.htb:PORT/admin/admin.php \
      -X POST \
      -d 'id=FUZZ' \
@@ -379,7 +379,7 @@ ffuf -w ids.txt:FUZZ \
 Retrieve the flag with curl:
 
 ```bash
-curl http://admin.academy.htb:PORT/admin/admin.php \
+Hackerpatel007_1@htb[/htb]$ curl http://admin.academy.htb:PORT/admin/admin.php \
      -X POST \
      -d 'id=73' \
      -H 'Content-Type: application/x-www-form-urlencoded'

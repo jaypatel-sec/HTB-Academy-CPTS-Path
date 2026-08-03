@@ -23,19 +23,19 @@ Five-question skills assessment covering the full ffuf workflow: VHost discovery
 First run without filtering to identify the default (erroneous) response size:
 
 ```bash
-ffuf -w /opt/useful/SecLists/Discovery/DNS/subdomains-top1million-5000.txt:FUZZ -u http://10.129.43.71:32596 -H 'Host: FUZZ.academy.htb'
+Hackerpatel007_1@htb[/htb]$ ffuf -w /opt/useful/SecLists/Discovery/DNS/subdomains-top1million-5000.txt:FUZZ -u http://10.129.43.71:32596 -H 'Host: FUZZ.academy.htb'
 ```
 
 Default erroneous VHost returns **Size: 985**. Filter it out:
 
 ```bash
-ffuf -w /opt/useful/SecLists/Discovery/DNS/subdomains-top1million-5000.txt:FUZZ -u http://10.129.43.71:32596 -H 'Host: FUZZ.academy.htb' -fs 985
+Hackerpatel007_1@htb[/htb]$ ffuf -w /opt/useful/SecLists/Discovery/DNS/subdomains-top1million-5000.txt:FUZZ -u http://10.129.43.71:32596 -H 'Host: FUZZ.academy.htb' -fs 985
 ```
 
 Alternatively, use `-ac` for automatic calibration:
 
 ```bash
-ffuf -w /opt/useful/SecLists/Discovery/DNS/subdomains-top1million-5000.txt:FUZZ -u http://10.129.43.71:32596 -H 'Host: FUZZ.academy.htb' -ac
+Hackerpatel007_1@htb[/htb]$ ffuf -w /opt/useful/SecLists/Discovery/DNS/subdomains-top1million-5000.txt:FUZZ -u http://10.129.43.71:32596 -H 'Host: FUZZ.academy.htb' -ac
 ```
 
 ### Output
@@ -59,20 +59,17 @@ ffuf -w /opt/useful/SecLists/Discovery/DNS/subdomains-top1million-5000.txt:FUZZ 
 Add all three VHosts to `/etc/hosts`:
 
 ```bash
-sudo bash -c 'echo "10.129.43.71 <vhost1>.academy.htb <vhost2>.academy.htb <vhost3>.academy.htb" >> /etc/hosts'
+Hackerpatel007_1@htb[/htb]$ sudo bash -c 'echo "10.129.43.71 <vhost1>.academy.htb <vhost2>.academy.htb <vhost3>.academy.htb" >> /etc/hosts'
 ```
 
 Run extension fuzzing against each VHost on `/indexFUZZ`:
 
 ```bash
-# vhost1
-ffuf -w /opt/useful/SecLists/Discovery/Web-Content/web-extensions.txt:FUZZ -u http://<vhost1>.academy.htb:32596/indexFUZZ
+Hackerpatel007_1@htb[/htb]$ ffuf -w /opt/useful/SecLists/Discovery/Web-Content/web-extensions.txt:FUZZ -u http://<vhost1>.academy.htb:32596/indexFUZZ
 
-# vhost2
-ffuf -w /opt/useful/SecLists/Discovery/Web-Content/web-extensions.txt:FUZZ -u http://<vhost2>.academy.htb:32596/indexFUZZ
+Hackerpatel007_1@htb[/htb]$ ffuf -w /opt/useful/SecLists/Discovery/Web-Content/web-extensions.txt:FUZZ -u http://<vhost2>.academy.htb:32596/indexFUZZ
 
-# vhost3
-ffuf -w /opt/useful/SecLists/Discovery/Web-Content/web-extensions.txt:FUZZ -u http://<vhost3>.academy.htb:32596/indexFUZZ
+Hackerpatel007_1@htb[/htb]$ ffuf -w /opt/useful/SecLists/Discovery/Web-Content/web-extensions.txt:FUZZ -u http://<vhost3>.academy.htb:32596/indexFUZZ
 ```
 
 ### Results
@@ -96,13 +93,13 @@ ffuf -w /opt/useful/SecLists/Discovery/Web-Content/web-extensions.txt:FUZZ -u ht
 Fuzz the target VHost recursively (depth 1) with all discovered extensions. Filter the erroneous response size and match the target string with `-mr`:
 
 ```bash
-ffuf -w /opt/useful/SecLists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ -u http://<target-vhost>.academy.htb:32596/FUZZ -recursion -recursion-depth 1 -e .php,.phps,.php7 -fs 287 -mr "You don't have access!" -t 100
+Hackerpatel007_1@htb[/htb]$ ffuf -w /opt/useful/SecLists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ -u http://<target-vhost>.academy.htb:32596/FUZZ -recursion -recursion-depth 1 -e .php,.phps,.php7 -fs 287 -mr "You don't have access!" -t 100
 ```
 
 ffuf quickly discovers a subdirectory as a new queue entry. Cancel and target it directly:
 
 ```bash
-ffuf -w /opt/useful/SecLists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ -u http://<target-vhost>.academy.htb:32596/<subdir>/FUZZ -e .php,.phps,.php7 -fs 287 -mr "You don't have access!" -t 100
+Hackerpatel007_1@htb[/htb]$ ffuf -w /opt/useful/SecLists/Discovery/Web-Content/directory-list-2.3-small.txt:FUZZ -u http://<target-vhost>.academy.htb:32596/<subdir>/FUZZ -e .php,.phps,.php7 -fs 287 -mr "You don't have access!" -t 100
 ```
 
 ### Output
@@ -124,13 +121,13 @@ ffuf -w /opt/useful/SecLists/Discovery/Web-Content/directory-list-2.3-small.txt:
 First pass without filtering to identify the erroneous response size (774):
 
 ```bash
-ffuf -w /opt/useful/SecLists/Discovery/Web-Content/burp-parameter-names.txt:FUZZ -u http://<target-vhost>.academy.htb:32596/<path-to-page> -X POST -d 'FUZZ=key' -H 'Content-Type: application/x-www-form-urlencoded'
+Hackerpatel007_1@htb[/htb]$ ffuf -w /opt/useful/SecLists/Discovery/Web-Content/burp-parameter-names.txt:FUZZ -u http://<target-vhost>.academy.htb:32596/<path-to-page> -X POST -d 'FUZZ=key' -H 'Content-Type: application/x-www-form-urlencoded'
 ```
 
 Filter erroneous size and re-run:
 
 ```bash
-ffuf -w /opt/useful/SecLists/Discovery/Web-Content/burp-parameter-names.txt:FUZZ -u http://<target-vhost>.academy.htb:32596/<path-to-page> -X POST -d 'FUZZ=key' -H 'Content-Type: application/x-www-form-urlencoded' -fs 774 -t 100
+Hackerpatel007_1@htb[/htb]$ ffuf -w /opt/useful/SecLists/Discovery/Web-Content/burp-parameter-names.txt:FUZZ -u http://<target-vhost>.academy.htb:32596/<path-to-page> -X POST -d 'FUZZ=key' -H 'Content-Type: application/x-www-form-urlencoded' -fs 774 -t 100
 ```
 
 ### Output
@@ -153,7 +150,7 @@ ffuf -w /opt/useful/SecLists/Discovery/Web-Content/burp-parameter-names.txt:FUZZ
 Fuzz the identified parameter with a names wordlist. First pass shows erroneous size is 781:
 
 ```bash
-ffuf -w /opt/useful/SecLists/Usernames/Names/names.txt:FUZZ -u http://<target-vhost>.academy.htb:32596/<path-to-page> -X POST -d '<param>=FUZZ' -H 'Content-Type: application/x-www-form-urlencoded' -fs 781 -t 100
+Hackerpatel007_1@htb[/htb]$ ffuf -w /opt/useful/SecLists/Usernames/Names/names.txt:FUZZ -u http://<target-vhost>.academy.htb:32596/<path-to-page> -X POST -d '<param>=FUZZ' -H 'Content-Type: application/x-www-form-urlencoded' -fs 781 -t 100
 ```
 
 ### Output
@@ -165,7 +162,7 @@ ffuf -w /opt/useful/SecLists/Usernames/Names/names.txt:FUZZ -u http://<target-vh
 Confirm with curl:
 
 ```bash
-curl -s http://<target-vhost>.academy.htb:32596/<path-to-page> -X POST -d '<param>=[redacted]' | grep "HTB{.*}"
+Hackerpatel007_1@htb[/htb]$ curl -s http://<target-vhost>.academy.htb:32596/<path-to-page> -X POST -d '<param>=[redacted]' | grep "HTB{.*}"
 ```
 
 **Answer:** `HTB{flag_redacted}`
@@ -188,24 +185,24 @@ curl -s http://<target-vhost>.academy.htb:32596/<path-to-page> -X POST -d '<para
 
 ```bash
 # VHost fuzzing with size filter
-ffuf -w subdomains-top1million-5000.txt:FUZZ -u http://IP:PORT -H 'Host: FUZZ.domain.htb' -fs <size>
+Hackerpatel007_1@htb[/htb]$ ffuf -w subdomains-top1million-5000.txt:FUZZ -u http://IP:PORT -H 'Host: FUZZ.domain.htb' -fs <size>
 
 # Auto-calibrate filter
-ffuf -w subdomains.txt:FUZZ -u http://IP:PORT -H 'Host: FUZZ.domain.htb' -ac
+Hackerpatel007_1@htb[/htb]$ ffuf -w subdomains.txt:FUZZ -u http://IP:PORT -H 'Host: FUZZ.domain.htb' -ac
 
 # Extension fuzzing
-ffuf -w web-extensions.txt:FUZZ -u http://vhost:PORT/indexFUZZ
+Hackerpatel007_1@htb[/htb]$ ffuf -w web-extensions.txt:FUZZ -u http://vhost:PORT/indexFUZZ
 
 # Recursive fuzzing with regex matcher
-ffuf -w wordlist:FUZZ -u http://vhost:PORT/FUZZ -recursion -recursion-depth 1 \
+Hackerpatel007_1@htb[/htb]$ ffuf -w wordlist:FUZZ -u http://vhost:PORT/FUZZ -recursion -recursion-depth 1 \
   -e .php,.phps,.php7 -fs <size> -mr "target string" -t 100
 
 # POST parameter fuzzing
-ffuf -w burp-parameter-names.txt:FUZZ -u http://vhost:PORT/page \
+Hackerpatel007_1@htb[/htb]$ ffuf -w burp-parameter-names.txt:FUZZ -u http://vhost:PORT/page \
   -X POST -d 'FUZZ=key' -H 'Content-Type: application/x-www-form-urlencoded' -fs <size>
 
 # Value fuzzing
-ffuf -w names.txt:FUZZ -u http://vhost:PORT/page \
+Hackerpatel007_1@htb[/htb]$ ffuf -w names.txt:FUZZ -u http://vhost:PORT/page \
   -X POST -d '<param>=FUZZ' -H 'Content-Type: application/x-www-form-urlencoded' -fs <size>
 ```
 
