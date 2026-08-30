@@ -1,7 +1,7 @@
 # HTB Academy — CPTS Path
 
 **Author:** Jay Patel | **Path:** Certified Penetration Testing Specialist (CPTS)
-**Started:** March 2026 | **Status:** In Progress (17/28 modules complete)
+**Started:** March 2026 | **Status:** In Progress (18/28 modules complete)
 
 ---
 
@@ -44,7 +44,7 @@ exact commands, and notes on what each technique actually means in practice.
 | 16 | Login Brute Forcing | Easy | ✅ Complete | August 2026 |
 | 17 | SQL Injection Fundamentals | Medium | ⏳ Pending | — |
 | 18 | SQLMap Essentials | Easy | ⏳ Pending | — |
-| 19 | Cross-Site Scripting (XSS) | Easy | ⏳ Pending | — |
+| 19 | Cross-Site Scripting (XSS) | Easy | ✅ Complete | August 2026 |
 | 20 | File Inclusion | Medium | ⏳ Pending | — |
 | 21 | File Upload Attacks | Medium | ⏳ Pending | — |
 | 22 | Command Injections | Medium | ⏳ Pending | — |
@@ -73,6 +73,10 @@ exact commands, and notes on what each technique actually means in practice.
 
 ### Module 16 — Login Brute Forcing
 - [Module Notes](16-Login-Brute-Forcing/Login-Brute-Forcing.md) — Brute force types (simple/dictionary/hybrid/credential stuffing/password spraying), password security fundamentals, default credentials, Hydra (http-get/http-post-form/ssh/ftp/rdp), Basic HTTP Auth brute force, login form inspection + params string construction, Medusa (SSH/FTP modules), SSH pivot → internal FTP discovery, Username Anarchy, CUPP password profiling, grep-based wordlist policy filtering
+- [Skills Assessment](16-Login-Brute-Forcing/Skills-Assessment.md) — Basic Auth Hydra http-get (admin creds) → curl authenticated GET → username for Part 2 → SSH Hydra brute force → nmap localhost FTP → Username-Anarchy Thomas Smith → Medusa FTP brute force → FTP login → `HTB{flag_redacted}`
+
+### Module 19 — Cross-Site Scripting (XSS)
+- [Module Notes](19-Cross-Site-Scripting-XSS/Cross-Site-Scripting-XSS.md) — Stored/Reflected/DOM-based XSS types, `window.origin` PoC, DOM source/sink analysis, event-handler payloads (`onerror`, `onload`), XSS Strike automated scanner, manual payload vectors, defacement (background/title/innerHTML), phishing form injection + PHP credential logger, blind XSS remote script callbacks, cookie grabber script + PHP logger, session takeover via Firefox Storage tab, `HttpOnly`/CSP/DOMPurify prevention
 
 ### Module 26 — Windows Privilege Escalation
 - [Module Notes](26-Windows-Privilege-Escalation/Windows-Privilege-Escalation.md)
