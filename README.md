@@ -77,6 +77,7 @@ exact commands, and notes on what each technique actually means in practice.
 
 ### Module 19 — Cross-Site Scripting (XSS)
 - [Module Notes](19-Cross-Site-Scripting-XSS/Cross-Site-Scripting-XSS.md) — Stored/Reflected/DOM-based XSS types, `window.origin` PoC, DOM source/sink analysis, event-handler payloads (`onerror`, `onload`), XSS Strike automated scanner, manual payload vectors, defacement (background/title/innerHTML), phishing form injection + PHP credential logger, blind XSS remote script callbacks, cookie grabber script + PHP logger, session takeover via Firefox Storage tab, `HttpOnly`/CSP/DOMPurify prevention
+- [Skills Assessment](19-Cross-Site-Scripting-XSS/Skills-Assessment.md) — blog comment approval workflow → blind XSS surface → nc listener + unique path probe per field → Website field confirmed via HeadlessChrome callback → `script.js` cookie grabber + `index.php` PHP logger → `'><script src=...>` payload in Website field → admin cookie exfiltrated → `HTB{flag_redacted}`
 
 ### Module 26 — Windows Privilege Escalation
 - [Module Notes](26-Windows-Privilege-Escalation/Windows-Privilege-Escalation.md)
