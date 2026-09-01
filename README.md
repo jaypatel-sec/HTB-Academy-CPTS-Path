@@ -1,7 +1,7 @@
 # HTB Academy — CPTS Path
 
 **Author:** Jay Patel | **Path:** Certified Penetration Testing Specialist (CPTS)
-**Started:** March 2026 | **Status:** In Progress (18/28 modules complete)
+**Started:** March 2026 | **Status:** In Progress (19/28 modules complete)
 
 ---
 
@@ -42,7 +42,7 @@ exact commands, and notes on what each technique actually means in practice.
 | 14 | Using Web Proxies | Easy | ✅ Complete | July 2026 |
 | 15 | Attacking Web Applications with Ffuf | Easy | ✅ Complete | July 2026 |
 | 16 | Login Brute Forcing | Easy | ✅ Complete | August 2026 |
-| 17 | SQL Injection Fundamentals | Medium | ⏳ Pending | — |
+| 17 | SQL Injection Fundamentals | Medium | ✅ Complete | September 2026 |
 | 18 | SQLMap Essentials | Easy | ⏳ Pending | — |
 | 19 | Cross-Site Scripting (XSS) | Easy | ✅ Complete | August 2026 |
 | 20 | File Inclusion | Medium | ⏳ Pending | — |
@@ -74,6 +74,9 @@ exact commands, and notes on what each technique actually means in practice.
 ### Module 16 — Login Brute Forcing
 - [Module Notes](16-Login-Brute-Forcing/Login-Brute-Forcing.md) — Brute force types (simple/dictionary/hybrid/credential stuffing/password spraying), password security fundamentals, default credentials, Hydra (http-get/http-post-form/ssh/ftp/rdp), Basic HTTP Auth brute force, login form inspection + params string construction, Medusa (SSH/FTP modules), SSH pivot → internal FTP discovery, Username Anarchy, CUPP password profiling, grep-based wordlist policy filtering
 - [Skills Assessment](16-Login-Brute-Forcing/Skills-Assessment.md) — Basic Auth Hydra http-get (admin creds) → curl authenticated GET → username for Part 2 → SSH Hydra brute force → nmap localhost FTP → Username-Anarchy Thomas Smith → Medusa FTP brute force → FTP login → `HTB{flag_redacted}`
+
+### Module 17 — SQL Injection Fundamentals
+- [Module Notes](17-SQL-Injection-Fundamentals/SQL-Injection-Fundamentals.md) — MySQL/MariaDB fundamentals (CREATE/INSERT/SELECT/UPDATE/ALTER/DROP, WHERE, ORDER BY, LIKE, SQL operators, precedence), SQLi types (Union/Error/Boolean Blind/Time Blind/Out-of-band), auth bypass (OR injection, comment-based `--` and `#`), UNION injection (column count via ORDER BY + UNION SELECT, visible column detection), DB enumeration via INFORMATION_SCHEMA (schemata, tables, columns), data dumping with dot notation, user privilege check (`FILE` privilege), LOAD_FILE file read (`/etc/passwd`, PHP source), `secure_file_priv` check, `INTO OUTFILE` PHP web shell write → OS RCE as `www-data`, mitigation (prepared statements, input validation, least privilege, WAF)
 
 ### Module 19 — Cross-Site Scripting (XSS)
 - [Module Notes](19-Cross-Site-Scripting-XSS/Cross-Site-Scripting-XSS.md) — Stored/Reflected/DOM-based XSS types, `window.origin` PoC, DOM source/sink analysis, event-handler payloads (`onerror`, `onload`), XSS Strike automated scanner, manual payload vectors, defacement (background/title/innerHTML), phishing form injection + PHP credential logger, blind XSS remote script callbacks, cookie grabber script + PHP logger, session takeover via Firefox Storage tab, `HttpOnly`/CSP/DOMPurify prevention
