@@ -55,42 +55,6 @@ exact commands, and notes on what each technique actually means in practice.
 | 27 | Documentation and Reporting | Easy | ⏳ Pending | — |
 | 28 | Attacking Enterprise Networks | Medium | ⏳ Pending | — |
 
-### Module 10 — Password Attacks
-- [Module Notes](10-Password-Attacks/Password-Attacks.md)
-- [Skills Assessment](10-Password-Attacks/Skills-Assessment.md) — DMZ foothold → ligolo-ng pivot → Snaffler share hunting → Password Safe 3 cracking → LSASS hash extraction → NTDS Administrator hash
-
-### Module 12 — Pivoting, Tunneling and Port Forwarding
-- [Module Notes](12-Pivoting-Tunneling-and-Port-Forwarding/Pivoting-Tunneling-and-Port-Forwarding.md) — SSH local/dynamic/remote forwarding, Meterpreter AutoRoute, Socat redirectors, sshuttle, Chisel, ligolo-ng, rpivot, dnscat2, ptunnel-ng, Netsh, double pivots
-- [Skills Assessment](12-Pivoting-Tunneling-and-Port-Forwarding/Skills-Assessment.md) — Web shell → SSH key → Ubuntu pivot → Meterpreter AutoRoute + SOCKS → RDP mlefay (Flag 1) → LSASS dump + Mimikatz → vfrank cleartext → RDP workstation (Flag 2) → Z: mapped share → DC (Flag 3)
-
-### Module 14 — Using Web Proxies
-- [Module Notes](14-Using-Web-Proxies/Using-Web-Proxies.md) — Burp Suite vs ZAP, FoxyProxy setup, CA certificates, request/response interception, Match and Replace, Repeater, Decoder/Inspector, proxychains, Metasploit proxying, Intruder (Sniper/Battering Ram/Pitchfork/Cluster Bomb), ZAP Fuzzer, Burp Scanner, ZAP Active Scanner, BApp Store, ZAP Marketplace
-- [Skills Assessment](14-Using-Web-Proxies/Skills-Assessment.md) — ZAP Replacer strip `disabled>` (Flag 1) → ZAP Encoder ASCII Hex → Base64 decode 31-char MD5 cookie → Burp Intruder 3-rule encoding chain fuzz last MD5 char (Flag 2) → Metasploit `coldfusion_locale_traversal` proxied → CFIDE directory
-
-### Module 15 — Attacking Web Applications with Ffuf
-- [Module Notes](15-Attacking-Web-Applications-with-Ffuf/Attacking-Web-Applications-with-Ffuf.md) — Directory fuzzing, extension fuzzing, page fuzzing, recursive scanning, DNS /etc/hosts, sub-domain fuzzing, VHost fuzzing with Host header, response size filtering (`-fs`), GET parameter fuzzing, POST parameter fuzzing, value fuzzing with custom wordlists
-- [Skills Assessment](15-Attacking-Web-Applications-with-Ffuf/Skills-Assessment.md) — VHost fuzzing → 3 sub-domains → extension fuzzing → recursive fuzzing with `-mr` regex match → POST parameter fuzzing → value fuzzing → `HTB{flag_redacted}`
-
-### Module 16 — Login Brute Forcing
-- [Module Notes](16-Login-Brute-Forcing/Login-Brute-Forcing.md) — Brute force types (simple/dictionary/hybrid/credential stuffing/password spraying), password security fundamentals, default credentials, Hydra (http-get/http-post-form/ssh/ftp/rdp), Basic HTTP Auth brute force, login form inspection + params string construction, Medusa (SSH/FTP modules), SSH pivot → internal FTP discovery, Username Anarchy, CUPP password profiling, grep-based wordlist policy filtering
-- [Skills Assessment](16-Login-Brute-Forcing/Skills-Assessment.md) — Basic Auth Hydra http-get (admin creds) → curl authenticated GET → username for Part 2 → SSH Hydra brute force → nmap localhost FTP → Username-Anarchy Thomas Smith → Medusa FTP brute force → FTP login → `HTB{flag_redacted}`
-
-### Module 17 — SQL Injection Fundamentals
-- [Module Notes](17-SQL-Injection-Fundamentals/SQL-Injection-Fundamentals.md) — MySQL/MariaDB fundamentals (CREATE/INSERT/SELECT/UPDATE/ALTER/DROP, WHERE, ORDER BY, LIKE, SQL operators, precedence), SQLi types (Union/Error/Boolean Blind/Time Blind/Out-of-band), auth bypass (OR injection, comment-based `--` and `#`), UNION injection (column count via ORDER BY + UNION SELECT, visible column detection), DB enumeration via INFORMATION_SCHEMA (schemata, tables, columns), data dumping with dot notation, user privilege check (`FILE` privilege), LOAD_FILE file read (`/etc/passwd`, PHP source), `secure_file_priv` check, `INTO OUTFILE` PHP web shell write → OS RCE as `www-data`, mitigation (prepared statements, input validation, least privilege, WAF)
-- [Skills Assessment](17-SQL-Injection-Fundamentals/Skills-Assessment.md) — single quote `'` → 500 on `invitationCode` → `') OR 1=1-- -` registration bypass → second SQLi on `q` parameter → UNION 4-col injection → `chattr.Users` dump → admin Argon2i hash (Q1) → `Server: nginx` header → LOAD_FILE Nginx config → `/var/www/chattr-prod` web root (Q2) → `INTO OUTFILE` PHP backtick shell → `cat /*.txt` → `HTB{flag_redacted}` (Q3)
-
-### Module 18 — SQLMap Essentials
-- [Module Notes](18-SQLMap-Essentials/SQLMap-Essentials.md) — SQLMap architecture and detection engine, 6 SQLi technique types (B/E/U/S/T/Q), basic usage with `--batch`, output interpretation, building requests (GET/POST/request file/custom headers/cookies), error handling (`--parse-errors`, `-t`, `-v 6`, `--proxy`), attack tuning (prefix/suffix, level/risk, advanced options), full DB enumeration (banner/users/dbs/tables/columns/dump), advanced enumeration (hash cracking, schema search with `--search`), WAF bypass (anti-CSRF token, IP blacklisting, tamper scripts), OS exploitation (`--file-read`, `--file-write` web shell, `--os-shell` via UDF)
-
-### Module 19 — Cross-Site Scripting (XSS)
-- [Module Notes](19-Cross-Site-Scripting-XSS/Cross-Site-Scripting-XSS.md) — Stored/Reflected/DOM-based XSS types, `window.origin` PoC, DOM source/sink analysis, event-handler payloads (`onerror`, `onload`), XSS Strike automated scanner, manual payload vectors, defacement (background/title/innerHTML), phishing form injection + PHP credential logger, blind XSS remote script callbacks, cookie grabber script + PHP logger, session takeover via Firefox Storage tab, `HttpOnly`/CSP/DOMPurify prevention
-- [Skills Assessment](19-Cross-Site-Scripting-XSS/Skills-Assessment.md) — blog comment approval workflow → blind XSS surface → nc listener + unique path probe per field → Website field confirmed via HeadlessChrome callback → `script.js` cookie grabber + `index.php` PHP logger → `'><script src=...>` payload in Website field → admin cookie exfiltrated → `HTB{flag_redacted}`
-
-### Module 26 — Windows Privilege Escalation
-- [Module Notes](26-Windows-Privilege-Escalation/Windows-Privilege-Escalation.md)
-- [Skills Assessment Part I](26-Windows-Privilege-Escalation/Skills-Assessment-Part-I.md) — Command injection → PrintNightmare → LaZagne
-- [Skills Assessment Part II](26-Windows-Privilege-Escalation/Skills-Assessment-Part-II.md) — unattend.xml → AlwaysInstallElevated → PwDump8 + Hashcat
-
 ---
 
 ## Certification Roadmap
