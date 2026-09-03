@@ -1,7 +1,7 @@
 # HTB Academy — CPTS Path
 
 **Author:** Jay Patel | **Path:** Certified Penetration Testing Specialist (CPTS)
-**Started:** March 2026 | **Status:** In Progress (19/28 modules complete)
+**Started:** March 2026 | **Status:** In Progress (20/28 modules complete)
 
 ---
 
@@ -43,7 +43,7 @@ exact commands, and notes on what each technique actually means in practice.
 | 15 | Attacking Web Applications with Ffuf | Easy | ✅ Complete | July 2026 |
 | 16 | Login Brute Forcing | Easy | ✅ Complete | August 2026 |
 | 17 | SQL Injection Fundamentals | Medium | ✅ Complete | September 2026 |
-| 18 | SQLMap Essentials | Easy | ⏳ Pending | — |
+| 18 | SQLMap Essentials | Easy | ✅ Complete | September 2026 |
 | 19 | Cross-Site Scripting (XSS) | Easy | ✅ Complete | August 2026 |
 | 20 | File Inclusion | Medium | ⏳ Pending | — |
 | 21 | File Upload Attacks | Medium | ⏳ Pending | — |
@@ -78,6 +78,9 @@ exact commands, and notes on what each technique actually means in practice.
 ### Module 17 — SQL Injection Fundamentals
 - [Module Notes](17-SQL-Injection-Fundamentals/SQL-Injection-Fundamentals.md) — MySQL/MariaDB fundamentals (CREATE/INSERT/SELECT/UPDATE/ALTER/DROP, WHERE, ORDER BY, LIKE, SQL operators, precedence), SQLi types (Union/Error/Boolean Blind/Time Blind/Out-of-band), auth bypass (OR injection, comment-based `--` and `#`), UNION injection (column count via ORDER BY + UNION SELECT, visible column detection), DB enumeration via INFORMATION_SCHEMA (schemata, tables, columns), data dumping with dot notation, user privilege check (`FILE` privilege), LOAD_FILE file read (`/etc/passwd`, PHP source), `secure_file_priv` check, `INTO OUTFILE` PHP web shell write → OS RCE as `www-data`, mitigation (prepared statements, input validation, least privilege, WAF)
 - [Skills Assessment](17-SQL-Injection-Fundamentals/Skills-Assessment.md) — single quote `'` → 500 on `invitationCode` → `') OR 1=1-- -` registration bypass → second SQLi on `q` parameter → UNION 4-col injection → `chattr.Users` dump → admin Argon2i hash (Q1) → `Server: nginx` header → LOAD_FILE Nginx config → `/var/www/chattr-prod` web root (Q2) → `INTO OUTFILE` PHP backtick shell → `cat /*.txt` → `HTB{flag_redacted}` (Q3)
+
+### Module 18 — SQLMap Essentials
+- [Module Notes](18-SQLMap-Essentials/SQLMap-Essentials.md) — SQLMap architecture and detection engine, 6 SQLi technique types (B/E/U/S/T/Q), basic usage with `--batch`, output interpretation, building requests (GET/POST/request file/custom headers/cookies), error handling (`--parse-errors`, `-t`, `-v 6`, `--proxy`), attack tuning (prefix/suffix, level/risk, advanced options), full DB enumeration (banner/users/dbs/tables/columns/dump), advanced enumeration (hash cracking, schema search with `--search`), WAF bypass (anti-CSRF token, IP blacklisting, tamper scripts), OS exploitation (`--file-read`, `--file-write` web shell, `--os-shell` via UDF)
 
 ### Module 19 — Cross-Site Scripting (XSS)
 - [Module Notes](19-Cross-Site-Scripting-XSS/Cross-Site-Scripting-XSS.md) — Stored/Reflected/DOM-based XSS types, `window.origin` PoC, DOM source/sink analysis, event-handler payloads (`onerror`, `onload`), XSS Strike automated scanner, manual payload vectors, defacement (background/title/innerHTML), phishing form injection + PHP credential logger, blind XSS remote script callbacks, cookie grabber script + PHP logger, session takeover via Firefox Storage tab, `HttpOnly`/CSP/DOMPurify prevention
