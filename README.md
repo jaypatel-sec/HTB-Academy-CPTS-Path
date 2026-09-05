@@ -1,7 +1,7 @@
 # HTB Academy — CPTS Path
 
 **Author:** Jay Patel | **Path:** Certified Penetration Testing Specialist (CPTS)
-**Started:** March 2026 | **Status:** In Progress (20/28 modules complete)
+**Started:** March 2026 | **Status:** In Progress (21/28 modules complete)
 
 ---
 
@@ -48,7 +48,7 @@ exact commands, and notes on what each technique actually means in practice.
 | 20 | File Inclusion | Medium | ⏳ Pending | — |
 | 21 | File Upload Attacks | Medium | ⏳ Pending | — |
 | 22 | Command Injections | Medium | ⏳ Pending | — |
-| 23 | Web Attacks | Medium | ⏳ Pending | — |
+| 23 | Web Attacks | Medium | ✅ Complete | September 2026 |
 | 24 | Attacking Common Applications | Medium | ⏳ Pending | — |
 | 25 | Linux Privilege Escalation | Medium | ✅ Complete | May 2026 |
 | 26 | Windows Privilege Escalation | Medium | ✅ Complete | July 2026 |
