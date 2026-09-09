@@ -1,7 +1,7 @@
 # HTB Academy — CPTS Path
 
 **Author:** Jay Patel | **Path:** Certified Penetration Testing Specialist (CPTS)
-**Started:** March 2026 | **Status:** In Progress (22/28 modules complete)
+**Started:** March 2026 | **Status:** In Progress (23/28 modules complete)
 
 ---
 
@@ -45,7 +45,7 @@ exact commands, and notes on what each technique actually means in practice.
 | 17 | SQL Injection Fundamentals | Medium | ✅ Complete | September 2026 |
 | 18 | SQLMap Essentials | Easy | ✅ Complete | September 2026 |
 | 19 | Cross-Site Scripting (XSS) | Easy | ✅ Complete | August 2026 |
-| 20 | File Inclusion | Medium | ⏳ Pending | — |
+| 20 | File Inclusion | Medium | ✅ Complete | September 2026 |
 | 21 | File Upload Attacks | Medium | ✅ Complete + SA | September 2026 |
 | 22 | Command Injections | Medium | ⏳ Pending | — |
 | 23 | Web Attacks | Medium | ✅ Complete + SA | September 2026 |
