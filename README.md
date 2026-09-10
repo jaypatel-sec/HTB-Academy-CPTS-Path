@@ -45,10 +45,10 @@ exact commands, and notes on what each technique actually means in practice.
 | 17 | SQL Injection Fundamentals | Medium | ✅ Complete | September 2026 |
 | 18 | SQLMap Essentials | Easy | ✅ Complete | September 2026 |
 | 19 | Cross-Site Scripting (XSS) | Easy | ✅ Complete | August 2026 |
-| 20 | File Inclusion | Medium | ✅ Complete + SA | September 2026 |
-| 21 | File Upload Attacks | Medium | ✅ Complete + SA | September 2026 |
+| 20 | File Inclusion | Medium | ✅ Complete | September 2026 |
+| 21 | File Upload Attacks | Medium | ✅ Complete | September 2026 |
 | 22 | Command Injections | Medium | ⏳ Pending | — |
-| 23 | Web Attacks | Medium | ✅ Complete + SA | September 2026 |
+| 23 | Web Attacks | Medium | ✅ Complete | September 2026 |
 | 24 | Attacking Common Applications | Medium | ⏳ Pending | — |
 | 25 | Linux Privilege Escalation | Medium | ✅ Complete | May 2026 |
 | 26 | Windows Privilege Escalation | Medium | ✅ Complete | July 2026 |
